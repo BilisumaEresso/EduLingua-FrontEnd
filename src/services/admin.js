@@ -43,9 +43,13 @@ export const shutdownSystem = async () => {
 // ======================
 // 🧑‍💼 Admin & Super Admin
 // ======================
+export const getAllLanguages  = async () => {
+  const res = await api.get('/admin/all-langs');
+  return res.data;
+};
 
-export const getAllUsers = async () => {
-  const res = await api.get('/admin/all-user');
+export const getAllUsers = async (page = 1, limit = 10) => {
+  const res = await api.get(`/admin/all-user?page=${page}&limit=${limit}`);
   return res.data;
 };
 
@@ -54,13 +58,13 @@ export const getUserById = async (userId) => {
   return res.data;
 };
 
-export const getAllLessons = async () => {
-  const res = await api.get('/admin/all-lesson');
+export const getAllLessons = async (page = 1, limit = 10) => {
+  const res = await api.get(`/admin/all-lesson?page=${page}&limit=${limit}`);
   return res.data;
 };
 
-export const getAllQuizzes = async () => {
-  const res = await api.get('/admin/all-quiz');
+export const getAllQuizzes = async (page = 1, limit = 10) => {
+  const res = await api.get(`/admin/all-quiz?page=${page}&limit=${limit}`);
   return res.data;
 };
 

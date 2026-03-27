@@ -135,7 +135,7 @@ const TeacherApplication = () => {
                   value={subject}
                   onChange={e => setSubject(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
-                  placeholder="e.g. French, Spanish, Mandarin..."
+                  placeholder="e.g. Swahili, Amharic, Afan Oromo..."
                 />
               </div>
 

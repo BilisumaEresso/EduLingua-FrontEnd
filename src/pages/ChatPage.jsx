@@ -35,7 +35,14 @@ const ChatPage = () => {
             sender: m.role === 'user' ? 'user' : 'ai',
             text: m.content || m.text,
           }));
-          setMessages(prev => [...prev, ...mapped]);
+          setMessages(mapped);
+        } else {
+          // Default localized welcome for new sessions
+          setMessages([{
+            id: 'welcome',
+            sender: 'ai',
+            text: `Hujambo ${user?.fullName?.split(' ')[0] || 'there'}! I'm your East African language tutor. I can help you practice Swahili, Amharic, Afan Oromo, or any other regional language. How can I assist you today?`
+          }]);
         }
       })
       .catch(() => { /* session load failure is non-critical — chat still works */ })

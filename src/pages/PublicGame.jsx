@@ -5,25 +5,25 @@ import { Trophy, Timer, RefreshCw, XCircle, CheckCircle2, Gamepad2 } from 'lucid
 // Mock Data
 const vocabulary = {
   easy: [
-    { word: 'Hello', correct: 'Bonjour', options: ['Bonjour', 'Merci', 'Au revoir', 'Oui'] },
-    { word: 'Water', correct: 'Eau', options: ['Lait', 'Eau', 'Vin', 'Pain'] },
-    { word: 'Dog', correct: 'Chien', options: ['Chat', 'Chien', 'Oiseau', 'Cheval'] },
-    { word: 'House', correct: 'Maison', options: ['Voiture', 'Pomme', 'Maison', 'Livre'] },
-    { word: 'Cat', correct: 'Chat', options: ['Oiseau', 'Chat', 'Chien', 'Poisson'] },
+    { word: 'Hello', correct: 'Jambo', options: ['Jambo', 'Asante', 'Kwaheri', 'Ndiyo'] },
+    { word: 'Water', correct: 'Maji', options: ['Maziwa', 'Maji', 'Divai', 'Mkate'] },
+    { word: 'Dog', correct: 'Mbwa', options: ['Paka', 'Mbwa', 'Ndege', 'Farasi'] },
+    { word: 'House', correct: 'Nyumba', options: ['Gari', 'Tofaa', 'Nyumba', 'Kitabu'] },
+    { word: 'Cat', correct: 'Paka', options: ['Ndege', 'Paka', 'Mbwa', 'Samaki'] },
   ],
   medium: [
-    { word: 'Always', correct: 'Toujours', options: ['Jamais', 'Parfois', 'Toujours', 'Souvent'] },
-    { word: 'To eat', correct: 'Manger', options: ['Boire', 'Dormir', 'Courir', 'Manger'] },
-    { word: 'Yesterday', correct: 'Hier', options: ['Demain', 'Aujourd\'hui', 'Hier', 'Jamais'] },
-    { word: 'Window', correct: 'Fenêtre', options: ['Porte', 'Mur', 'Fenêtre', 'Toit'] },
-    { word: 'To speak', correct: 'Parler', options: ['Parler', 'Ecouter', 'Regarder', 'Ecrire'] },
+    { word: 'Always', correct: 'Daima', options: ['Kamwe', 'Wakati mwingine', 'Daima', 'Mara nyingi'] },
+    { word: 'To eat', correct: 'Kula', options: ['Kunywa', 'Kulala', 'Kukimbia', 'Kula'] },
+    { word: 'Yesterday', correct: 'Jana', options: ['Kesho', 'Leo', 'Jana', 'Kamwe'] },
+    { word: 'Window', correct: 'Dirisha', options: ['Mlango', 'Ukuta', 'Dirisha', 'Paa'] },
+    { word: 'To speak', correct: 'Kusema', options: ['Kusema', 'Kusikiliza', 'Kutazama', 'Kuandika'] },
   ],
   hard: [
-    { word: 'Nevertheless', correct: 'Néanmoins', options: ['Cependant', 'Néanmoins', 'Pourtant', 'Toutefois'] },
-    { word: 'To overwhelm', correct: 'Submerger', options: ['Soulager', 'Submerger', 'Aider', 'Calmer'] },
-    { word: 'Stubborn', correct: 'Têtu', options: ['Flexible', 'Têtu', 'Doux', 'Gentil'] },
-    { word: 'Thunderstorm', correct: 'Orage', options: ['Pluie', 'Vent', 'Orage', 'Neige'] },
-    { word: 'Betrayal', correct: 'Trahison', options: ['Fidélité', 'Trahison', 'Amour', 'Haine'] },
+    { word: 'Nevertheless', correct: 'Walakini', options: ['Hata hivyo', 'Walakini', 'Bado', 'Ijapokuwa'] },
+    { word: 'To overwhelm', correct: 'Kuzidi', options: ['Kutuliza', 'Kuzidi', 'Kusaidia', 'Kutulia'] },
+    { word: 'Stubborn', correct: 'Kaidi', options: ['Mnyumbufu', 'Kaidi', 'Mpole', 'Mkarimu'] },
+    { word: 'Thunderstorm', correct: 'Ngurumo', options: ['Mvua', 'Upepo', 'Ngurumo', 'Theluji'] },
+    { word: 'Betrayal', correct: 'Usaliti', options: ['Uaminifu', 'Usaliti', 'Upendo', 'Chuki'] },
   ]
 };
 
@@ -178,7 +178,7 @@ const PublicGame = () => {
                     <h3 className="text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white mt-2">
                       {currentQuestion.word}
                     </h3>
-                    <p className="text-slate-500 mt-2">to French</p>
+                    <p className="text-slate-500 mt-2">to Swahili</p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

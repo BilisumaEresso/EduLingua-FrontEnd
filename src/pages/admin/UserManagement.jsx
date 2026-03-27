@@ -4,7 +4,7 @@ import {
   MoreVertical, MoreHorizontal, Loader2, Mail, 
   ChevronLeft, ChevronRight, CheckCircle2, XCircle
 } from 'lucide-react';
-import { getAllUsers, promoteUser, demoteUser } from '../../services/admin';
+import { getAllUsers, promoteUser, demoteUser, fireTeacher } from '../../services/admin';
 import useAuthStore from '../../store/authStore';
 
 const UserManagement = () => {
@@ -14,14 +14,20 @@ const UserManagement = () => {
   const [search, setSearch] = useState('');
   const [processingId, setProcessingId] = useState(null);
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const [pagination, setPagination] = useState({ page: 1, totalPages: 1, total: 0 });
+  const [limit] = useState(10);
 
-  const fetchUsers = async () => {
+  useEffect(() => {
+    fetchUsers(pagination.page);
+  }, [pagination.page]);
+
+  const fetchUsers = async (page = 1) => {
+    setLoading(true);
     try {
-      const res = await getAllUsers();
-      setUsers(res?.data?.users || res?.data || []);
+      const res = await getAllUsers(page, limit);
+      const data = res?.data || res;
+      setUsers(data.users || []);
+      setPagination(data.pagination || { page: 1, totalPages: 1, total: data.users?.length || 0 });
     } catch (error) {
       console.error("Failed to fetch users:", error);
     } finally {
@@ -29,25 +35,39 @@ const UserManagement = () => {
     }
   };
 
-  const handlePromote = async (id) => {
+  const handleFire = async (id) => {
+    if (!window.confirm("Are you sure you want to fire this teacher? They will be demoted to a regular learner.")) return;
     setProcessingId(id);
     try {
-      await promoteUser(id);
-      await fetchUsers();
+      await fireTeacher(id);
+      await fetchUsers(pagination.page);
     } catch (error) {
-      alert("Promotion failed: " + (error.response?.data?.message || "ServerError"));
+      alert("Action failed: " + (error.response?.data?.message || "ServerError"));
     } finally {
       setProcessingId(null);
     }
   };
 
   const handleDemote = async (id) => {
+    if (!window.confirm("Are you sure you want to demote this admin?")) return;
     setProcessingId(id);
     try {
       await demoteUser(id);
-      await fetchUsers();
+      await fetchUsers(pagination.page);
     } catch (error) {
       alert("Demotion failed: " + (error.response?.data?.message || "ServerError"));
+    } finally {
+      setProcessingId(null);
+    }
+  };
+
+  const handlePromote = async (id) => {
+    setProcessingId(id);
+    try {
+      await promoteUser(id);
+      await fetchUsers(pagination.page);
+    } catch (error) {
+      alert("Promotion failed: " + (error.response?.data?.message || "ServerError"));
     } finally {
       setProcessingId(null);
     }
@@ -144,19 +164,30 @@ const UserManagement = () => {
                     <td className="px-6 py-4 text-right">
                       {usr._id !== currentUser._id && (
                         <div className="flex justify-end gap-2">
-                          {usr.role === 'learner' || usr.role === 'teacher' ? (
+                          {usr.role === 'learner' ? (
                             <button 
                               onClick={() => handlePromote(usr._id)}
                               disabled={processingId === usr._id}
-                              className="p-2 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors title='Promote to Admin'"
+                              className="p-2 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors"
+                              title="Promote to Admin"
                             >
                               {processingId === usr._id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Shield className="w-4 h-4" />}
                             </button>
-                          ) : usr.role === 'admin' ? (
+                          ) : usr.role === 'teacher' ? (
+                            <button 
+                              onClick={() => handleFire(usr._id)}
+                              disabled={processingId === usr._id}
+                              className="p-2 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition-colors"
+                              title="Fire Teacher"
+                            >
+                              {processingId === usr._id ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserX className="w-4 h-4" />}
+                            </button>
+                          ) : usr.role === 'admin' && currentUser.role === 'super-admin' ? (
                             <button 
                               onClick={() => handleDemote(usr._id)}
                               disabled={processingId === usr._id}
-                              className="p-2 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition-colors title='Demote to Learner'"
+                              className="p-2 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-lg transition-colors"
+                              title="Demote to Learner"
                             >
                               {processingId === usr._id ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserX className="w-4 h-4" />}
                             </button>
@@ -174,14 +205,23 @@ const UserManagement = () => {
           </table>
         </div>
         
-        {/* Pagination Placeholder */}
         <div className="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-          <p className="text-xs font-medium text-slate-500">Showing {filteredUsers.length} users</p>
+          <p className="text-xs font-medium text-slate-500">
+            Showing {filteredUsers.length} of {pagination.total} users (Page {pagination.page} of {pagination.totalPages})
+          </p>
           <div className="flex gap-2">
-            <button disabled className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-50">
+            <button 
+              disabled={!pagination.hasPrev || loading} 
+              onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
+              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-50 hover:bg-white dark:hover:bg-slate-800 transition-colors"
+            >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <button disabled className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-50">
+            <button 
+              disabled={!pagination.hasNext || loading}
+              onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
+              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-50 hover:bg-white dark:hover:bg-slate-800 transition-colors"
+            >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>

@@ -1,24 +1,28 @@
-import { useState, useEffect } from 'react';
-import { 
-  BookOpen, Globe, Layers, Book, Plus, 
-  Edit2, Trash2, Loader2, Save, X, 
-  ChevronRight, ArrowLeft, Filter, AlertCircle
+import {
+  BookOpen, Globe, Layers, Book, Plus,
+  Edit2, Trash2, Loader2, Save, X,
+  ChevronRight, ArrowLeft, Filter, AlertCircle,
+  Eye, EyeOff, ToggleLeft as Toggle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import useAuthStore from '../../store/authStore';
 
 // Services
-import { getAllLanguages, addLanguage, updateLanguage, deleteLanguage } from '../../services/language';
+import { addLanguage, updateLanguage, deleteLanguage } from '../../services/language';
+import { getAllLanguages} from '../../services/admin';
 import { getAllLearnings, createLearning, updateLearning, deleteLearning } from '../../services/learning';
 import { getAllLevels, createLevel, updateLevel, deleteLevel } from '../../services/level';
 import { getAllLessons, createLesson, updateLesson, deleteLesson } from '../../services/lesson';
+import { useState,useEffect } from 'react';
 
 const ContentManagement = () => {
+  const { user } = useAuthStore();
   const [activeTab, setActiveTab] = useState('languages'); // languages, learnings, levels, lessons
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingItem, setEditingItem] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
-  
+
   // Selection state for hierarchical filtering
   const [selectedLang, setSelectedLang] = useState('');
   const [selectedTrack, setSelectedTrack] = useState('');
@@ -94,6 +98,21 @@ const ContentManagement = () => {
     }
   };
 
+   const toggleLanguageStatus = async (lang) => {
+    if (user?.role !== 'super-admin') return;
+    try {
+      setProcessingId(lang._id);
+      await updateLanguage(lang._id, { ...lang, isActive: !lang.isActive });
+      fetchData();
+    } catch (error) {
+      alert("Toggle failed.");
+    } finally {
+      setProcessingId(null);
+    }
+  };
+
+  const [processingId, setProcessingId] = useState(null);
+
   const startEdit = (item) => {
     setEditingItem(item);
     setFormData(item);
@@ -125,7 +144,7 @@ const ContentManagement = () => {
           <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white">Curriculum Management</h1>
           <p className="text-slate-500 dark:text-slate-400">Structure the learning experience from languages down to individual lessons.</p>
         </div>
-        <button 
+        <button
           onClick={startAdd}
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-rose-600 text-white font-bold text-sm hover:bg-rose-700 transition-all shadow-sm"
         >
@@ -144,8 +163,8 @@ const ContentManagement = () => {
               setIsAdding(false);
             }}
             className={`px-6 py-4 text-sm font-bold transition-all border-b-2 flex items-center gap-2 ${
-              activeTab === tab.id 
-                ? 'border-rose-500 text-rose-600' 
+              activeTab === tab.id
+                ? 'border-rose-500 text-rose-600'
                 : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
             }`}
           >
@@ -165,8 +184,8 @@ const ContentManagement = () => {
                  <Filter className="w-3 h-3" /> Filter By:
                </div>
                {activeTab === 'learnings' && (
-                 <select 
-                    value={selectedLang} 
+                 <select
+                    value={selectedLang}
                     onChange={e => setSelectedLang(e.target.value)}
                     className="text-xs font-bold bg-slate-50 dark:bg-slate-800 border-none rounded-lg px-3 py-1.5 focus:ring-1 focus:ring-rose-500"
                  >
@@ -192,17 +211,43 @@ const ContentManagement = () => {
                          {activeTab === 'languages' ? <Globe className="w-5 h-5 text-slate-400" /> : <Layers className="w-5 h-5 text-slate-400" />}
                       </div>
                       <div className="min-w-0">
-                        <h4 className="font-bold text-slate-900 dark:text-white truncate">{item.name || item.title}</h4>
+                        <h4 className="font-bold text-slate-900 dark:text-white truncate">
+                          {activeTab === 'languages' && item.metadata?.flag && <span className="mr-2">{item.metadata.flag}</span>}
+                          {item.name || item.title}
+                          {activeTab === 'languages' && item.nativeName && <span className="ml-2 text-slate-400 font-medium">({item.nativeName})</span>}
+                        </h4>
                         <p className="text-xs text-slate-500 truncate">{item.description || item.code || 'No description'}</p>
                       </div>
                     </div>
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button onClick={() => startEdit(item)} className="p-2 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg">
-                        <Edit2 className="w-4 h-4" />
-                      </button>
-                      <button onClick={() => handleDelete(item._id)} className="p-2 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                    <div className="flex items-center gap-3">
+                      <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        {activeTab === 'languages' && user?.role === 'super-admin' && (
+                          <button
+                            onClick={() => toggleLanguageStatus(item)}
+                            disabled={processingId === item._id}
+                            className={`p-2 rounded-lg transition-colors ${item.isActive ? 'text-emerald-500 hover:bg-emerald-50' : 'text-slate-400 hover:bg-slate-100'}`}
+                            title={item.isActive ? 'Deactivate Language' : 'Activate Language'}
+                          >
+                            {processingId === item._id ? <Loader2 className="w-4 h-4 animate-spin" /> : (
+                              item.isActive ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />
+                            )}
+                          </button>
+                        )}
+                        <button onClick={() => startEdit(item)} className="p-2 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg">
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button onClick={() => handleDelete(item._id)} className="p-2 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      {activeTab === 'languages' && (
+                        <div className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-tighter shadow-sm ${
+                          item.isActive ? 'bg-emerald-100 text-emerald-600 border border-emerald-200' : 'bg-slate-100 text-slate-400 border border-slate-200'
+                        }`}>
+                          {item.isActive ? 'Active' : 'Hidden'}
+                        </div>
+                      )}
                     </div>
                   </li>
                 ))}
@@ -234,42 +279,101 @@ const ContentManagement = () => {
                   {/* Common Fields */}
                   <div>
                     <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{activeTab === 'languages' ? 'Name' : 'Title'}</label>
-                    <input 
+                    <input
                       required
-                      type="text" 
+                      type="text"
                       value={formData.name || formData.title || ''}
                       onChange={e => setFormData({...formData, [activeTab === 'languages' ? 'name' : 'title']: e.target.value})}
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
                     />
                   </div>
 
-                  {activeTab === 'languages' && (
+                   {activeTab === 'languages' && (
+                    <>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Native Name (e.g., አማርኛ)</label>
+                        <input
+                          required
+                          type="text"
+                          value={formData.nativeName || ''}
+                          onChange={e => setFormData({...formData, nativeName: e.target.value})}
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Language Code (e.g., am, sw)</label>
+                        <input
+                          required
+                          type="text"
+                          value={formData.code || ''}
+                          onChange={e => setFormData({...formData, code: e.target.value})}
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Direction</label>
+                          <select
+                            value={formData.direction || 'ltr'}
+                            onChange={e => setFormData({...formData, direction: e.target.value})}
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                          >
+                            <option value="ltr">LTR</option>
+                            <option value="rtl">RTL</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Flag Emoji/URL</label>
+                          <input
+                            type="text"
+                            value={formData.metadata?.flag || ''}
+                            onChange={e => setFormData({...formData, metadata: { ...formData.metadata, flag: e.target.value }})}
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                      <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Region (e.g., Ethiopia, East Africa)</label>
+                      <input
+                        type="text"
+                        value={formData.metadata?.region || ''}
+                        onChange={e => setFormData({...formData, metadata: { ...formData.metadata, region: e.target.value }})}
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                      />
+                    </div>
+                    {user?.role === 'super-admin' && (
+                      <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <input
+                          type="checkbox"
+                          id="isActive"
+                          checked={formData.isActive || false}
+                          onChange={e => setFormData({...formData, isActive: e.target.checked})}
+                          className="w-4 h-4 rounded text-rose-500 focus:ring-rose-500"
+                        />
+                        <label htmlFor="isActive" className="text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+                          Active & Visible to learners
+                        </label>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                  {activeTab !== 'languages' && (
                     <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Language Code (e.g., en, fr)</label>
-                      <input 
-                        required
-                        type="text" 
-                        value={formData.code || ''}
-                        onChange={e => setFormData({...formData, code: e.target.value})}
+                      <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Description</label>
+                      <textarea
+                        rows={3}
+                        value={formData.description || ''}
+                        onChange={e => setFormData({...formData, description: e.target.value})}
                         className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
                       />
                     </div>
                   )}
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Description</label>
-                    <textarea 
-                      rows={3}
-                      value={formData.description || ''}
-                      onChange={e => setFormData({...formData, description: e.target.value})}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
-                    />
-                  </div>
-
                   {/* Hierarchical selection placeholders (logic would need more state) */}
-                  
+
                   <div className="pt-4 flex gap-3">
-                    <button 
+                    <button
                       type="submit"
                       className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-sm hover:opacity-90 transition-opacity"
                     >

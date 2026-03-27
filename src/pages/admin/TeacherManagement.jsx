@@ -18,14 +18,13 @@ const TeacherManagement = () => {
 
   const fetchApplications = async () => {
     try {
-      // In this system, "teacherRequested: true" and "role: learner" means pending
-      const res = await getAllUsers();
-      const allUsers = res?.data?.users || res?.data || [];
+      // Fetch users (ideally this would be a specific applications endpoint)
+      // For now, we fetch a large first page to find applicants
+      const res = await getAllUsers(1, 50);
+      const data = res?.data || res;
+      const allUsers = data.users || [];
       
-      // Filter for users who have requested to be teachers
-      // Depending on backend implementation, this might be a specific endpoint 
-      // but here we use the data we have from getAllUsers
-      setApplications(allUsers.filter(u => u.teacherRequested));
+      setApplications(allUsers.filter(u => u.teacherRequested || u.role === 'teacher'));
     } catch (error) {
       console.error("Failed to fetch applications:", error);
     } finally {

@@ -8,12 +8,22 @@ import {
 import { getAllLanguages } from '../services/language';
 
 const flagMap = {
-  english: '🇬🇧', french: '🇫🇷', spanish: '🇪🇸', german: '🇩🇪',
-  arabic: '🇸🇦', mandarin: '🇨🇳', chinese: '🇨🇳', japanese: '🇯🇵',
-  korean: '🇰🇷', portuguese: '🇵🇹', italian: '🇮🇹', russian: '🇷🇺',
-  turkish: '🇹🇷', hindi: '🇮🇳', dutch: '🇳🇱',
+  amharic: '🇪🇹',
+  swahili: '🇰🇪',
+  oromo: '🇪🇹',
+  tigrinya: '🇪🇷',
+  somali: '🇸🇴',
+  luganda: '🇺🇬',
+  kinyarwanda: '🇷🇼',
+  arabic: '🇸🇩',
+  afaan_oromoo: '🇪🇹',
+  kiswahili: '🇹🇿',
+  ge_ez: '🇪🇹',
 };
-const getFlag = (name = '') => flagMap[name.toLowerCase()] || '🌐';
+const getFlag = (lang) => {
+  if (typeof lang === 'string') return flagMap[lang.toLowerCase()] || '🌐';
+  return lang?.metadata?.flag || flagMap[lang?.name?.toLowerCase()] || '🌐';
+};
 const gradients = [
   'from-indigo-500 to-purple-600', 'from-fuchsia-500 to-pink-600',
   'from-sky-500 to-blue-600', 'from-emerald-500 to-teal-600',
@@ -25,7 +35,10 @@ const Landing = () => {
 
   useEffect(() => {
     getAllLanguages()
-      .then(res => setLanguages((res?.data?.langs || res?.data || []).slice(0, 6)))
+      .then(res => {
+        const allLangs = res?.data?.langs || res?.data || [];
+        setLanguages(allLangs.filter(l => l.isActive).slice(0, 6));
+      })
       .catch(() => {});
   }, []);
   return (
@@ -46,11 +59,11 @@ const Landing = () => {
               <span>Introducing EduLingua AI 2.0</span>
             </div>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-8">
-              Learn Languages <br className="hidden md:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-600">Smarter with AI</span>
+              MASTER EAST AFRICAN LANGUAGES <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-rose-600">THROUGH AI</span>
             </h1>
             <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10">
-              Master any language organically through immersive AI conversations, personalized learning paths, and intelligent feedback.
+              Master Amharic, Swahili, Afan Oromo, and more organically through immersive AI conversations and personalized learning paths.
             </p>
             
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
@@ -184,9 +197,9 @@ const Landing = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl overflow-hidden pb-10">
             <div className="grid md:grid-cols-3 gap-6">
               {[
-                { name: "Sarah K.", role: "French Learner", text: "EduLingua completely changed how I learn languages. The AI chat feels like talking to a real native speaker!" },
-                { name: "David M.", role: "Japanese Learner", text: "The personalized learning paths adapted directly to my weak spots. I've progressed faster in 3 months than I did in a year of conventional classes." },
-                { name: "Elena R.", role: "Spanish Learner", text: "Finally an app that isn't just flashcards. The contextual learning and mini-games make everything stick." }
+                { name: "Abebe B.", role: "Amharic Learner", text: "EduLingua completely changed how I learn. The AI chat feels like talking to a real native speaker from Addis Ababa!" },
+                { name: "Zahara M.", role: "Swahili Learner", text: "The personalized learning paths helped me master Kiswahili grammar faster than I ever thought possible. Haki!" },
+                { name: "Kofi A.", role: "Afan Oromo Learner", text: "Finally an app that respects regional languages. The contextual learning makes Afaan Oromoo so much easier to grasp." }
               ].map((t, i) => (
                 <div key={i} className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-8 border border-slate-100 dark:border-slate-800">
                   <div className="flex gap-1 text-amber-400 mb-4">
@@ -228,7 +241,7 @@ const Landing = () => {
                     to={`/languages`}
                     className={`group flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-gradient-to-br ${gradients[idx % gradients.length]} text-white hover:scale-105 transition-transform shadow-md`}
                   >
-                    <span className="text-4xl">{getFlag(lang.name)}</span>
+                    <span className="text-4xl">{getFlag(lang)}</span>
                     <span className="text-sm font-bold text-white/90">{lang.name}</span>
                   </Link>
                 </motion.div>

@@ -6,32 +6,25 @@ import { getAllLanguages } from '../services/language';
 
 // Flag emoji helper using country code (common languages only)
 const flagMap = {
-  english: '🇬🇧',
-  french: '🇫🇷',
-  spanish: '🇪🇸',
-  german: '🇩🇪',
-  arabic: '🇸🇦',
-  mandarin: '🇨🇳',
-  chinese: '🇨🇳',
-  japanese: '🇯🇵',
-  korean: '🇰🇷',
-  portuguese: '🇵🇹',
-  italian: '🇮🇹',
-  russian: '🇷🇺',
-  turkish: '🇹🇷',
-  hindi: '🇮🇳',
-  dutch: '🇳🇱',
-  greek: '🇬🇷',
-  polish: '🇵🇱',
-  swedish: '🇸🇪',
-  norwegian: '🇳🇴',
-  danish: '🇩🇰',
-  hebrew: '🇮🇱',
-  persian: '🇮🇷',
-  farsi: '🇮🇷',
+  amharic: '🇪🇹',
+  swahili: '🇰🇪',
+  kiswahili: '🇹🇿',
+  oromo: '🇪🇹',
+  afaan_oromoo: '🇪🇹',
+  tigrinya: '🇪🇷',
+  somali: '🇸🇴',
+  luganda: '🇺🇬',
+  kinyarwanda: '🇷🇼',
+  arabic: '🇸🇩',
+  ge_ez: '🇪🇹',
+  sidamo: '🇪🇹',
+  wolaytta: '🇪🇹',
 };
 
-const getFlag = (name = '') => flagMap[name.toLowerCase()] || '🌐';
+const getFlag = (lang) => {
+  if (typeof lang === 'string') return flagMap[lang.toLowerCase()] || '🌐';
+  return lang?.metadata?.flag || flagMap[lang?.name?.toLowerCase()] || '🌐';
+};
 
 const bgColors = [
   'from-indigo-500 to-purple-600',
@@ -52,8 +45,9 @@ const LanguagesPage = () => {
     const fetch = async () => {
       try {
         const res = await getAllLanguages();
-        const langs = res?.data?.langs || res?.data || [];
-        setLanguages(langs);
+        const allLangs = res?.data?.langs || res?.data || [];
+        // Only show active languages to learners
+        setLanguages(allLangs.filter(l => l.isActive));
       } catch {
         setError(true);
       } finally {
@@ -86,8 +80,8 @@ const LanguagesPage = () => {
               Available Languages
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6">
-              Which language will you{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-600">
+              Which East African language will you{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-rose-600">
                 master next?
               </span>
             </h1>
@@ -149,13 +143,16 @@ const LanguagesPage = () => {
                     {/* Card Header */}
                     <div className={`h-28 bg-gradient-to-br ${bgColors[idx % bgColors.length]} relative overflow-hidden flex items-center justify-center`}>
                       <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <span className="text-6xl drop-shadow-lg">{getFlag(lang.name)}</span>
+                      <span className="text-6xl drop-shadow-lg">{getFlag(lang)}</span>
                     </div>
 
                     {/* Card Body */}
                     <div className="p-6 flex items-center justify-between">
                       <div>
-                        <h3 className="text-lg font-bold text-slate-900 dark:text-white">{lang.name}</h3>
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                          {lang.name} 
+                          {lang.nativeName && <span className="ml-2 text-sm font-medium text-slate-400">({lang.nativeName})</span>}
+                        </h3>
                         <div className="flex items-center gap-1.5 mt-1">
                           <BookOpen className="w-4 h-4 text-slate-400" />
                           <span className="text-sm text-slate-500 dark:text-slate-400">

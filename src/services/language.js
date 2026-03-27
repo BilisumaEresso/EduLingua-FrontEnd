@@ -16,7 +16,7 @@ export const getAllLanguages = async () => {
 };
 
 export const getLanguageById = async (id) => {
-  const res = await api.get(`/language/${id}`);
+  const res = await api.get(`/lang/${id}`);
   return res.data;
 };
 
@@ -26,16 +26,16 @@ export const getLanguageById = async (id) => {
 // ======================
 
 export const addLanguage = async (data) => {
-  const res = await api.post('/language/add', data);
+  const res = await api.post('/lang/add', data);
   return res.data;
 };
 
 export const updateLanguage = async (id, data) => {
-  const res = await api.put(`/language/update/${id}`, data);
+  const res = await api.put(`/lang/update/${id}`, data);
   return res.data;
 };
 
 export const deleteLanguage = async (id) => {
-  const res = await api.delete(`/language/delete/${id}`);
+  const res = await api.delete(`/lang/delete/${id}`);
   return res.data;
 };
