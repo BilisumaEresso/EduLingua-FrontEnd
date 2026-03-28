@@ -291,6 +291,20 @@ const LessonPage = () => {
         </div>
       )}
 
+      {/* Lesson Header (Objective/Topic) */}
+      <div className="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-800 py-3 px-4 sm:px-6">
+        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded">Topic</span>
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{currentLesson?.aiContext?.topic || 'General Learning'}</span>
+          </div>
+          <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+            <BookOpen className="w-3.5 h-3.5" />
+            <span className="text-xs italic">{currentLesson?.objective || 'Complete the sections to progress.'}</span>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto w-full max-w-3xl mx-auto px-4 sm:px-6 py-10 flex flex-col">
         <AnimatePresence mode="wait">

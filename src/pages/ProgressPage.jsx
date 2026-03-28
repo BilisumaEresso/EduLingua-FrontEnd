@@ -20,10 +20,15 @@ const ProgressPage = () => {
   useEffect(() => {
     userProgressService.getProgress()
       .then(res => {
-        const data = res?.data?.progress || res?.data || res?.progress || [];
-        setProgressList(Array.isArray(data) ? data : []);
+        const rawData = res?.data?.progress || res?.data || res?.progress || [];
+        // Handle single object vs array
+        const list = Array.isArray(rawData) ? rawData : (rawData && typeof rawData === 'object' ? [rawData] : []);
+        setProgressList(list);
       })
-      .catch(() => setError(true))
+      .catch((e) => {
+        console.error("Progress fetch error:", e);
+        setError(true);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -94,9 +99,15 @@ const ProgressPage = () => {
           {progressList.map((p, idx) => {
             const trackId = p.learning?._id || p.learning;
             const title = p.learning?.title || p.title || 'Learning Track';
-            const lang = p.learning?.language?.name || '';
-            const pct = Math.round(p.progress ?? 0);
-            const lessonsCount = p.completedLessons?.length ?? 0;
+            const targetLang = p.learning?.targetLanguage;
+            const langName = targetLang?.name || '';
+            const flag = targetLang?.metadata?.flag || '';
+            
+            // Calculate progress percentage dynamically
+            const completedCount = p.completedLessons?.length ?? 0;
+            const totalLessonsInTrack = p.learning?.levels?.reduce((sum, level) => sum + (level.lessons?.length || 0), 0) || 1;
+            const pct = Math.min(100, Math.round((completedCount / totalLessonsInTrack) * 100));
+            
             const isComplete = pct >= 100;
 
             return (
@@ -113,7 +124,12 @@ const ProgressPage = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap mb-1">
                     <h3 className="font-bold text-slate-900 dark:text-white truncate">{title}</h3>
-                    {lang && <span className="text-xs font-medium text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">{lang}</span>}
+                    {langName && (
+                      <span className="text-xs font-medium text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full flex items-center gap-1">
+                        {flag && <span>{flag}</span>}
+                        {langName}
+                      </span>
+                    )}
                     {isComplete && (
                       <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-0.5 rounded-full flex items-center gap-1">
                         <CheckCircle2 className="w-3 h-3" /> Completed
@@ -122,7 +138,7 @@ const ProgressPage = () => {
                   </div>
 
                   <p className="text-sm text-slate-500 dark:text-slate-400 mb-3">
-                    {lessonsCount} lesson{lessonsCount !== 1 ? 's' : ''} completed
+                    {completedCount} lesson{completedCount !== 1 ? 's' : ''} completed
                     {p.xp ? ` • ${p.xp} XP earned` : ''}
                   </p>
 

@@ -28,8 +28,36 @@ const ContentManagement = () => {
   const [selectedTrack, setSelectedTrack] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('');
 
+  // Global Lists for selects
+  const [languages, setLanguages] = useState([]);
+  const [learningsList, setLearningsList] = useState([]);
+  const [levelsList, setLevelsList] = useState([]);
+
   // Form State
   const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    // Fetch base data for dropdowns
+    const fetchBaseData = async () => {
+      try {
+        const langRes = await getAllLanguages();
+        setLanguages(langRes?.data?.langs || langRes?.data || []);
+
+        if (activeTab !== 'languages') {
+          const learnRes = await getAllLearnings();
+          setLearningsList(learnRes?.data?.learnings || learnRes?.data || []);
+
+          if (activeTab === 'lessons') {
+            const levelRes = await getAllLevels();
+            setLevelsList(levelRes?.data?.levels || levelRes?.data || []);
+          }
+        }
+      } catch (e) {
+        console.error("Baseline fetch failed:", e);
+      }
+    };
+    fetchBaseData();
+  }, [activeTab]);
 
   useEffect(() => {
     fetchData();
@@ -46,9 +74,11 @@ const ContentManagement = () => {
         res = await getAllLearnings();
         const learnings = res?.data?.learnings || res?.data || [];
         setData(selectedLang ? learnings.filter(l => (l.language?._id || l.language) === selectedLang) : learnings);
+        console.log(res?.data?.learnings || res?.data || [])
       } else if (activeTab === 'levels') {
         res = await getAllLevels(selectedTrack ? { learningId: selectedTrack } : {});
         setData(res?.data?.levels || res?.data || []);
+        console.log(res?.data?.levels || res?.data || [])
       } else if (activeTab === 'lessons') {
         res = await getAllLessons(selectedLevel ? { levelId: selectedLevel } : {});
         setData(res?.data?.lessons || res?.data || []);
@@ -102,7 +132,7 @@ const ContentManagement = () => {
     if (user?.role !== 'super-admin') return;
     try {
       setProcessingId(lang._id);
-      await updateLanguage(lang._id, { ...lang, isActive: !lang.isActive });
+      await updateLanguage(lang._id, { isActive: !lang.isActive });
       fetchData();
     } catch (error) {
       alert("Toggle failed.");
@@ -124,9 +154,12 @@ const ContentManagement = () => {
     setEditingItem(null);
     // Pre-fill relation IDs if filtered
     setFormData({
-      ...(activeTab === 'learnings' && selectedLang ? { language: selectedLang } : {}),
+      ...(activeTab === 'learnings' && selectedLang ? { targetLanguage: selectedLang } : {}),
       ...(activeTab === 'levels' && selectedTrack ? { learning: selectedTrack } : {}),
       ...(activeTab === 'lessons' && selectedLevel ? { level: selectedLevel } : {}),
+      ...(activeTab === 'learnings' ? { aiConfig: { difficultyCurve: 'linear' }, isActive: true } : {}),
+      ...(activeTab === 'levels' ? { difficulty: 'beginner', unlockCondition: { minScore: 70, requiredLessonsCompleted: 0 }, aiConfig: { focusAreas: [], complexityBoost: 1 }, isActive: true } : {}),
+      ...(activeTab === 'lessons' ? { aiContext: { difficulty: 'easy', generated: false }, isActive: false, teacher: user._id } : {}),
     });
   };
 
@@ -183,16 +216,42 @@ const ContentManagement = () => {
                <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase mr-2">
                  <Filter className="w-3 h-3" /> Filter By:
                </div>
-               {activeTab === 'learnings' && (
-                 <select
-                    value={selectedLang}
-                    onChange={e => setSelectedLang(e.target.value)}
-                    className="text-xs font-bold bg-slate-50 dark:bg-slate-800 border-none rounded-lg px-3 py-1.5 focus:ring-1 focus:ring-rose-500"
-                 >
-                   <option value="">All Languages</option>
-                   {/* This would ideally come from a cached list of languages */}
-                 </select>
-               )}
+                {activeTab === 'learnings' && (
+                  <select
+                     value={selectedLang}
+                     onChange={e => setSelectedLang(e.target.value)}
+                     className="text-xs font-bold bg-slate-50 dark:bg-slate-800 border-none rounded-lg px-3 py-1.5 focus:ring-1 focus:ring-rose-500"
+                  >
+                    <option value="">All Languages</option>
+                    {languages.map(l => (
+                      <option key={l._id} value={l._id}>{l.name}</option>
+                    ))}
+                  </select>
+                )}
+                {activeTab === 'levels' && (
+                  <select
+                     value={selectedTrack}
+                     onChange={e => setSelectedTrack(e.target.value)}
+                     className="text-xs font-bold bg-slate-50 dark:bg-slate-800 border-none rounded-lg px-3 py-1.5 focus:ring-1 focus:ring-rose-500"
+                  >
+                    <option value="">All Tracks</option>
+                    {learningsList.map(t => (
+                      <option key={t._id} value={t._id}>{t.title}</option>
+                    ))}
+                  </select>
+                )}
+                {activeTab === 'lessons' && (
+                  <select
+                     value={selectedLevel}
+                     onChange={e => setSelectedLevel(e.target.value)}
+                     className="text-xs font-bold bg-slate-50 dark:bg-slate-800 border-none rounded-lg px-3 py-1.5 focus:ring-1 focus:ring-rose-500"
+                  >
+                    <option value="">All Levels</option>
+                    {levelsList.map(l => (
+                      <option key={l._id} value={l._id}>L{l.levelNumber}: {l.title}</option>
+                    ))}
+                  </select>
+                )}
                {/* Simplified selection for now */}
             </div>
           )}
@@ -213,10 +272,34 @@ const ContentManagement = () => {
                       <div className="min-w-0">
                         <h4 className="font-bold text-slate-900 dark:text-white truncate">
                           {activeTab === 'languages' && item.metadata?.flag && <span className="mr-2">{item.metadata.flag}</span>}
-                          {item.name || item.title}
-                          {activeTab === 'languages' && item.nativeName && <span className="ml-2 text-slate-400 font-medium">({item.nativeName})</span>}
+                          {activeTab === 'learnings' && (
+                            <span className="mr-2 text-slate-400 font-medium">
+                              {languages.find(l => l._id === (item.sourceLanguage?._id || item.sourceLanguage))?.name || '—'} →
+                            </span>
+                          )}
+                          {activeTab === 'levels' && (
+                            <span className="mr-2 text-slate-400 font-medium whitespace-nowrap">
+                              [{learningsList.find(t => t._id === (item.learning?._id || item.learning))?.title || 'Track'}] {item.levelNumber}.
+                            </span>
+                          )}
+                          {activeTab === 'lessons' && (
+                            <span className="mr-2 text-slate-400 font-medium whitespace-nowrap">
+                              [{levelsList.find(l => l._id === (item.level?._id || item.level))?.title || 'Level'}] {item.order}.
+                            </span>
+                          )}
+                          {item.title || item.name}
                         </h4>
-                        <p className="text-xs text-slate-500 truncate">{item.description || item.code || 'No description'}</p>
+                        <p className="text-xs text-slate-500 truncate">
+                          {activeTab === 'learnings' ? (
+                            `Target: ${languages.find(l => l._id === (item.targetLanguage?._id || item.targetLanguage))?.name || 'Unknown'}`
+                          ) : activeTab === 'levels' ? (
+                            `Difficulty: ${item.difficulty?.charAt(0).toUpperCase() + item.difficulty?.slice(1) || 'Unknown'} | Lessons: ${item.lessons?.length || 0}`
+                          ) : activeTab === 'lessons' ? (
+                            `Topic: ${item.aiContext?.topic || 'N/A'} | Difficulty: ${item.aiContext?.difficulty?.toUpperCase() || 'EASY'}`
+                          ) : (
+                            item.description || item.code || 'No description'
+                          )}
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -287,6 +370,292 @@ const ContentManagement = () => {
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
                     />
                   </div>
+
+                  {activeTab === 'levels' && (
+                    <>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Learning Track</label>
+                        <select
+                          required
+                          value={formData.learning?._id || formData.learning || ''}
+                          onChange={e => setFormData({...formData, learning: e.target.value})}
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                        >
+                          <option value="">Select Track</option>
+                          {learningsList.map(t => <option key={t._id} value={t._id}>{t.title}</option>)}
+                        </select>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Level Number (1-5)</label>
+                          <input
+                            required
+                            type="number"
+                            min="1"
+                            max="5"
+                            value={formData.levelNumber || ''}
+                            onChange={e => setFormData({...formData, levelNumber: parseInt(e.target.value)})}
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Display Order</label>
+                          <input
+                            required
+                            type="number"
+                            value={formData.order || ''}
+                            onChange={e => setFormData({...formData, order: parseInt(e.target.value)})}
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Difficulty</label>
+                        <select
+                          required
+                          value={formData.difficulty || 'beginner'}
+                          onChange={e => setFormData({...formData, difficulty: e.target.value})}
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                        >
+                          <option value="beginner">Beginner</option>
+                          <option value="elementary">Elementary</option>
+                          <option value="intermediate">Intermediate</option>
+                          <option value="advanced">Advanced</option>
+                          <option value="master">Master</option>
+                        </select>
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
+                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Progression Rules</h4>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Min Score (%)</label>
+                            <input
+                              type="number"
+                              value={formData.unlockCondition?.minScore || 70}
+                              onChange={e => setFormData({...formData, unlockCondition: { ...formData.unlockCondition, minScore: parseInt(e.target.value) }})}
+                              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Req. Lessons</label>
+                            <input
+                              type="number"
+                              value={formData.unlockCondition?.requiredLessonsCompleted || 0}
+                              onChange={e => setFormData({...formData, unlockCondition: { ...formData.unlockCondition, requiredLessonsCompleted: parseInt(e.target.value) }})}
+                              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
+                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">AI & Specialization</h4>
+                        <div className="space-y-2">
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Focus Areas</label>
+                          <div className="grid grid-cols-2 gap-2">
+                            {['vocabulary', 'grammar', 'conversation', 'listening'].map(area => (
+                              <label key={area} className="flex items-center gap-2 p-2 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={formData.aiConfig?.focusAreas?.includes(area)}
+                                  onChange={e => {
+                                    const current = formData.aiConfig?.focusAreas || [];
+                                    const next = e.target.checked ? [...current, area] : current.filter(a => a !== area);
+                                    setFormData({...formData, aiConfig: { ...formData.aiConfig, focusAreas: next }});
+                                  }}
+                                  className="w-4 h-4 rounded text-rose-500 focus:ring-rose-500"
+                                />
+                                <span className="text-xs font-medium text-slate-600 dark:text-slate-400 capitalize">{area}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Complexity Boost</label>
+                          <input
+                            type="number"
+                            step="0.1"
+                            value={formData.aiConfig?.complexityBoost || 1}
+                            onChange={e => setFormData({...formData, aiConfig: { ...formData.aiConfig, complexityBoost: parseFloat(e.target.value) }})}
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <input
+                          type="checkbox"
+                          id="isLevelActive"
+                          checked={formData.isActive !== false}
+                          onChange={e => setFormData({...formData, isActive: e.target.checked})}
+                          className="w-4 h-4 rounded text-rose-500 focus:ring-rose-500"
+                        />
+                        <label htmlFor="isLevelActive" className="text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+                          Active & Visible to learners
+                        </label>
+                      </div>
+                    </>
+                  )}
+
+                  {activeTab === 'lessons' && (
+                    <>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Parent Level</label>
+                        <select
+                          required
+                          value={formData.level?._id || formData.level || ''}
+                          onChange={e => setFormData({...formData, level: e.target.value})}
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                        >
+                          <option value="">Select Level</option>
+                          {levelsList.map(l => <option key={l._id} value={l._id}>L{l.levelNumber}: {l.title}</option>)}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Order inside Level</label>
+                        <input
+                          required
+                          type="number"
+                          value={formData.order || ''}
+                          onChange={e => setFormData({...formData, order: parseInt(e.target.value)})}
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Learning Objective</label>
+                        <textarea
+                          required
+                          rows={2}
+                          value={formData.objective || ''}
+                          onChange={e => setFormData({...formData, objective: e.target.value})}
+                          placeholder="e.g. Learn basic greetings in daily conversation"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                        />
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
+                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">AI & Tutor Context</h4>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Topic</label>
+                            <input
+                              required
+                              type="text"
+                              value={formData.aiContext?.topic || ''}
+                              onChange={e => setFormData({...formData, aiContext: { ...formData.aiContext, topic: e.target.value }})}
+                              placeholder="e.g. Greetings"
+                              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">AI Difficulty</label>
+                            <select
+                              value={formData.aiContext?.difficulty || 'easy'}
+                              onChange={e => setFormData({...formData, aiContext: { ...formData.aiContext, difficulty: e.target.value }})}
+                              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                            >
+                              <option value="easy">Easy</option>
+                              <option value="medium">Medium</option>
+                              <option value="hard">Hard</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Teacher Specific Instruction</label>
+                          <textarea
+                            rows={3}
+                            value={formData.aiContext?.teacherPrompt || ''}
+                            onChange={e => setFormData({...formData, aiContext: { ...formData.aiContext, teacherPrompt: e.target.value }})}
+                            placeholder="Specific instructions for the AI tutor during this lesson..."
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <input
+                          type="checkbox"
+                          id="isLessonActive"
+                          checked={formData.isActive || false}
+                          onChange={e => setFormData({...formData, isActive: e.target.checked})}
+                          className="w-4 h-4 rounded text-rose-500 focus:ring-rose-500"
+                        />
+                        <label htmlFor="isLessonActive" className="text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+                          Lesson Active & Visible
+                        </label>
+                      </div>
+                    </>
+                  )}
+
+                  {activeTab === 'learnings' && (
+                    <>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Source Language</label>
+                          <select
+                            required
+                            value={formData.sourceLanguage?._id || formData.sourceLanguage || ''}
+                            onChange={e => setFormData({...formData, sourceLanguage: e.target.value})}
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                          >
+                            <option value="">Select Source</option>
+                            {languages.map(l => <option key={l._id} value={l._id}>{l.name}</option>)}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Target Language</label>
+                          <select
+                            required
+                            value={formData.targetLanguage?._id || formData.targetLanguage || ''}
+                            onChange={e => setFormData({...formData, targetLanguage: e.target.value})}
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                          >
+                            <option value="">Select Target</option>
+                            {languages.map(l => <option key={l._id} value={l._id}>{l.name}</option>)}
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">AI Configuration</h4>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Teacher Base Prompt</label>
+                          <textarea
+                            rows={3}
+                            value={formData.aiConfig?.basePrompt || ''}
+                            onChange={e => setFormData({...formData, aiConfig: { ...formData.aiConfig, basePrompt: e.target.value }})}
+                            placeholder="Instruct the AI on how to teach this language..."
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                          />
+                        </div>
+                        <div className="mt-4">
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Difficulty Curve</label>
+                          <select
+                            value={formData.aiConfig?.difficultyCurve || 'linear'}
+                            onChange={e => setFormData({...formData, aiConfig: { ...formData.aiConfig, difficultyCurve: e.target.value }})}
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
+                          >
+                            <option value="linear">Linear (Fixed pacing)</option>
+                            <option value="adaptive">Adaptive (AI Dynamic)</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <input
+                          type="checkbox"
+                          id="isLearningActive"
+                          checked={formData.isActive !== false}
+                          onChange={e => setFormData({...formData, isActive: e.target.checked})}
+                          className="w-4 h-4 rounded text-rose-500 focus:ring-rose-500"
+                        />
+                        <label htmlFor="isLearningActive" className="text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+                          Active & Enrollment Open
+                        </label>
+                      </div>
+                    </>
+                  )}
 
                    {activeTab === 'languages' && (
                     <>

@@ -57,8 +57,11 @@ const LevelPage = () => {
         <div className="flex-1">
           <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">{track.title}</h1>
           <div className="flex items-center gap-3 mt-1 text-sm text-slate-500 dark:text-slate-400">
-            {track.language?.name && (
-              <span className="flex items-center gap-1"><BookOpen className="w-4 h-4" /> {track.language.name}</span>
+            {track.targetLanguage?.name && (
+              <span className="flex items-center gap-1">
+                {track.targetLanguage?.metadata?.flag && <span>{track.targetLanguage.metadata.flag}</span>}
+                <BookOpen className="w-4 h-4" /> {track.targetLanguage.name}
+              </span>
             )}
             <span>{levels.length} levels</span>
           </div>
@@ -126,16 +129,27 @@ const LevelPage = () => {
                     <div className={`bg-white dark:bg-slate-900 border rounded-2xl p-4 sm:p-6 w-full max-w-sm ${
                       isCurrent ? 'border-indigo-200 dark:border-indigo-800/50 shadow-md shadow-indigo-500/5' : 'border-slate-200 dark:border-slate-800'
                     } ${isLocked ? 'opacity-50' : ''}`}>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Level {level.order ?? idx + 1}</span>
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Level {level.levelNumber || level.order || idx + 1}</span>
+                        {level.difficulty && (
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
+                            level.difficulty === 'master' ? 'bg-amber-100 text-amber-700' :
+                            level.difficulty === 'advanced' ? 'bg-rose-100 text-rose-700' :
+                            level.difficulty === 'intermediate' ? 'bg-indigo-100 text-indigo-700' :
+                            'bg-emerald-100 text-emerald-700'
+                          }`}>
+                            {level.difficulty}
+                          </span>
+                        )}
                       </div>
                       <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-3">{level.title}</h3>
                       {level.description && (
                         <p className="text-sm text-slate-500 dark:text-slate-400 mb-3 line-clamp-2">{level.description}</p>
                       )}
                       {isLocked ? (
-                        <div className="flex items-center gap-2 py-2 text-sm text-slate-400 font-medium">
-                          <Lock className="w-4 h-4" /> Complete previous level to unlock
+                        <div className="flex items-center gap-2 py-2 text-sm text-slate-400 font-medium whitespace-nowrap">
+                          <Lock className="w-4 h-4" /> 
+                          <span>{level.unlockCondition?.minScore || 70}% on prev level to unlock</span>
                         </div>
                       ) : (
                         <Link

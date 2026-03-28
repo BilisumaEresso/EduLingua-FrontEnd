@@ -20,6 +20,12 @@ const levelBadge = {
   advanced: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400',
 };
 
+const formatProgress = (data) => {
+  if (Array.isArray(data)) return data;
+  if (data && typeof data === 'object') return [data];
+  return [];
+};
+
 const LearningTracks = () => {
   const [searchParams] = useSearchParams();
   const [tracks, setTracks] = useState([]);
@@ -38,11 +44,17 @@ const LearningTracks = () => {
           getAllLanguages(),
           userProgressService.getProgress(),
         ]);
-        setTracks(tracksRes.value?.data?.learnings || tracksRes.value?.data || []);
-        setLanguages(langsRes.value?.data?.langs || langsRes.value?.data || []);
-        setMyProgress(progressRes.value?.data?.progress || progressRes.value?.progress || []);
+
+        const tracksData = tracksRes.status === 'fulfilled' ? (tracksRes.value?.data?.learnings || tracksRes.value?.data || []) : [];
+        const langsData = langsRes.status === 'fulfilled' ? (langsRes.value?.data?.langs || langsRes.value?.data || []) : [];
+        const progressData = progressRes.status === 'fulfilled' ? (progressRes.value?.data?.progress || progressRes.value?.progress || []) : [];
+
+        setTracks(tracksData);
+        setLanguages(langsData);
+
+        setMyProgress(formatProgress(progressData));
       } catch (e) {
-        console.error(e);
+        console.error("Fetch all error:", e);
       } finally {
         setLoading(false);
       }
@@ -55,9 +67,12 @@ const LearningTracks = () => {
   const handleEnroll = async (trackId) => {
     setEnrolling(trackId);
     try {
-      await userProgressService.startLearningTrack({ learningId: trackId });
+      const res = await userProgressService.startLearningTrack({ learning: trackId });
+      console.log(res)
+      console.log(trackId)
       const progressRes = await userProgressService.getProgress();
-      setMyProgress(progressRes?.data?.progress || progressRes?.progress || []);
+      const rawProgress = progressRes?.data?.progress || progressRes?.data || [];
+      setMyProgress(Array.isArray(rawProgress) ? rawProgress : (rawProgress && typeof rawProgress === 'object' ? [rawProgress] : []));
     } catch (e) {
       console.error(e);
     } finally {
@@ -67,7 +82,8 @@ const LearningTracks = () => {
 
   const filtered = tracks.filter(t => {
     const matchesSearch = t.title?.toLowerCase().includes(search.toLowerCase()) || t.description?.toLowerCase().includes(search.toLowerCase());
-    const matchesLang = !selectedLang || t.language?._id === selectedLang || t.language === selectedLang;
+    const targetId = t.targetLanguage?._id || t.targetLanguage;
+    const matchesLang = !selectedLang || targetId === selectedLang;
     return matchesSearch && matchesLang;
   });
 
@@ -131,7 +147,12 @@ const LearningTracks = () => {
           {filtered.map((track, idx) => {
             const isEnrolled = enrolledIds.includes(track._id);
             const progressEntry = myProgress.find(p => (p.learning?._id || p.learning) === track._id);
-            const progressPct = progressEntry?.progress ?? 0;
+
+            // Calculate progress percentage dynamically
+            const completedCount = progressEntry?.completedLessons?.length ?? 0;
+            const totalLessonsInTrack = track.levels?.reduce((sum, level) => sum + (level.lessons?.length || 0), 0) || 1;
+            const progressPct = Math.min(100, Math.round((completedCount / totalLessonsInTrack) * 100));
+
             const level = track.level?.toLowerCase() || 'beginner';
 
             return (
@@ -143,8 +164,9 @@ const LearningTracks = () => {
                 <div className={`h-28 bg-gradient-to-br ${gradients[idx % gradients.length]} relative overflow-hidden flex items-end p-5`}>
                   <div className="absolute inset-0 bg-black/10" />
                   <div className="relative flex items-center justify-between w-full">
-                    <span className="text-white/90 text-sm font-semibold">
-                      {track.language?.name || 'Language'}
+                    <span className="text-white/90 text-sm font-semibold flex items-center gap-2">
+                      {track.targetLanguage?.metadata?.flag && <span>{track.targetLanguage.metadata.flag}</span>}
+                      {track.targetLanguage?.name || 'Language'}
                     </span>
                     <span className={`text-xs font-bold px-2.5 py-1 rounded-full bg-white/20 text-white backdrop-blur`}>
                       {track.level || 'Beginner'}

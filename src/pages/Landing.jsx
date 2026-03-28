@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  MessageSquare, Brain, Target, 
+import {
+  MessageSquare, Brain, Target,
   ArrowRight, Sparkles, Zap, Shield, Globe
 } from 'lucide-react';
 import { getAllLanguages } from '../services/language';
@@ -47,7 +47,7 @@ const Landing = () => {
       <section className="relative overflow-hidden pt-20 pb-32 lg:pt-32 lg:pb-48">
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-indigo-50 dark:bg-indigo-900/20 blur-3xl opacity-50"></div>
         <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-fuchsia-50 dark:bg-fuchsia-900/20 blur-3xl opacity-50"></div>
-        
+
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -65,7 +65,7 @@ const Landing = () => {
             <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10">
               Master Amharic, Swahili, Afan Oromo, and more organically through immersive AI conversations and personalized learning paths.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <Link to="/signup" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-8 py-3.5 text-base font-semibold text-white shadow-sm hover:bg-indigo-700 hover:shadow-md transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-950">
                 Get Started
@@ -109,7 +109,7 @@ const Landing = () => {
                 desc: "Practice conversing with an AI companion that corrects your grammar and vocabulary instantly."
               }
             ].map((feature, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -140,7 +140,7 @@ const Landing = () => {
           <div className="relative">
             {/* Connecting line */}
             <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-indigo-100 dark:bg-indigo-900/30 -translate-x-1/2"></div>
-            
+
             <div className="space-y-16 relative">
               {[
                 {

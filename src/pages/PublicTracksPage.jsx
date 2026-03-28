@@ -52,7 +52,8 @@ const PublicTracksPage = () => {
   const filtered = tracks.filter(track => {
     const matchesSearch = track.title?.toLowerCase().includes(search.toLowerCase()) ||
       track.description?.toLowerCase().includes(search.toLowerCase());
-    const matchesLang = !selectedLang || track.language?._id === selectedLang || track.language === selectedLang;
+    const targetId = track.targetLanguage?._id || track.targetLanguage;
+    const matchesLang = !selectedLang || targetId === selectedLang;
     return matchesSearch && matchesLang;
   });
 
@@ -177,10 +178,11 @@ const PublicTracksPage = () => {
                             <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-snug mb-1">
                               {track.title}
                             </h3>
-                            {track.language?.name && (
+                            {track.targetLanguage?.name && (
                               <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 mb-2">
                                 <Globe className="w-3.5 h-3.5" />
-                                {track.language.name}
+                                {track.targetLanguage?.metadata?.flag && <span>{track.targetLanguage.metadata.flag}</span>}
+                                {track.targetLanguage.name}
                               </div>
                             )}
                             {track.description && (
