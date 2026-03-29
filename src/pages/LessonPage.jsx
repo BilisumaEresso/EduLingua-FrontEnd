@@ -8,115 +8,100 @@ import { getAllLevels } from '../services/level';
 import userProgressService from '../services/userProgress';
 
 // Section renderer helpers
+const ContentBlockRenderer = ({ block, inputVal, setInputVal, isChecked }) => {
+  const { type, payload } = block;
+
+  switch (type) {
+    case 'explanation':
+      return (
+        <div className="space-y-4 py-4">
+          <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center">
+            <BookOpen className="w-6 h-6" />
+          </div>
+          <p className="text-xl text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
+            {payload?.text}
+          </p>
+        </div>
+      );
+
+    case 'translation':
+      return (
+        <div className="space-y-4 py-6 bg-slate-50 dark:bg-slate-900/50 rounded-3xl p-6 border border-slate-100 dark:border-slate-800">
+           <div className="space-y-1">
+             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Native</span>
+             <p className="text-lg font-bold text-slate-900 dark:text-white">{payload?.translations?.source}</p>
+           </div>
+           <div className="w-full h-px bg-slate-200 dark:bg-slate-800" />
+           <div className="space-y-1">
+             <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Learning</span>
+             <p className="text-2xl font-black text-indigo-600 dark:text-indigo-400">{payload?.translations?.target}</p>
+           </div>
+        </div>
+      );
+
+    case 'example':
+      return (
+        <div className="py-4 border-l-4 border-indigo-500 pl-6 my-4 bg-indigo-50/30 dark:bg-indigo-900/10 rounded-r-2xl">
+           <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase mb-2 tracking-widest">Example</p>
+           <p className="text-lg text-slate-700 dark:text-slate-200">{payload?.text}</p>
+        </div>
+      );
+
+    case 'exercise':
+      return (
+        <div className="space-y-6 py-8">
+          <div className="p-6 bg-rose-50 dark:bg-rose-900/20 rounded-3xl border-2 border-rose-100 dark:border-rose-900/30">
+            <h3 className="text-xl font-bold text-rose-900 dark:text-rose-100 mb-2">{payload?.question}</h3>
+            <p className="text-xs text-rose-600 dark:text-rose-400 font-medium">Type the correct answer below</p>
+          </div>
+          <input
+            autoFocus
+            type="text"
+            value={inputVal}
+            onChange={e => setInputVal(e.target.value)}
+            disabled={isChecked}
+            placeholder="Your answer..."
+            className="w-full p-5 text-2xl font-bold bg-white dark:bg-slate-900 border-b-4 border-slate-200 dark:border-slate-800 focus:border-indigo-500 focus:ring-0 dark:text-white transition-all outline-none"
+          />
+        </div>
+      );
+
+    case 'hint':
+    case 'pronunciation':
+      return (
+        <div className="flex items-start gap-4 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-2xl border border-amber-100 dark:border-amber-900/30">
+          <div className="shrink-0 w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+            <Volume2 className="w-4 h-4" />
+          </div>
+          <p className="text-sm font-medium text-amber-800 dark:text-amber-200 italic">{payload?.text || payload?.hint}</p>
+        </div>
+      );
+
+    default:
+      return null;
+  }
+};
+
 const SectionContent = ({ section, inputVal, setInputVal, isChecked }) => {
-  const type = section.type?.toLowerCase();
-
-  if (type === 'explanation' || type === 'text' || type === 'content') {
-    return (
-      <div className="flex flex-col items-center text-center justify-center flex-1 space-y-6">
-        <div className="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center">
-          <BookOpen className="w-10 h-10" />
-        </div>
-        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-          {section.title || 'New Concept'}
-        </h2>
-        <p className="text-xl text-slate-600 dark:text-slate-300 max-w-lg leading-relaxed">
-          {section.content || section.text}
-        </p>
-        {section.mediaUrl && (
-          <img src={section.mediaUrl} alt={section.title} className="max-w-sm rounded-2xl shadow-md" />
-        )}
-      </div>
-    );
-  }
-
-  if (type === 'media' || type === 'image') {
-    return (
-      <div className="flex flex-col items-center justify-center flex-1 space-y-6">
-        <div className="w-20 h-20 bg-fuchsia-100 dark:bg-fuchsia-900/40 text-fuchsia-600 rounded-full flex items-center justify-center">
-          <ImageIcon className="w-10 h-10" />
-        </div>
-        {section.mediaUrl
-          ? <img src={section.mediaUrl} alt={section.title} className="max-w-md w-full rounded-2xl shadow-lg" />
-          : <p className="text-slate-500">{section.content || section.text}</p>
-        }
-        {section.content && <p className="text-lg text-slate-600 dark:text-slate-300 max-w-lg text-center">{section.content}</p>}
-      </div>
-    );
-  }
-
-  if (type === 'translation') {
-    return (
-      <div className="flex flex-col flex-1 space-y-8 mt-10">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Translate this phrase</h2>
-        <div className="p-6 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl border border-indigo-100 dark:border-indigo-800/30">
-          <p className="text-2xl font-medium text-indigo-900 dark:text-indigo-100">{section.question || section.content}</p>
-        </div>
-        <textarea
-          autoFocus
-          value={inputVal}
-          onChange={e => setInputVal(e.target.value)}
-          disabled={isChecked}
-          placeholder="Type your answer..."
-          className="w-full h-32 p-4 text-xl bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-2xl focus:border-indigo-500 focus:ring-0 dark:text-white resize-none transition-colors"
-        />
-      </div>
-    );
-  }
-
-  if (type === 'listening' || type === 'audio') {
-    return (
-      <div className="flex flex-col flex-1 space-y-8 mt-10">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Listen carefully</h2>
-        <div className="flex flex-col items-center justify-center p-12 space-y-8">
-          <button
-            onClick={() => section.mediaUrl && new Audio(section.mediaUrl).play()}
-            className="w-24 h-24 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all"
-          >
-            <Volume2 className="w-10 h-10" />
-          </button>
-          {section.content && (
-            <p className="text-xl font-medium text-slate-600 dark:text-slate-400 italic">"{section.content}"</p>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  if (type === 'multiple_choice' || type === 'quiz') {
-    const options = section.options || [];
-    return (
-      <div className="flex flex-col flex-1 space-y-8 mt-10">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{section.question || section.content}</h2>
-        <div className="grid sm:grid-cols-2 gap-4">
-          {options.map((option, idx) => {
-            const optText = typeof option === 'string' ? option : option.text || option;
-            return (
-              <button
-                key={idx}
-                disabled={isChecked}
-                onClick={() => setInputVal(optText)}
-                className={`p-6 text-left rounded-2xl border-2 font-medium text-lg transition-all ${
-                  inputVal === optText
-                    ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300'
-                    : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-slate-300'
-                }`}
-              >
-                {optText}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-
-  // Fallback: show content as text
   return (
-    <div className="flex flex-col items-center text-center justify-center flex-1 space-y-6">
-      <p className="text-xl text-slate-600 dark:text-slate-300 max-w-lg leading-relaxed">
-        {section.content || section.text || 'No content available.'}
-      </p>
+    <div className="flex flex-col space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="space-y-2">
+         <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{section.title}</h1>
+         <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{section.objective}</p>
+      </div>
+      
+      <div className="space-y-6 divide-y divide-slate-100 dark:divide-slate-800">
+        {section.contentBlocks?.map((block, idx) => (
+          <div key={idx} className={idx > 0 ? 'pt-6' : ''}>
+            <ContentBlockRenderer
+              block={block}
+              inputVal={inputVal}
+              setInputVal={setInputVal}
+              isChecked={isChecked}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
@@ -185,12 +170,14 @@ const LessonPage = () => {
   const getAnswer = (section) => section?.answer || section?.correctAnswer || '';
 
   const handleCheck = () => {
-    const type = currentSection?.type?.toLowerCase();
-    if (!type || type === 'explanation' || type === 'text' || type === 'content' || type === 'media' || type === 'listening' || type === 'audio') {
+    const exerciseBlock = currentSection?.contentBlocks?.find(b => b.type === 'exercise');
+    
+    if (!exerciseBlock) {
       handleNext();
       return;
     }
-    const answer = getAnswer(currentSection);
+
+    const answer = exerciseBlock.payload?.answer || '';
     if (answer) {
       setIsCorrect(inputVal.trim().toLowerCase() === answer.toLowerCase());
       setIsChecked(true);
@@ -227,8 +214,7 @@ const LessonPage = () => {
   };
 
   const isPassiveSection = () => {
-    const type = currentSection?.type?.toLowerCase();
-    return !type || ['explanation', 'text', 'content', 'media', 'image', 'listening', 'audio'].includes(type);
+    return !currentSection?.contentBlocks?.some(b => b.type === 'exercise');
   };
 
   if (loading) {
@@ -357,7 +343,7 @@ const LessonPage = () => {
                   Incorrect
                 </div>
                 <p className="text-sm font-medium text-slate-600 dark:text-slate-300 ml-11">
-                  Correct: <span className="text-emerald-600 dark:text-emerald-400">{getAnswer(currentSection)}</span>
+                  Correct: <span className="text-emerald-600 dark:text-emerald-400">{currentSection?.contentBlocks?.find(b => b.type === 'exercise')?.payload?.answer}</span>
                 </p>
               </div>
             )}
