@@ -234,11 +234,21 @@ const ContentManagement = () => {
     if (generatedQuizQuestions.length === 0) return;
     setSaveLoading(true);
     try {
-      // Find or create quiz for this lesson
+      // Map AI fields to schema fields
+      const mappedQuestions = generatedQuizQuestions.map(q => ({
+        questionText: q.question,
+        correctAnswer: q.answer,
+        options: q.options || [],
+        questionType: 'multiple_choice',
+        difficulty: 'medium',
+        skills: ['vocabulary'], // Default or derived
+        isAiGenerated: true,
+        section: null // Optional link
+      }));
+
       await saveQuiz({
-        lesson: editingItem._id,
-        questionPool: generatedQuizQuestions,
-        title: `${editingItem.title} Review`
+        lessonId: editingItem._id,
+        questions: mappedQuestions
       });
       setShowAIModal(false);
       setGeneratedQuizQuestions([]);
@@ -256,8 +266,10 @@ const ContentManagement = () => {
     setGeneratingAI(true);
     try {
       const res = await aiService.generateQuiz({ lessonId: editingItem._id });
-      setGeneratedQuizQuestions(res?.data?.questions || res?.questions || []);
-      setGeneratedSections([]); // Ensure sections view is cleared
+      // Controller returns { quiz: { questions: [...] } }
+      const quizResult = res?.data?.quiz || res?.quiz;
+      setGeneratedQuizQuestions(quizResult?.questions || []);
+      setGeneratedSections([]); 
       setShowAIModal(true);
     } catch (error) {
       alert("AI Quiz generation failed: " + (error.response?.data?.message || "Error"));
