@@ -5,7 +5,7 @@ import useAuthStore from '../store/authStore';
 import userProgressService from '../services/userProgress';
 import { getMyChat, sendMessage as sendChatMessage } from '../services/chat';
 
-const FREE_LIMIT = 5;
+const FREE_LIMIT = 30;
 
 const ChatPage = () => {
   const { user, checkAuth } = useAuthStore();

@@ -63,7 +63,7 @@ const ContentManagement = () => {
           if (activeTab === 'lessons' || activeTab === 'sections') {
             const levelRes = await getAllLevels();
             setLevelsList(levelRes?.data?.levels || levelRes?.data || []);
-            
+
             if (activeTab === 'sections' || activeTab === 'quizzes') {
               const lessonRes = await getAllLessons();
               setLessonsList(lessonRes?.data?.lessons || lessonRes?.data || []);
@@ -268,8 +268,9 @@ const ContentManagement = () => {
       const res = await aiService.generateQuiz({ lessonId: editingItem._id });
       // Controller returns { quiz: { questions: [...] } }
       const quizResult = res?.data?.quiz || res?.quiz;
+      console.log(res)
       setGeneratedQuizQuestions(quizResult?.questions || []);
-      setGeneratedSections([]); 
+      setGeneratedSections([]);
       setShowAIModal(true);
     } catch (error) {
       alert("AI Quiz generation failed: " + (error.response?.data?.message || "Error"));
@@ -792,15 +793,15 @@ const ContentManagement = () => {
                               onClick={() => {
                                 const current = formData.questionPool || [];
                                 setFormData({
-                                  ...formData, 
-                                  questionPool: [...current, { 
-                                    questionText: '', 
-                                    questionType: 'multiple_choice', 
-                                    options: ['', '', '', ''], 
+                                  ...formData,
+                                  questionPool: [...current, {
+                                    questionText: '',
+                                    questionType: 'multiple_choice',
+                                    options: ['', '', '', ''],
                                     correctAnswer: '',
                                     difficulty: 'easy',
                                     skills: [],
-                                    isAiGenerated: false 
+                                    isAiGenerated: false
                                   }]
                                 });
                               }}
@@ -912,8 +913,8 @@ const ContentManagement = () => {
                                           onChange={e => {
                                             const next = [...formData.questionPool];
                                             const currentSkills = next[qIdx].skills || [];
-                                            next[qIdx].skills = e.target.checked 
-                                              ? [...currentSkills, skill] 
+                                            next[qIdx].skills = e.target.checked
+                                              ? [...currentSkills, skill]
                                               : currentSkills.filter(s => s !== skill);
                                             setFormData({...formData, questionPool: next});
                                           }}
@@ -1190,7 +1191,7 @@ const ContentManagement = () => {
                                     />
                                   </div>
                                 )}
-                                
+
                                 <p className="text-[9px] text-slate-400">Content block will appear in the specified order.</p>
                               </div>
                             ))}
@@ -1404,7 +1405,7 @@ const ContentManagement = () => {
                    <div key={idx} className="p-4 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
                       <div className="flex items-center gap-3 mb-3">
                          <span className="w-6 h-6 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center font-bold text-[10px]">{idx + 1}</span>
-                         <h4 className="font-bold text-sm text-slate-900 dark:text-white">{q.questionText}</h4>
+                         <h4 className="font-bold text-sm text-slate-900 dark:text-white">{q.question}</h4>
                       </div>
                       <div className="pl-9 grid grid-cols-2 gap-2">
                          {q.options?.map((opt, oIdx) => (

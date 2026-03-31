@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, Loader2, BookOpen } from 'lucide-react';
 import useAuthStore from '../store/authStore';
@@ -9,7 +9,11 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuthStore();
   const navigate = useNavigate();
-
+ useEffect(() => {
+  if(useAuthStore.getState().user){
+    navigate('/dashboard');
+  }
+ }, []);
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);

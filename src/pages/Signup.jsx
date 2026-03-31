@@ -18,7 +18,11 @@ const Signup = () => {
 
   const { signup } = useAuthStore();
   const navigate = useNavigate();
-
+useEffect(() => {
+  if(useAuthStore.getState().user){
+    navigate('/dashboard');
+  }
+}, []);
   useEffect(() => {
     const fetchLanguages = async () => {
       try {
