@@ -31,11 +31,31 @@ const ProgressPage = () => {
       })
       .finally(() => setLoading(false));
   }, []);
+console.log(progressList)
+  const computeTrackStats = (p) => {
+    const levels = Array.isArray(p?.levelsProgress) ? p.levelsProgress : []
+    const totalLevels = levels.length || 5
+    const passedLevels = levels.filter((lp) => lp.status === "review" || lp.status === "passed").length
+
+    const lessonProgress = levels.flatMap((lp) => (Array.isArray(lp.lessonProgress) ? lp.lessonProgress : []))
+    const lessonsDone = lessonProgress.filter((lp) => lp.status === "done").length
+    const lessonsSkipped = lessonProgress.filter((lp) => lp.status === "skipped").length
+    const lessonCompletionCount = lessonsDone + lessonsSkipped
+
+    const pct = totalLevels ? Math.round((passedLevels / totalLevels) * 100) : 0
+    return { totalLevels, passedLevels, lessonCompletionCount, pct, isComplete: pct >= 100 }
+  }
 
   const totalXP = progressList.reduce((acc, p) => acc + (p.xp ?? 0), 0);
-  const totalLessons = progressList.reduce((acc, p) => acc + (p.completedLessons?.length ?? 0), 0);
-  const completed = progressList.filter(p => (p.progress ?? 0) >= 100).length;
-  const inProgress = progressList.filter(p => (p.progress ?? 0) < 100).length;
+  const totalLessons = progressList.reduce((acc, p) => acc + (computeTrackStats(p).lessonCompletionCount ?? 0), 0);
+
+  // Progress indicators
+  const tracksWithStats = progressList.map(p => {
+    return { ...p, ...computeTrackStats(p) };
+  });
+
+  const completedTracks = tracksWithStats.filter(t => t.isComplete).length;
+  const activeTracks = tracksWithStats.filter(t => !t.isComplete).length;
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 pb-12">
@@ -51,10 +71,10 @@ const ProgressPage = () => {
           {[
             { label: 'Total XP', value: totalXP, icon: Trophy, color: 'indigo' },
             { label: 'Lessons Done', value: totalLessons, icon: CheckCircle2, color: 'emerald' },
-            { label: 'Tracks Active', value: inProgress, icon: Layers, color: 'fuchsia' },
-            { label: 'Tracks Finished', value: completed, icon: Target, color: 'orange' },
+            { label: 'Tracks Active', value: activeTracks, icon: Layers, color: 'fuchsia' },
+            { label: 'Tracks Finished', value: completedTracks, icon: Target, color: 'orange' },
           ].map(({ label, value, icon: Icon, color }) => (
-            <div key={label} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+            <div key={label} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
               <div className={`w-10 h-10 rounded-xl bg-${color}-50 dark:bg-${color}-900/20 text-${color}-500 flex items-center justify-center mb-3`}>
                 <Icon className="w-5 h-5" />
               </div>
@@ -96,24 +116,22 @@ const ProgressPage = () => {
       {!loading && !error && progressList.length > 0 && (
         <div className="space-y-4">
           <h2 className="text-lg font-bold text-slate-900 dark:text-white">Enrolled Tracks</h2>
-          {progressList.map((p, idx) => {
+          {tracksWithStats.map((p, idx) => {
             const trackId = p.learning?._id || p.learning;
             const title = p.learning?.title || p.title || 'Learning Track';
             const targetLang = p.learning?.targetLanguage;
             const langName = targetLang?.name || '';
             const flag = targetLang?.metadata?.flag || '';
-            
-            // Calculate progress percentage dynamically
-            const completedCount = p.completedLessons?.length ?? 0;
-            const totalLessonsInTrack = p.learning?.levels?.reduce((sum, level) => sum + (level.lessons?.length || 0), 0) || 1;
-            const pct = Math.min(100, Math.round((completedCount / totalLessonsInTrack) * 100));
-            
-            const isComplete = pct >= 100;
+            const currentLevelTitle = p.currentLevel?.title || `Level ${p.overallLevel || 1}`;
+
+            const completedCount = p.lessonCompletionCount ?? 0;
+            const pct = p.pct;
+            const isComplete = p.isComplete;
 
             return (
               <div
                 key={p._id || idx}
-                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center gap-6"
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center gap-6 shadow-sm hover:shadow-md transition-shadow"
               >
                 {/* Icon */}
                 <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${gradients[idx % gradients.length]} flex items-center justify-center shrink-0 shadow-md`}>
@@ -130,6 +148,9 @@ const ProgressPage = () => {
                         {langName}
                       </span>
                     )}
+                    <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 px-2 py-0.5 rounded-full">
+                      {currentLevelTitle}
+                    </span>
                     {isComplete && (
                       <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-0.5 rounded-full flex items-center gap-1">
                         <CheckCircle2 className="w-3 h-3" /> Completed

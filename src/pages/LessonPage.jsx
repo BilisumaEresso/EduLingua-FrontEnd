@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { X, Check, Volume2, ArrowRight, BookOpen, Loader2, Image as ImageIcon } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { getAllLessons } from '../services/lesson';
 import { getAllSections } from '../services/section';
-import { getAllLevels } from '../services/level';
+import { getLevelById } from '../services/level';
 import userProgressService from '../services/userProgress';
 
 // Section renderer helpers
@@ -119,6 +119,8 @@ const LessonPage = () => {
   const [isCorrect, setIsCorrect] = useState(null);
   const [loading, setLoading] = useState(true);
   const [levelInfo, setLevelInfo] = useState(null);
+  const [progress, setProgress] = useState(null);
+  const [isSavingLesson, setIsSavingLesson] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,18 +128,25 @@ const LessonPage = () => {
         // id here is levelId
         const [lessonsRes, levelRes] = await Promise.all([
           getAllLessons({ levelId: id }),
-          getAllLevels({ _id: id }),
+          getLevelById(id),
         ]);
         const fetchedLessons = lessonsRes?.data?.lessons || lessonsRes?.data || [];
         setLessons(fetchedLessons);
 
-        const levels = levelRes?.data?.levels || levelRes?.data || [];
-        setLevelInfo(levels[0] || null);
+        const levelData = levelRes?.data?.level || levelRes?.level || levelRes?.data || null;
+        setLevelInfo(levelData || null);
 
         // Fetch sections for the first lesson immediately
         if (fetchedLessons.length > 0) {
           const sectionsRes = await getAllSections({ lessonId: fetchedLessons[0]._id });
           setSections(sectionsRes?.data?.sections || sectionsRes?.data || []);
+        }
+
+        // Fetch user progress to check for completion
+        if (levelData?.learning) {
+          const progRes = await userProgressService.getProgress({ learningId: levelData.learning });
+          const progData = progRes?.data?.progress || progRes?.data || progRes?.progress;
+          setProgress(Array.isArray(progData) ? progData[0] : progData);
         }
       } catch (e) {
         console.error(e);
@@ -147,6 +156,27 @@ const LessonPage = () => {
     };
     fetchData();
   }, [id]);
+
+  const getLearningId = () => levelInfo?.learning?._id || levelInfo?.learning
+
+  const persistLessonStatus = async (lesson, lessonStatus) => {
+    if (!lesson || !levelInfo?.learning) return
+    const learningId = getLearningId()
+    if (!learningId) return
+
+    await userProgressService.markLessonCompleted({
+      learningId,
+      levelId: id,
+      lessonId: lesson._id,
+      status: lessonStatus,
+    })
+
+    // Refresh server state so phase/labels stay correct.
+    const progRes = await userProgressService.getProgress({ learningId })
+    const progData =
+      progRes?.data?.progress || progRes?.data || progRes?.progress || progRes
+    setProgress(Array.isArray(progData) ? progData[0] : progData)
+  }
 
   // Load sections when lesson changes
   const loadSectionsForLesson = async (lesson) => {
@@ -166,8 +196,6 @@ const LessonPage = () => {
   const currentSection = sections[currentSectionIdx];
   const totalSteps = sections.length;
   const progressPercent = totalSteps > 0 ? (currentSectionIdx / totalSteps) * 100 : 0;
-
-  const getAnswer = (section) => section?.answer || section?.correctAnswer || '';
 
   const handleCheck = () => {
     const exerciseBlock = currentSection?.contentBlocks?.find(b => b.type === 'exercise');
@@ -196,11 +224,16 @@ const LessonPage = () => {
       return;
     }
 
-    // Finished current lesson — mark as complete and move to next
-    if (currentLesson) {
-      try {
-        await userProgressService.markLessonCompleted({ lessonId: currentLesson._id });
-      } catch (e) { /* non-critical */ }
+    // Finished current lesson — add to session state
+    if (!currentLesson) return
+
+    setIsSavingLesson(true)
+    try {
+      await persistLessonStatus(currentLesson, "done")
+    } catch (e) {
+      console.error("Failed to mark lesson done:", e)
+    } finally {
+      setIsSavingLesson(false)
     }
 
     if (currentLessonIdx < lessons.length - 1) {
@@ -208,10 +241,41 @@ const LessonPage = () => {
       setCurrentLessonIdx(prev => prev + 1);
       await loadSectionsForLesson(nextLesson);
     } else {
-      // All lessons done → go to quiz
-      navigate(`/quiz/${id}`);
+      // All lessons done → go to quiz (unless already in review).
+      const levelEntry = progress?.levelsProgress?.find(
+        (lp) =>
+          (lp.levelId?._id || lp.levelId)?.toString?.() === id?.toString?.(),
+      )
+      if (levelEntry?.status === "review") navigate(`/learning/${getLearningId()}`)
+      else navigate(`/quiz/${id}`)
     }
   };
+
+  const handleSkipLesson = async () => {
+    if (!currentLesson) return
+
+    setIsSavingLesson(true)
+    try {
+      await persistLessonStatus(currentLesson, "skipped")
+    } catch (e) {
+      console.error("Failed to skip lesson:", e)
+    } finally {
+      setIsSavingLesson(false)
+    }
+
+    if (currentLessonIdx < lessons.length - 1) {
+      const nextLesson = lessons[currentLessonIdx + 1];
+      setCurrentLessonIdx(prev => prev + 1);
+      await loadSectionsForLesson(nextLesson);
+    } else {
+      const levelEntry = progress?.levelsProgress?.find(
+        (lp) =>
+          (lp.levelId?._id || lp.levelId)?.toString?.() === id?.toString?.(),
+      )
+      if (levelEntry?.status === "review") navigate(`/learning/${getLearningId()}`)
+      else navigate(`/quiz/${id}`)
+    }
+  }
 
   const isPassiveSection = () => {
     return !currentSection?.contentBlocks?.some(b => b.type === 'exercise');
@@ -236,7 +300,16 @@ const LessonPage = () => {
     );
   }
 
-  return (
+    const levelEntry = progress?.levelsProgress?.find(
+      (lp) => (lp.levelId?._id || lp.levelId) === id,
+    )
+    const isLessonAlreadyDone = levelEntry?.lessonProgress?.some(
+      (lp) =>
+        (lp.lessonId?._id || lp.lessonId) === currentLesson?._id &&
+        (lp.status === "done" || lp.status === "skipped"),
+    );
+
+    return (
     <div className="fixed inset-0 z-50 bg-white dark:bg-slate-950 flex flex-col">
       {/* Top Bar */}
       <div className="h-16 border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 flex items-center gap-4 bg-white dark:bg-slate-950">
@@ -248,11 +321,16 @@ const LessonPage = () => {
             <span>{currentLesson?.title || 'Lesson'}</span>
             <span>Section {currentSectionIdx + 1} of {totalSteps}</span>
           </div>
-          <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+          <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden relative">
             <div
-              className="h-full bg-emerald-500 transition-all duration-500 ease-out rounded-full"
+              className={`h-full ${isLessonAlreadyDone ? 'bg-indigo-400' : 'bg-emerald-500'} transition-all duration-500 ease-out rounded-full`}
               style={{ width: `${progressPercent}%` }}
             />
+            {isLessonAlreadyDone && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-[8px] font-black text-white uppercase tracking-tighter opacity-70">Reviewing</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -283,10 +361,17 @@ const LessonPage = () => {
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded">Topic</span>
             <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{currentLesson?.aiContext?.topic || 'General Learning'}</span>
+            {isLessonAlreadyDone && (
+              <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-0.5 rounded flex items-center gap-1">
+                <Check className="w-3 h-3" /> Already Done
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
             <BookOpen className="w-3.5 h-3.5" />
-            <span className="text-xs italic">{currentLesson?.objective || 'Complete the sections to progress.'}</span>
+            <span className="text-xs italic">
+              {isLessonAlreadyDone ? 'You are reviewing this lesson.' : (currentLesson?.objective || 'Complete the sections to progress.')}
+            </span>
           </div>
         </div>
       </div>
@@ -294,7 +379,7 @@ const LessonPage = () => {
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto w-full max-w-3xl mx-auto px-4 sm:px-6 py-10 flex flex-col">
         <AnimatePresence mode="wait">
-          <motion.div
+          <Motion.div
             key={`${currentLessonIdx}-${currentSectionIdx}`}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -314,7 +399,7 @@ const LessonPage = () => {
                 <p>No sections available.</p>
               </div>
             )}
-          </motion.div>
+          </Motion.div>
         </AnimatePresence>
       </div>
 
@@ -350,20 +435,35 @@ const LessonPage = () => {
           </div>
 
           {currentSection && (
-            <button
-              onClick={isChecked || isPassiveSection() ? handleNext : handleCheck}
-              disabled={!isPassiveSection() && !inputVal && !isChecked}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={isChecked || isPassiveSection() ? handleNext : handleCheck}
+                disabled={!isPassiveSection() && !inputVal && !isChecked}
               className={`px-8 py-3 rounded-full font-bold text-white shadow-sm transition-all flex items-center gap-2 ${
                 isChecked && !isCorrect ? 'bg-rose-600 hover:bg-rose-700'
                 : isChecked && isCorrect ? 'bg-emerald-600 hover:bg-emerald-700'
                 : !isPassiveSection() && !inputVal ? 'bg-slate-300 dark:bg-slate-700 text-slate-500 cursor-not-allowed opacity-50'
                 : 'bg-indigo-600 hover:bg-indigo-700 active:scale-95'
               }`}
-            >
-              {isChecked || isPassiveSection() ? (
-                <>Continue <ArrowRight className="w-4 h-4" /></>
-              ) : 'Check'}
-            </button>
+              >
+                {isChecked || isPassiveSection() ? (
+                  <>
+                    Continue <ArrowRight className="w-4 h-4" />
+                  </>
+                ) : (
+                  'Check'
+                )}
+              </button>
+
+              <button
+                onClick={handleSkipLesson}
+                disabled={isSavingLesson}
+                className="px-6 py-3 rounded-full font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                title="Skip this lesson"
+              >
+                Skip
+              </button>
+            </div>
           )}
         </div>
       </div>

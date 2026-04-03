@@ -64,9 +64,12 @@ const ContentManagement = () => {
             const levelRes = await getAllLevels();
             setLevelsList(levelRes?.data?.levels || levelRes?.data || []);
 
-            if (activeTab === 'sections' || activeTab === 'quizzes') {
+            if (activeTab === 'sections') {
               const lessonRes = await getAllLessons();
               setLessonsList(lessonRes?.data?.lessons || lessonRes?.data || []);
+            }
+            if (activeTab === 'quizzes') {
+               // No longer need lessons for quizzes tab, we filter by level
             }
           }
         }
@@ -98,13 +101,16 @@ const ContentManagement = () => {
         setData(res?.data?.levels || res?.data || []);
         console.log(res?.data?.levels || res?.data || [])
       } else if (activeTab === 'lessons') {
-        res = await getAllLessons(selectedLevel ? { levelId: selectedLevel } : {});
+        res = await getAllLessons(selectedLevel 
+          ? { levelId: selectedLevel, activeOnly: false } 
+          : { activeOnly: false }
+        );
         setData(res?.data?.lessons || res?.data || []);
       } else if (activeTab === 'sections') {
         res = await getAllSections(selectedLesson ? { lessonId: selectedLesson } : {});
         setData(res?.data?.sections || res?.data || []);
       } else if (activeTab === 'quizzes') {
-        res = await getAllQuizzes(selectedLesson ? { lessonId: selectedLesson } : {});
+        res = await getAllQuizzes(selectedLevel ? { levelId: selectedLevel } : {});
         setData(res?.data?.quizzes || res?.data || []);
       }
     } catch (error) {
@@ -194,7 +200,7 @@ const ContentManagement = () => {
       ...(activeTab === 'levels' ? { difficulty: 'beginner', unlockCondition: { minScore: 70, requiredLessonsCompleted: 0 }, aiConfig: { focusAreas: [], complexityBoost: 1 }, isActive: true } : {}),
       ...(activeTab === 'lessons' ? { aiContext: { difficulty: 'easy', generated: false }, isActive: false, teacher: user._id } : {}),
       ...(activeTab === 'sections' ? { contentBlocks: [], skills: [], isActive: true } : {}),
-      ...(activeTab === 'quizzes' ? { questionPool: [], passingScore: 80 } : {}),
+      ...(activeTab === 'quizzes' ? { questionPool: [], passingScore: 80, level: selectedLevel } : {}),
     });
   };
 
@@ -370,15 +376,15 @@ const ContentManagement = () => {
                     ))}
                   </select>
                 )}
-                {activeTab === 'sections' && (
+                {activeTab === 'quizzes' && (
                   <select
-                     value={selectedLesson}
-                     onChange={e => setSelectedLesson(e.target.value)}
+                     value={selectedLevel}
+                     onChange={e => setSelectedLevel(e.target.value)}
                      className="text-xs font-bold bg-slate-50 dark:bg-slate-800 border-none rounded-lg px-3 py-1.5 focus:ring-1 focus:ring-rose-500"
                   >
-                    <option value="">All Lessons</option>
-                    {lessonsList.map(l => (
-                      <option key={l._id} value={l._id}>{l.title}</option>
+                    <option value="">All Levels</option>
+                    {levelsList.map(l => (
+                      <option key={l._id} value={l._id}>L{l.levelNumber}: {l.title}</option>
                     ))}
                   </select>
                 )}
@@ -416,12 +422,15 @@ const ContentManagement = () => {
                           {activeTab === 'quizzes' && (
                             <div className="flex items-center gap-2">
                               <span className="text-slate-400 font-medium whitespace-nowrap text-xs">
-                                [{lessonsList.find(l => l._id === (item.lesson?._id || item.lesson))?.title || 'Lesson'}]
+                                [{levelsList.find(lvl => lvl._id === (item.level?._id || item.level))?.title || 'Level'}]
                               </span>
                               <span className="font-bold text-slate-900 dark:text-white truncate">{item.title}</span>
                             </div>
                           )}
                           {activeTab !== 'sections' && activeTab !== 'quizzes' && (item.title || item.name)}
+                          {item.isActive === false && activeTab !== 'sections' && (
+                             <span className="ml-2 text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">HIDDEN</span>
+                          )}
                         </h4>
                         <p className="text-xs text-slate-500 truncate mt-1">
                           {activeTab === 'learnings' ? (
@@ -756,17 +765,17 @@ const ContentManagement = () => {
                   {activeTab === 'quizzes' && (
                      <>
                         <div>
-                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Parent Lesson</label>
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Parent Level</label>
                           <select
                             required
-                            value={formData.lesson?._id || formData.lesson || ''}
-                            onChange={e => setFormData({...formData, lesson: e.target.value})}
+                            value={formData.level?._id || formData.level || ''}
+                            onChange={e => setFormData({...formData, level: e.target.value})}
                             className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
                           >
-                            <option value="">Select Lesson</option>
-                            {lessonsList.map(l => (
-                              <option key={l._id} value={l._id}>
-                                {levelsList.find(lvl => lvl._id === (l.level?._id || l.level))?.title || 'Unknown Level'} - {l.title}
+                            <option value="">Select Level</option>
+                            {levelsList.map(lvl => (
+                              <option key={lvl._id} value={lvl._id}>
+                                L{lvl.levelNumber}: {lvl.title}
                               </option>
                             ))}
                           </select>

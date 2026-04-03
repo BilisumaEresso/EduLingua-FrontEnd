@@ -6,7 +6,7 @@ import api from './api';
  */
 
 export const getAllQuizzes = async (params = {}) => {
-  // supports ?lessonId=...
+  // supports ?levelId=...
   const res = await api.get('/quiz', { params });
   return res.data;
 };
@@ -18,6 +18,11 @@ export const getQuizById = async (id) => {
 
 export const getQuizRandomQuestions = async (id, count = 5) => {
   const res = await api.get(`/quiz/${id}/random`, { params: { count } });
+  return res.data;
+};
+
+export const getQuizRandomQuestionsByLevel = async (levelId, count = 10) => {
+  const res = await api.get(`/quiz/level/${levelId}/random`, { params: { count } });
   return res.data;
 };
 

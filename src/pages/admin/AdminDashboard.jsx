@@ -1,31 +1,108 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Users, GraduationCap, BookOpen, TrendingUp,
   ArrowUpRight, ArrowDownRight, Loader2, ShieldCheck,
   UserPlus, MessageSquare, Zap, Globe, Sparkles, AlertCircle, Power
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion as Motion, animate, AnimatePresence } from 'framer-motion';
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  LineChart,
+  Line,
+  AreaChart,
+  Area
+} from "recharts";
 import { getDashboardStats } from '../../services/admin';
+import api from '../../services/api';
+import toast from 'react-hot-toast';
 import useAuthStore from '../../store/authStore';
+
+const AnimatedCounter = ({ value, duration = 1.5 }) => {
+  const nodeRef = useRef(null);
+
+  useEffect(() => {
+    const num = parseInt(value, 10);
+    if (isNaN(num)) {
+      if (nodeRef.current) nodeRef.current.textContent = value;
+      return;
+    }
+    const controls = animate(0, num, {
+      duration,
+      ease: "easeOut",
+      onUpdate: (v) => {
+        if (nodeRef.current) nodeRef.current.textContent = Math.round(v).toString();
+      }
+    });
+    return () => controls.stop();
+  }, [value, duration]);
+
+  return <span ref={nodeRef}>0</span>;
+};
+
+const getActivityStyling = (type) => {
+  switch(type) {
+    case 'auth': return { icon: UserPlus, color: 'blue' };
+    case 'security': return { icon: ShieldCheck, color: 'purple' };
+    case 'content': return { icon: Zap, color: 'orange' };
+    case 'system': return { icon: MessageSquare, color: 'rose' };
+    case 'quiz': return { icon: Sparkles, color: 'emerald' };
+    case 'chat': return { icon: BookOpen, color: 'indigo' };
+    default: return { icon: AlertCircle, color: 'slate' };
+  }
+};
+
+const timeAgo = (dateStr) => {
+  if (!dateStr) return 'just now';
+  const seconds = Math.floor((new Date() - new Date(dateStr)) / 1000);
+  if (seconds < 60) return `${Math.max(seconds, 1)} secs ago`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes} mins ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} hours ago`;
+  return `${Math.floor(hours / 24)} days ago`;
+};
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
  const {user}=useAuthStore()
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchStats = async (isInitial = false) => {
       try {
         const res = await getDashboardStats();
-        console.log(res)
         setStats(res?.data?.stats || res?.data || null);
       } catch (error) {
         console.error("Failed to fetch admin stats:", error);
       } finally {
-        setLoading(false);
+        if (isInitial) setLoading(false);
       }
     };
-    fetchStats();
+
+    // Fast initial fetch
+    fetchStats(true);
+
+    // Live polling every 5 seconds (5000ms)
+    const intervalId = setInterval(() => {
+      fetchStats(false);
+    }, 5000);
+
+    return () => clearInterval(intervalId);
   }, []);
+
+  const handleLockdown = async () => {
+    try {
+      const res = await api.put('/admin/shut-system');
+      toast.success(res.data?.message || 'Emergency Lockdown initiated');
+    } catch (err) {
+      toast.error('Failed to initiate lockdown');
+    }
+  };
 
   if (loading) {
     return (
@@ -93,7 +170,7 @@ const AdminDashboard = () => {
         {/* Stat Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {statCards.map((stat, i) => (
-            <motion.div
+            <Motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -113,10 +190,12 @@ const AdminDashboard = () => {
               </div>
               <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">{stat.label}</p>
               <div className="flex items-baseline gap-2 mt-1">
-                <h3 className="text-3xl font-extrabold text-slate-900 dark:text-white">{stat.value}</h3>
+                <h3 className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                  <AnimatedCounter value={stat.value} />
+                </h3>
                 {stat.sub && <span className="text-xs font-medium text-slate-400">{stat.sub}</span>}
               </div>
-            </motion.div>
+            </Motion.div>
           ))}
         </div>
 
@@ -131,28 +210,34 @@ const AdminDashboard = () => {
                   User Growth (7 Days)
                 </h3>
               </div>
-              <div className="h-48 flex items-end gap-2 px-2">
-                {stats?.userGrowth?.map((day, i) => {
-                  const max = Math.max(...stats.userGrowth.map(d => d.count), 1);
-                  const height = (day.count / max) * 100;
-                  return (
-                    <div key={day._id} className="flex-1 flex flex-col items-center gap-2 group relative">
-                       <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                        {day.count}
-                       </div>
-                       <div
-                        className="w-full bg-indigo-500/20 group-hover:bg-indigo-500/40 rounded-t-lg transition-all"
-                        style={{ height: `${height}%`, minHeight: '4px' }}
-                       />
-                       <span className="text-[10px] font-bold text-slate-400 rotate-45 mt-2 origin-left truncate max-w-[40px] whitespace-nowrap">
-                        {day._id.split('-').slice(1).join('/')}
-                       </span>
+              <div className="h-48">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+                  {stats?.userGrowth?.length ? (
+                    <AreaChart
+                      data={(stats.userGrowth || []).map((d) => ({
+                        date: d._id,
+                        count: d.count,
+                      }))}
+                      margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                    >
+                      <defs>
+                        <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.4}/>
+                          <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#e2e8f0" />
+                      <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} dy={8} />
+                      <YAxis tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                      <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 25px -5px rgb(0 0 0 / 0.1)', fontWeight: 'bold' }} />
+                      <Area type="monotone" dataKey="count" stroke="#4f46e5" strokeWidth={3} fillOpacity={1} fill="url(#colorUsers)" />
+                    </AreaChart>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-slate-400 text-sm italic">
+                      No data available for chart
                     </div>
-                  );
-                })}
-                {(!stats?.userGrowth || stats.userGrowth.length === 0) && (
-                   <div className="w-full h-full flex items-center justify-center text-slate-400 text-sm italic">No data available for chart</div>
-                )}
+                  )}
+                </ResponsiveContainer>
               </div>
             </section>
 
@@ -162,29 +247,91 @@ const AdminDashboard = () => {
                 <Sparkles className="w-5 h-5 text-amber-500" />
                 Popular Languages
               </h3>
-              <div className="space-y-4">
-                {stats?.popularLanguages?.map((lang, i) => (
-                  <div key={lang.name} className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-xs text-slate-500">
-                      #{i+1}
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+                  {stats?.popularLanguages?.length ? (
+                    <BarChart
+                      data={stats.popularLanguages}
+                      layout="vertical"
+                      margin={{ top: 10, right: 20, left: -10, bottom: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="4 4" horizontal={false} stroke="#e2e8f0" />
+                      <XAxis type="number" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                      <YAxis dataKey="name" type="category" width={110} tick={{ fontSize: 12, fill: '#334155', fontWeight: 700 }} axisLine={false} tickLine={false} />
+                      <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 25px -5px rgb(0 0 0 / 0.1)' }} />
+                      <Bar dataKey="count" fill="#a855f7" radius={[0, 10, 10, 0]} barSize={24} />
+                    </BarChart>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-slate-400 text-sm italic">
+                      No enrollment data yet
                     </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between text-sm font-bold mb-1">
-                        <span>{lang.name}</span>
-                        <span className="text-indigo-600">{lang.count} learners</span>
-                      </div>
-                      <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-indigo-500 rounded-full"
-                          style={{ width: `${(lang.count / stats.popularLanguages[0].count) * 100}%` }}
-                        />
-                      </div>
+                  )}
+                </ResponsiveContainer>
+              </div>
+            </section>
+
+            {/* Quiz Insights */}
+            <section className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm lg:col-span-1">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-emerald-500" />
+                Quiz Attempts (7 Days)
+              </h3>
+              <div className="h-56">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+                  {stats?.quizAttemptsLast7Days?.length ? (
+                    <LineChart data={stats.quizAttemptsLast7Days} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#e2e8f0" />
+                      <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} dy={8} />
+                      <YAxis yAxisId="left" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                      <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                      <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 25px -5px rgb(0 0 0 / 0.1)' }} />
+                      <Line yAxisId="left" type="monotone" dataKey="attempts" stroke="#4f46e5" strokeWidth={3} dot={{ r: 4, strokeWidth: 2, fill: "#fff" }} activeDot={{ r: 7 }} />
+                      <Line yAxisId="right" type="monotone" dataKey="passRate" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2, fill: "#fff" }} activeDot={{ r: 7 }} />
+                    </LineChart>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-slate-400 text-sm italic">
+                      No quiz attempt data
                     </div>
-                  </div>
-                ))}
-                {(!stats?.popularLanguages || stats.popularLanguages.length === 0) && (
-                   <div className="text-center py-8 text-slate-400 italic">No enrollment data yet</div>
-                )}
+                  )}
+                </ResponsiveContainer>
+              </div>
+
+              <div className="mt-4 text-sm text-slate-600 dark:text-slate-300 font-semibold">
+                Retake Rate: {typeof stats?.retakeRate === "number" ? `${stats.retakeRate.toFixed(0)}%` : "—"}
+              </div>
+            </section>
+
+            {/* Level Pass Rate */}
+            <section className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm lg:col-span-1">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-indigo-500" />
+                Level Pass Rate (Top Levels)
+              </h3>
+              <div className="h-56">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+                  {stats?.levelPassRate?.length ? (
+                    <BarChart
+                      data={stats.levelPassRate.map((r) => ({
+                        name: `L${r.levelNumber}`,
+                        title: r.title,
+                        passRate: r.passRate,
+                        attempts: r.attempts,
+                      }))}
+                      layout="vertical"
+                      margin={{ top: 10, right: 20, left: 10, bottom: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="4 4" horizontal={false} stroke="#e2e8f0" />
+                      <XAxis type="number" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                      <YAxis dataKey="name" type="category" width={50} tick={{ fontSize: 12, fill: '#334155', fontWeight: 700 }} axisLine={false} tickLine={false} />
+                      <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 25px -5px rgb(0 0 0 / 0.1)' }} />
+                      <Bar dataKey="passRate" fill="#3b82f6" radius={[0, 10, 10, 0]} barSize={24} />
+                    </BarChart>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-slate-400 text-sm italic">
+                      No pass-rate data
+                    </div>
+                  )}
+                </ResponsiveContainer>
               </div>
             </section>
           </div>
@@ -195,23 +342,34 @@ const AdminDashboard = () => {
           {/* Recent Activity */}
           <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Recent System Activity</h3>
-          <div className="space-y-6">
-            {[
-              { icon: UserPlus, text: 'New user "sarah_j" registered', time: '12 mins ago', color: 'blue' },
-              { icon: ShieldCheck, text: 'Promoted "john_doe" to Teacher', time: '45 mins ago', color: 'purple' },
-              { icon: Zap, text: 'Level "Intermediate Swahili" updated', time: '2 hours ago', color: 'orange' },
-              { icon: MessageSquare, text: 'AI context cache cleared', time: '5 hours ago', color: 'rose' },
-            ].map((activity, i) => (
-              <div key={i} className="flex gap-4">
-                <div className={`w-10 h-10 rounded-full bg-${activity.color}-50 dark:bg-${activity.color}-900/20 text-${activity.color}-500 flex items-center justify-center shrink-0`}>
-                  <activity.icon className="w-5 h-5" />
+          <div className="space-y-6 overflow-hidden">
+            <AnimatePresence initial={false}>
+            {(stats?.activityLogs || []).map((log) => {
+              const styleProps = getActivityStyling(log.type);
+              const Icon = styleProps.icon;
+              const color = styleProps.color;
+              return (
+              <Motion.div 
+                key={log._id} 
+                initial={{ opacity: 0, height: 0, y: -20 }}
+                animate={{ opacity: 1, height: 'auto', y: 0 }}
+                className="flex gap-4 items-start"
+              >
+                <div className={`w-10 h-10 rounded-full bg-${color}-50 dark:bg-${color}-900/20 text-${color}-500 flex items-center justify-center shrink-0`}>
+                  <Icon className="w-5 h-5" />
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">{activity.text}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">{activity.time}</p>
+                <div className="pb-3">
+                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">{log.message}</p>
+                  <p className="text-xs text-slate-400 mt-0.5">{timeAgo(log.createdAt)}</p>
                 </div>
+              </Motion.div>
+            )})}
+            </AnimatePresence>
+            {(!stats?.activityLogs || stats.activityLogs.length === 0) && (
+              <div className="text-center text-slate-400 text-sm italic py-8">
+                No system activity recorded yet.
               </div>
-            ))}
+            )}
           </div>
         </div>
 
@@ -237,8 +395,8 @@ const AdminDashboard = () => {
                 {user?.role === 'super-admin' && (
                   <div className="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
                     <button
-                      onClick={() => alert("System Lockdown initiated...")}
-                      className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-rose-50 text-rose-600 font-bold text-sm hover:bg-rose-100 transition-all border border-rose-100"
+                      onClick={handleLockdown}
+                      className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 font-bold text-sm hover:bg-rose-100 dark:hover:bg-rose-900/40 transition-all border border-rose-100 dark:border-rose-900/30"
                     >
                       <Power className="w-4 h-4" />
                       Emergency Lockdown
@@ -255,7 +413,7 @@ const AdminDashboard = () => {
                     Top Teachers
                   </h3>
                   <div className="space-y-4">
-                    {stats.topTeachers.map((teacher, i) => (
+                    {stats.topTeachers.map((teacher) => (
                       <div key={teacher.email} className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-xs text-indigo-500">
                           {teacher.name?.[0] || 'T'}

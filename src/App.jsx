@@ -35,6 +35,9 @@ const UserManagement = React.lazy(() => import('./pages/admin/UserManagement'));
 const TeacherManagement = React.lazy(() => import('./pages/admin/TeacherManagement'));
 const ContentManagement = React.lazy(() => import('./pages/admin/ContentManagement'));
 
+// Maintenance
+import MaintenancePage from './pages/MaintenancePage';
+
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuthStore();
   
@@ -53,8 +56,10 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+import { Toaster } from 'react-hot-toast';
+
 function App() {
-  const { checkAuth } = useAuthStore();
+  const { checkAuth, isMaintenanceMode } = useAuthStore();
 
   useEffect(() => {
     checkAuth();
@@ -67,8 +72,18 @@ function App() {
     return () => window.removeEventListener('auth-unauthorized', handleUnauthorized);
   }, [checkAuth]);
 
+  if (isMaintenanceMode) {
+    return (
+      <>
+        <Toaster position="top-center" />
+        <MaintenancePage />
+      </>
+    );
+  }
+
   return (
     <Router>
+      <Toaster position="top-center" />
       <Suspense fallback={
         <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
           <div className="animate-pulse flex flex-col items-center">

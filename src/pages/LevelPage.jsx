@@ -3,23 +3,29 @@ import { useParams, Link } from 'react-router-dom';
 import { Lock, CheckCircle, ChevronLeft, Flag, Loader2, BookOpen, Star } from 'lucide-react';
 import { getLearningById } from '../services/learning';
 import { getAllLevels } from '../services/level';
+import userProgressService from '../services/userProgress';
 
 const LevelPage = () => {
   const { id } = useParams(); // learningId
   const [track, setTrack] = useState(null);
   const [levels, setLevels] = useState([]);
+  const [progress, setProgress] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [trackRes, levelsRes] = await Promise.all([
+        const [trackRes, levelsRes, progressRes] = await Promise.all([
           getLearningById(id),
           getAllLevels({ learningId: id }),
+          userProgressService.getProgress({ learningId: id })
         ]);
         setTrack(trackRes?.data?.learning || trackRes?.data || null);
         const rawLevels = levelsRes?.data?.levels || levelsRes?.data || [];
-        setLevels(rawLevels);
+        setLevels(rawLevels.sort((a, b) => (a.levelNumber || a.order) - (b.levelNumber || b.order)));
+        
+        const progData = progressRes?.data?.progress || progressRes?.data || progressRes?.progress;
+        setProgress(Array.isArray(progData) ? progData[0] : progData);
       } catch (e) {
         console.error(e);
       } finally {
@@ -84,9 +90,22 @@ const LevelPage = () => {
 
           <div className="space-y-16 relative z-10">
             {levels.map((level, idx) => {
-              const isCompleted = level.isCompleted ?? false;
-              const isLocked = level.isLocked ?? (idx > 0 && !levels[idx - 1]?.isCompleted && !levels[idx - 1]?.isLocked === false);
-              const isCurrent = !isCompleted && !isLocked;
+              const userOverallLevel = progress?.overallLevel || 1;
+              const currentLvlNum = level.levelNumber || level.order || (idx + 1);
+
+                const levelEntry = progress?.levelsProgress?.find(
+                  (lp) =>
+                    (lp.levelId?._id || lp.levelId)?.toString?.() === level._id?.toString?.(),
+                )
+                const levelStatus = levelEntry?.status
+              
+                const isCompleted =
+                  levelStatus === "review" ||
+                  levelStatus === "passed" ||
+                  (!levelStatus && currentLvlNum < userOverallLevel)
+
+                const isLocked = levelStatus === "locked" || (!levelStatus && currentLvlNum > userOverallLevel)
+                const isCurrent = levelStatus === "active" || levelStatus === "failed" || currentLvlNum === userOverallLevel;
               const alignRight = idx % 2 === 0;
 
               let nodeClass = 'w-20 h-20 rounded-full border-4 flex items-center justify-center shadow-lg transition-transform hover:scale-105 cursor-pointer ';
@@ -104,7 +123,16 @@ const LevelPage = () => {
                 ? <Lock className="w-8 h-8" />
                 : <Star className="w-8 h-8" />;
 
-              const linkTarget = isLocked ? '#' : `/lesson/${level._id}`;
+              const linkTarget = (() => {
+                if (isLocked) return "#"
+
+                if (levelStatus === "review" || levelStatus === "passed") return `/lesson/${level._id}`
+                if (levelStatus === "failed") return `/quiz/${level._id}`
+
+                // Active: depend on phase
+                if (progress?.activePhase === "quiz") return `/quiz/${level._id}`
+                return `/lesson/${level._id}`
+              })()
 
               return (
                 <div key={level._id} className={`flex items-center w-full ${alignRight ? 'justify-end' : 'justify-start'}`}>
@@ -153,14 +181,20 @@ const LevelPage = () => {
                         </div>
                       ) : (
                         <Link
-                          to={`/lesson/${level._id}`}
+                          to={linkTarget}
                           className={`block w-full text-center py-2 rounded-xl font-bold text-sm transition-colors ${
                             isCompleted
                               ? 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
                               : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm'
                           }`}
                         >
-                          {isCompleted ? 'Review Level' : 'Start Level'}
+                          {levelStatus === "failed"
+                            ? "Retry Quiz"
+                            : progress?.activePhase === "quiz"
+                              ? "Go to Quiz"
+                              : isCompleted
+                                ? "Review Level"
+                                : "Start Level"}
                         </Link>
                       )}
                     </div>

@@ -15,6 +15,8 @@ const useAuthStore = create((set) => ({
   user: getStoredUser(),
   isAuthenticated: !!localStorage.getItem('token'),
   isLoading: true, // Typically App.jsx handles completing the check auth load
+  isMaintenanceMode: false,
+  setMaintenanceMode: (status) => set({ isMaintenanceMode: status }),
   
   checkAuth: async () => {
     try {
@@ -56,6 +58,14 @@ const useAuthStore = create((set) => ({
 // Global listener for 401s handled by auth service and api interceptors
 window.addEventListener('auth-unauthorized', () => {
   useAuthStore.setState({ user: null, isAuthenticated: false, isLoading: false });
+});
+
+window.addEventListener('system-maintenance', () => {
+  useAuthStore.setState({ isMaintenanceMode: true });
+});
+
+window.addEventListener('system-online', () => {
+  useAuthStore.setState({ isMaintenanceMode: false });
 });
 
 export default useAuthStore;

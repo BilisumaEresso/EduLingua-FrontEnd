@@ -1,12 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createElement } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import {
   Flame, Trophy, Target, ArrowRight, PlayCircle, BookOpen,
   Loader2, Plus, MessageSquare, Zap, Shield
 } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 import userProgressService from '../services/userProgress';
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  BarChart,
+  Bar,
+} from 'recharts';
 
 const gradients = [
   'from-indigo-500 to-purple-600',
@@ -32,15 +43,31 @@ const Dashboard = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  const computeTrackStats = (p) => {
+    const levels = Array.isArray(p?.levelsProgress) ? p.levelsProgress : []
+    const totalLevels = levels.length || 5
+    const passedLevels = levels.filter((lp) => lp.status === "review" || lp.status === "passed").length
+    const failedLevels = levels.filter((lp) => lp.status === "failed").length
+
+    const lessonProgress = levels.flatMap((lp) => (Array.isArray(lp.lessonProgress) ? lp.lessonProgress : []))
+    const lessonsDone = lessonProgress.filter((lp) => lp.status === "done").length
+    const lessonsSkipped = lessonProgress.filter((lp) => lp.status === "skipped").length
+    const lessonCompletionCount = lessonsDone + lessonsSkipped
+
+    const pct = totalLevels ? Math.round((passedLevels / totalLevels) * 100) : 0
+    return { totalLevels, passedLevels, failedLevels, lessonCompletionCount, pct, activePhase: p?.activePhase || "lessons" }
+  }
+
   // Aggregate stats from progress list
   const totalXP = progressList.reduce((acc, p) => acc + (p.xp ?? 0), 0);
   const streak = user?.streak ?? progressList[0]?.streak ?? 0;
-  const completedLessons = progressList.reduce((acc, p) => acc + (p.completedLessons?.length ?? 0), 0);
+  const completedLessons = progressList.reduce((acc, p) => acc + (computeTrackStats(p).lessonCompletionCount ?? 0), 0);
   const chatCount = user?.chatCount ?? 0;
-  const chatLimit = user?.isPremium ? '∞' : '5';
+  const chatLimit = user?.isPremium ? '∞' : '30';
 
   // First non-complete track for "continue" CTA
-  const activeTrack = progressList.find(p => (p.progress ?? 0) < 100) || progressList[0];
+  const activeTrack = progressList.find((p) => computeTrackStats(p).pct < 100) || progressList[0];
+  const activeTrackStats = activeTrack ? computeTrackStats(activeTrack) : null;
   const firstName = user?.fullName?.split(' ')[0] || user?.username || 'Learner';
 
   return (
@@ -119,9 +146,10 @@ const Dashboard = () => {
                 {progressList.slice(0, 4).map((p, idx) => {
                   const trackId = p.learning?._id || p.learning;
                   const title = p.learning?.title || p.title || 'Learning Track';
-                  const pct = Math.round(p.progress ?? 0);
+                  const stats = computeTrackStats(p)
+                  const pct = stats.pct
                   return (
-                    <motion.div
+                    <Motion.div
                       key={p._id || idx}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -146,11 +174,13 @@ const Dashboard = () => {
                             style={{ width: `${pct}%` }}
                           />
                         </div>
-                        {p.completedLessons?.length > 0 && (
-                          <p className="text-xs text-slate-400 mt-2">{p.completedLessons.length} lesson{p.completedLessons.length !== 1 ? 's' : ''} completed</p>
+                        {stats.lessonCompletionCount > 0 && (
+                          <p className="text-xs text-slate-400 mt-2">
+                            {stats.lessonCompletionCount} lesson{stats.lessonCompletionCount !== 1 ? 's' : ''} completed
+                          </p>
                         )}
                       </Link>
-                    </motion.div>
+                    </Motion.div>
                   );
                 })}
               </div>
@@ -173,7 +203,7 @@ const Dashboard = () => {
                   className={`flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 hover:shadow-md hover:border-${color}-300 dark:hover:border-${color}-700 transition-all group`}
                 >
                   <div className={`w-10 h-10 rounded-xl bg-${color}-50 dark:bg-${color}-900/20 text-${color}-500 flex items-center justify-center`}>
-                    <Icon className="w-5 h-5" />
+                    {createElement(Icon, { className: "w-5 h-5" })}
                   </div>
                   <div>
                     <p className="font-bold text-slate-900 dark:text-white text-sm">{label}</p>
@@ -198,7 +228,7 @@ const Dashboard = () => {
               ].map(({ icon: Icon, label, value, bg }) => (
                 <div key={label} className="flex items-center gap-4">
                   <div className={`w-12 h-12 rounded-xl bg-${bg}-50 dark:bg-${bg}-900/20 text-${bg}-500 flex items-center justify-center shrink-0`}>
-                    <Icon className="w-6 h-6" />
+                    {createElement(Icon, { className: "w-6 h-6" })}
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-slate-900 dark:text-white">{value}</div>
@@ -207,6 +237,74 @@ const Dashboard = () => {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Pro analytics */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6">
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <h3 className="font-bold text-slate-900 dark:text-white">Pro Analytics</h3>
+              <div className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                {activeTrackStats ? `${activeTrackStats.pct}%` : "—"} complete
+              </div>
+            </div>
+
+            {activeTrack && (
+              <>
+                <div className="h-56">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+                    <LineChart
+                      data={(() => {
+                        const events = (activeTrack?.levelsProgress || [])
+                          .filter((lp) => lp.passedAt)
+                          .slice()
+                          .sort((a, b) => new Date(a.passedAt) - new Date(b.passedAt))
+
+                        let cumulative = 0
+                        return events.map((e) => {
+                          const xpGain = Math.round((e.lastQuizScore ?? e.bestQuizScore ?? 0) / 2)
+                          cumulative += xpGain
+                          const dt = new Date(e.passedAt)
+                          const label = dt.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+                          return { name: label, xp: cumulative }
+                        })
+                      })()}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Line type="monotone" dataKey="xp" stroke="#4f46e5" strokeWidth={3} dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+
+                <div className="h-56 mt-6">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+                    <BarChart
+                      data={(() => {
+                        const levels = Array.isArray(activeTrack?.levelsProgress) ? activeTrack.levelsProgress : []
+                        const locked = levels.filter((lp) => lp.status === "locked").length
+                        const active = levels.filter((lp) => lp.status === "active").length
+                        const failed = levels.filter((lp) => lp.status === "failed").length
+                        const review = levels.filter((lp) => lp.status === "review").length
+                        return [
+                          { name: "Locked", value: locked },
+                          { name: "Active", value: active },
+                          { name: "Failed", value: failed },
+                          { name: "Review", value: review },
+                        ]
+                      })()}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis allowDecimals={false} />
+                      <Tooltip />
+                      <Bar dataKey="value" fill="#4f46e5" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
           </div>
 
           {/* AI Chat Quota */}
@@ -225,15 +323,15 @@ const Dashboard = () => {
                 <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 mb-3">
                   <div
                     className="bg-indigo-500 h-2 rounded-full transition-all"
-                    style={{ width: `${Math.min((chatCount / 5) * 100, 100)}%` }}
+                    style={{ width: `${Math.min((chatCount / 30) * 100, 100)}%` }}
                   />
                 </div>
-                {chatCount >= 5 ? (
+                {chatCount >= 30 ? (
                   <Link to="/premium" className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
                     Upgrade for unlimited chats →
                   </Link>
                 ) : (
-                  <p className="text-xs text-slate-400">{5 - chatCount} message{5 - chatCount !== 1 ? 's' : ''} remaining today</p>
+                  <p className="text-xs text-slate-400">{30 - chatCount} message{5 - chatCount !== 1 ? 's' : ''} remaining today</p>
                 )}
               </>
             )}
