@@ -1,30 +1,14 @@
 import api from './api';
 
-/**
- * Section Service
- * Handles section CRUD operations and bulk creation
- */
-
-
-// ======================
-// 🌍 Public Endpoints
-// ======================
-
 export const getAllSections = async (params = {}) => {
-  // supports ?lessonId=...
   const res = await api.get('/section', { params });
   return res.data;
 };
 
-export const getSectionById = async (id) => {
+export const getSection = async (id) => {
   const res = await api.get(`/section/${id}`);
   return res.data;
 };
-
-
-// ======================
-// 🔒 Super Admin Only
-// ======================
 
 export const createSection = async (data) => {
   const res = await api.post('/section/create', data);

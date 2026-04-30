@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, CheckCircle2, Layers, ArrowRight, Loader2, Trophy, Target } from 'lucide-react';
+import { BookOpen, CheckCircle2, Layers, ArrowRight, Loader2, Trophy, Target, Gamepad2, Star, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import userProgressService from '../services/userProgress';
+import { getGameProgress } from '../services/game';
 
 const gradients = [
   'from-indigo-500 to-purple-600',
@@ -13,7 +15,9 @@ const gradients = [
 ];
 
 const ProgressPage = () => {
+  const { t } = useTranslation();
   const [progressList, setProgressList] = useState([]);
+  const [gameProgress, setGameProgress] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -30,8 +34,12 @@ const ProgressPage = () => {
         setError(true);
       })
       .finally(() => setLoading(false));
+
+    getGameProgress()
+      .then(res => setGameProgress(res.data.progress || []))
+      .catch(() => setGameProgress([]));
   }, []);
-console.log(progressList)
+
   const computeTrackStats = (p) => {
     const levels = Array.isArray(p?.levelsProgress) ? p.levelsProgress : []
     const totalLevels = levels.length || 5
@@ -61,18 +69,18 @@ console.log(progressList)
     <div className="max-w-5xl mx-auto space-y-8 pb-12">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">My Progress</h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">Track your learning journey across all enrolled tracks.</p>
+        <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">{t('progress.title')}</h1>
+        <p className="text-slate-500 dark:text-slate-400 mt-1">{t('progress.subtitle')}</p>
       </div>
 
       {/* Summary Stats */}
       {!loading && progressList.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
-            { label: 'Total XP', value: totalXP, icon: Trophy, color: 'indigo' },
-            { label: 'Lessons Done', value: totalLessons, icon: CheckCircle2, color: 'emerald' },
-            { label: 'Tracks Active', value: activeTracks, icon: Layers, color: 'fuchsia' },
-            { label: 'Tracks Finished', value: completedTracks, icon: Target, color: 'orange' },
+            { label: t('progress.totalXP'), value: totalXP, icon: Trophy, color: 'indigo' },
+            { label: t('progress.lessonsDone'), value: totalLessons, icon: CheckCircle2, color: 'emerald' },
+            { label: t('progress.tracksActive'), value: activeTracks, icon: Layers, color: 'fuchsia' },
+            { label: t('progress.tracksFinished'), value: completedTracks, icon: Target, color: 'orange' },
           ].map(({ label, value, icon: Icon, color }) => (
             <div key={label} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
               <div className={`w-10 h-10 rounded-xl bg-${color}-50 dark:bg-${color}-900/20 text-${color}-500 flex items-center justify-center mb-3`}>
@@ -85,40 +93,89 @@ console.log(progressList)
         </div>
       )}
 
+      {/* Game Achievements Summary */}
+      {!loading && gameProgress.length > 0 && (
+        <section className="bg-[#121212] border border-white/5 rounded-3xl p-8 relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent pointer-events-none" />
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
+                 <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                   <Gamepad2 size={20} />
+                 </div>
+                 <h2 className="text-2xl font-black italic uppercase tracking-tighter text-white">{t('progress.mosaicMaster')}</h2>
+              </div>
+              <p className="text-slate-400 font-medium">{t('progress.historicalStatus')}</p>
+            </div>
+
+            <div className="flex gap-10">
+              <div className="text-center">
+                <div className="text-4xl font-black text-white flex items-center justify-center gap-2">
+                  {gameProgress.reduce((acc, p) => acc + (p.stars ?? 0), 0)}
+                  <Star className="w-8 h-8 text-amber-400 fill-amber-400" />
+                </div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 mt-1">{t('progress.totalStars')}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-black text-white">
+                  {gameProgress.filter(p => p.gameType === 'afro-mosaic').length + gameProgress.filter(p => p.gameType === 'chronos-grid').length}
+                </div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 mt-1">{t('progress.totalStages')}</div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Link 
+                to="/game"
+                className="px-6 py-3 bg-white text-black rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-slate-200 transition-all flex items-center justify-center gap-2"
+              >
+                <Sparkles size={14} /> AfroMosaic
+              </Link>
+              <Link 
+                to="/chronos-grid"
+                className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-indigo-500 transition-all flex items-center justify-center gap-2"
+              >
+                <Layers size={14} /> ChronosGrid
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Progress List */}
       {loading && (
         <div className="flex items-center justify-center py-24 gap-3 text-slate-500">
           <Loader2 className="w-7 h-7 animate-spin text-indigo-500" />
-          <span>Loading your progress...</span>
+          <span>{t('progress.loading')}</span>
         </div>
       )}
 
       {error && !loading && (
         <div className="text-center py-24">
-          <p className="text-slate-500 dark:text-slate-400">Could not load progress. Please try again.</p>
+          <p className="text-slate-500 dark:text-slate-400">{t('progress.error')}</p>
         </div>
       )}
 
       {!loading && !error && progressList.length === 0 && (
         <div className="text-center py-24 bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 rounded-3xl">
           <BookOpen className="w-14 h-14 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-          <h3 className="text-lg font-bold text-slate-700 dark:text-slate-300 mb-2">No progress yet</h3>
-          <p className="text-slate-500 dark:text-slate-400 mb-6">Enroll in a learning track to start your journey.</p>
+          <h3 className="text-lg font-bold text-slate-700 dark:text-slate-300 mb-2">{t('progress.noProgress')}</h3>
+          <p className="text-slate-500 dark:text-slate-400 mb-6">{t('progress.enrollDesc')}</p>
           <Link
             to="/tracks"
             className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-full font-bold transition-colors"
           >
-            Browse Tracks <ArrowRight className="w-4 h-4" />
+            {t('progress.browseTracks')} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       )}
 
       {!loading && !error && progressList.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white">Enrolled Tracks</h2>
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('progress.enrolledTracks')}</h2>
           {tracksWithStats.map((p, idx) => {
             const trackId = p.learning?._id || p.learning;
-            const title = p.learning?.title || p.title || 'Learning Track';
+            const title = p.learning?.title || p.title || t('nav.learningTracks');
             const targetLang = p.learning?.targetLanguage;
             const langName = targetLang?.name || '';
             const flag = targetLang?.metadata?.flag || '';
@@ -153,13 +210,13 @@ console.log(progressList)
                     </span>
                     {isComplete && (
                       <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3" /> Completed
+                        <CheckCircle2 className="w-3 h-3" /> {t('progress.completed')}
                       </span>
                     )}
                   </div>
 
                   <p className="text-sm text-slate-500 dark:text-slate-400 mb-3">
-                    {completedCount} lesson{completedCount !== 1 ? 's' : ''} completed
+                    {t('dashboard.lessonsCompleted', { count: completedCount })}
                     {p.xp ? ` • ${p.xp} XP earned` : ''}
                   </p>
 
@@ -183,7 +240,7 @@ console.log(progressList)
                       : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm'
                   }`}
                 >
-                  {isComplete ? 'Review' : 'Continue'}
+                  {isComplete ? t('progress.review') : t('progress.continue')}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>

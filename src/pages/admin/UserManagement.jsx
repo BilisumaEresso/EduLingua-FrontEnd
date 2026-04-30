@@ -2,24 +2,27 @@ import { useState, useEffect } from 'react';
 import { 
   Users, Search, Shield, UserX, UserCheck, 
   MoreVertical, MoreHorizontal, Loader2, Mail, 
-  ChevronLeft, ChevronRight, CheckCircle2, XCircle
+  ChevronLeft, ChevronRight, CheckCircle2, XCircle,
+  Crown, Eye, Filter
 } from 'lucide-react';
-import { getAllUsers, promoteUser, demoteUser, fireTeacher } from '../../services/admin';
+import { getAllUsers } from '../../services/admin';
 import useAuthStore from '../../store/authStore';
+import AdminUserDetailModal from '../../components/admin/AdminUserDetailModal';
 
 const UserManagement = () => {
   const { user: currentUser } = useAuthStore();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [processingId, setProcessingId] = useState(null);
-
+  
+  // Pagination & Filtering
   const [pagination, setPagination] = useState({ page: 1, totalPages: 1, total: 0 });
   const [limit] = useState(10);
+  const [activeTab, setActiveTab] = useState('all'); // all, learners, teachers, admins
 
-  useEffect(() => {
-    fetchUsers(pagination.page);
-  }, [pagination.page]);
+  // Modal State
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchUsers = async (page = 1) => {
     setLoading(true);
@@ -27,7 +30,13 @@ const UserManagement = () => {
       const res = await getAllUsers(page, limit);
       const data = res?.data || res;
       setUsers(data.users || []);
-      setPagination(data.pagination || { page: 1, totalPages: 1, total: data.users?.length || 0 });
+      setPagination(data.pagination || { 
+        page: 1, 
+        totalPages: 1, 
+        total: data.users?.length || 0,
+        hasNext: false,
+        hasPrev: false
+      });
     } catch (error) {
       console.error("Failed to fetch users:", error);
     } finally {
@@ -35,168 +44,168 @@ const UserManagement = () => {
     }
   };
 
-  const handleFire = async (id) => {
-    if (!window.confirm("Are you sure you want to fire this teacher? They will be demoted to a regular learner.")) return;
-    setProcessingId(id);
-    try {
-      await fireTeacher(id);
-      await fetchUsers(pagination.page);
-    } catch (error) {
-      alert("Action failed: " + (error.response?.data?.message || "ServerError"));
-    } finally {
-      setProcessingId(null);
-    }
+  useEffect(() => {
+    fetchUsers(pagination.page);
+  }, [pagination.page]);
+
+  const handleOpenModal = (user) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
   };
 
-  const handleDemote = async (id) => {
-    if (!window.confirm("Are you sure you want to demote this admin?")) return;
-    setProcessingId(id);
-    try {
-      await demoteUser(id);
-      await fetchUsers(pagination.page);
-    } catch (error) {
-      alert("Demotion failed: " + (error.response?.data?.message || "ServerError"));
-    } finally {
-      setProcessingId(null);
-    }
+  const handleUpdate = () => {
+    fetchUsers(pagination.page);
   };
 
-  const handlePromote = async (id) => {
-    setProcessingId(id);
-    try {
-      await promoteUser(id);
-      await fetchUsers(pagination.page);
-    } catch (error) {
-      alert("Promotion failed: " + (error.response?.data?.message || "ServerError"));
-    } finally {
-      setProcessingId(null);
-    }
-  };
+  const filteredUsers = users.filter(usr => {
+    const matchesSearch = 
+      usr.username?.toLowerCase().includes(search.toLowerCase()) ||
+      usr.email?.toLowerCase().includes(search.toLowerCase()) ||
+      usr.fullName?.toLowerCase().includes(search.toLowerCase());
+    
+    if (activeTab === 'all') return matchesSearch;
+    if (activeTab === 'learners') return matchesSearch && usr.role === 'learner';
+    if (activeTab === 'teachers') return matchesSearch && usr.role === 'teacher';
+    if (activeTab === 'admins') return matchesSearch && (usr.role === 'admin' || usr.role === 'super-admin');
+    return matchesSearch;
+  });
 
-  const filteredUsers = users.filter(usr => 
-    usr.username?.toLowerCase().includes(search.toLowerCase()) ||
-    usr.email?.toLowerCase().includes(search.toLowerCase()) ||
-    usr.fullName?.toLowerCase().includes(search.toLowerCase())
-  );
+  const tabs = [
+    { id: 'all', label: 'All Users', icon: Users },
+    { id: 'learners', label: 'Learners', icon: UserCheck },
+    { id: 'teachers', label: 'Teachers', icon: Shield },
+    { id: 'admins', label: 'Admins', icon: Crown },
+  ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white">User Management</h1>
-          <p className="text-slate-500 dark:text-slate-400">View and manage all system users and their roles.</p>
+          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">User Infrastructure</h1>
+          <p className="text-slate-500 font-medium mt-1">Global oversight and administrative control of all system accounts.</p>
         </div>
-        <div className="relative w-full sm:w-72">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input 
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search users..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all"
-          />
+        <div className="flex bg-white dark:bg-slate-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                activeTab === tab.id 
+                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' 
+                  : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+              }`}
+            >
+              <tab.icon className="w-3.5 h-3.5" />
+              {tab.label}
+            </button>
+          ))}
         </div>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none overflow-hidden">
+        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="relative w-full sm:w-80">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input 
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by name, email, username..."
+              className="w-full pl-11 pr-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-indigo-500 outline-none text-sm transition-all"
+            />
+          </div>
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800 px-4 py-2 rounded-xl">
+            <Filter className="w-3.5 h-3.5" /> Showing {filteredUsers.length} Users
+          </div>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
-                <th className="px-6 py-4">User</th>
-                <th className="px-6 py-4">Role</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4">Joined</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+              <tr className="bg-slate-50/50 dark:bg-slate-800/30 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">
+                <th className="px-8 py-5">Identity</th>
+                <th className="px-8 py-5">Clearance / Role</th>
+                <th className="px-8 py-5">Status</th>
+                <th className="px-8 py-5">Records</th>
+                <th className="px-8 py-5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
               {loading ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-12 text-center">
-                    <Loader2 className="w-8 h-8 animate-spin text-rose-500 mx-auto" />
+                  <td colSpan="5" className="px-8 py-20 text-center">
+                    <Loader2 className="w-10 h-10 animate-spin text-indigo-600 mx-auto" />
+                    <p className="mt-4 text-xs font-black text-slate-400 uppercase tracking-widest">Accessing Databases...</p>
                   </td>
                 </tr>
               ) : filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-12 text-center text-slate-500">
-                    No users found matching your search.
+                  <td colSpan="5" className="px-8 py-20 text-center">
+                    <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                      <Search className="w-8 h-8 text-slate-300" />
+                    </div>
+                    <p className="text-slate-500 font-medium">No accounts found matching your query.</p>
                   </td>
                 </tr>
               ) : (
                 filteredUsers.map((usr) => (
-                  <tr key={usr._id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-slate-500 shrink-0">
+                  <tr key={usr._id} className="group hover:bg-slate-50/80 dark:hover:bg-slate-800/20 transition-all cursor-pointer" onClick={() => handleOpenModal(usr)}>
+                    <td className="px-8 py-5">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center font-black text-slate-500 group-hover:scale-110 transition-transform shadow-inner">
                           {usr.fullName?.[0] || usr.username?.[0]}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{usr.fullName || usr.username}</p>
-                          <p className="text-xs text-slate-500 truncate">{usr.email}</p>
+                          <p className="text-sm font-black text-slate-900 dark:text-white truncate tracking-tight">{usr.fullName || usr.username}</p>
+                          <p className="text-xs font-bold text-slate-400 truncate flex items-center gap-1.5">
+                            <Mail className="w-3 h-3" /> {usr.email}
+                          </p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className={`text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-tight ${
-                        usr.role === 'super-admin' ? 'bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400' :
-                        usr.role === 'admin' ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400' :
-                        usr.role === 'teacher' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' :
-                        'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                    <td className="px-8 py-5">
+                      <span className={`text-[10px] font-black px-3 py-1.5 rounded-xl uppercase tracking-widest border transition-all ${
+                        usr.role === 'super-admin' ? 'bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-900/20 dark:border-rose-900/30' :
+                        usr.role === 'admin' ? 'bg-indigo-50 text-indigo-600 border-indigo-100 dark:bg-indigo-900/20 dark:border-indigo-900/30' :
+                        usr.role === 'teacher' ? 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-900/30' :
+                        'bg-slate-50 text-slate-500 border-slate-100 dark:bg-slate-800 dark:border-slate-700'
                       }`}>
                         {usr.role}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      {usr.isActive ? (
-                        <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                          <CheckCircle2 className="w-4 h-4" /> Active
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-1.5 text-xs font-bold text-slate-400">
-                          <XCircle className="w-4 h-4" /> Inactive
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 text-xs font-medium text-slate-500 dark:text-slate-400">
-                      {usr.createdAt ? new Date(usr.createdAt).toLocaleDateString() : '—'}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      {usr._id !== currentUser._id && (
-                        <div className="flex justify-end gap-2">
-                          {usr.role === 'learner' ? (
-                            <button 
-                              onClick={() => handlePromote(usr._id)}
-                              disabled={processingId === usr._id}
-                              className="p-2 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors"
-                              title="Promote to Admin"
-                            >
-                              {processingId === usr._id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Shield className="w-4 h-4" />}
-                            </button>
-                          ) : usr.role === 'teacher' ? (
-                            <button 
-                              onClick={() => handleFire(usr._id)}
-                              disabled={processingId === usr._id}
-                              className="p-2 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition-colors"
-                              title="Fire Teacher"
-                            >
-                              {processingId === usr._id ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserX className="w-4 h-4" />}
-                            </button>
-                          ) : usr.role === 'admin' && currentUser.role === 'super-admin' ? (
-                            <button 
-                              onClick={() => handleDemote(usr._id)}
-                              disabled={processingId === usr._id}
-                              className="p-2 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-lg transition-colors"
-                              title="Demote to Learner"
-                            >
-                              {processingId === usr._id ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserX className="w-4 h-4" />}
-                            </button>
-                          ) : null}
-                          <button className="p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
-                            <MoreVertical className="w-4 h-4" />
-                          </button>
+                    <td className="px-8 py-5">
+                      <div className="flex flex-col gap-1.5">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-2 h-2 rounded-full ${usr.isActive ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
+                          <span className={`text-[10px] font-black uppercase tracking-widest ${usr.isActive ? 'text-emerald-600' : 'text-slate-400'}`}>
+                            {usr.isActive ? 'Online' : 'Offline'}
+                          </span>
                         </div>
-                      )}
+                        {usr.isPremium && (
+                          <span className="flex items-center gap-1 text-[9px] font-black text-amber-500 uppercase tracking-widest">
+                            <Crown className="w-3 h-3 fill-current" /> Premium
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-8 py-5">
+                      <div className="flex flex-col gap-0.5">
+                        <p className="text-xs font-bold text-slate-900 dark:text-white">Joined</p>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">
+                          {usr.createdAt ? new Date(usr.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '—'}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-8 py-5 text-right">
+                      <button 
+                        className="p-2.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-400 group-hover:text-indigo-600 group-hover:border-indigo-100 dark:group-hover:border-indigo-900/50 transition-all shadow-sm group-hover:shadow-indigo-500/10"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOpenModal(usr);
+                        }}
+                      >
+                        <Eye className="w-5 h-5" />
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -205,28 +214,41 @@ const UserManagement = () => {
           </table>
         </div>
         
-        <div className="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-          <p className="text-xs font-medium text-slate-500">
-            Showing {filteredUsers.length} of {pagination.total} users (Page {pagination.page} of {pagination.totalPages})
+        <div className="px-8 py-6 bg-slate-50/50 dark:bg-slate-800/20 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+            Identity Count: <span className="text-slate-900 dark:text-white">{filteredUsers.length} / {pagination.total}</span>
           </p>
           <div className="flex gap-2">
             <button 
               disabled={!pagination.hasPrev || loading} 
               onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
-              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-50 hover:bg-white dark:hover:bg-slate-800 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 disabled:opacity-50 hover:bg-white dark:hover:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-400 transition-all active:scale-95"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-4 h-4" /> Previous
             </button>
+            <div className="flex items-center px-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-[10px] font-black text-indigo-600">
+              {pagination.page} / {pagination.totalPages}
+            </div>
             <button 
               disabled={!pagination.hasNext || loading}
               onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
-              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-50 hover:bg-white dark:hover:bg-slate-800 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 disabled:opacity-50 hover:bg-white dark:hover:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-400 transition-all active:scale-95"
             >
-              <ChevronRight className="w-4 h-4" />
+              Next <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
       </div>
+
+      {selectedUser && (
+        <AdminUserDetailModal 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          user={selectedUser}
+          onUpdate={handleUpdate}
+          currentAdmin={currentUser}
+        />
+      )}
     </div>
   );
 };

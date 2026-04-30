@@ -1,0 +1,562 @@
+{
+  "nav": {
+    "home": "መነሻ",
+    "features": "ባህሪያት",
+    "languages": "ቋንቋዎች",
+    "tracks": "ዱካዎች",
+    "mosaicGame": "ሞዛይክ ጨዋታ",
+    "dashboard": "ዳሽቦርድ",
+    "dash": "ዳሽ",
+    "login": "ግባ",
+    "getStarted": "ይጀምሩ",
+    "playMiniGame": "አነስተኛ ጨዋታ ይጫወቱ",
+    "myStudents": "ተማሪዎቼ",
+    "trackEditor": "ዱካ አርታኢ",
+    "learningTracks": "የትምህርት ዱካዎች",
+    "myProgress": "የእኔ ሂደት",
+    "aiTutorChat": "AI አስተማሪ ቻት",
+    "accountSettings": "የመለያ ቅንብሮች",
+    "systemAdmin": "የስርዓት አስተዳዳሪ",
+    "goPremium": "ወደ ፕሪሚየም ይሂዱ",
+    "becomeTeacher": "አስተማሪ ይሁኑ",
+    "backToApp": "ወደ መተግበሪያ ተመለስ",
+    "adminPanel": "የአስተዳዳሪ ፓነል",
+    "overview": "አጠቃላይ እይታ",
+    "users": "ተጠቃሚዎች",
+    "teachers": "አስተማሪዎች",
+    "content": "ይዘት"
+  },
+  "auth": {
+    "welcomeBack": "እንኳን ደህና ተመለሱ",
+    "createAccount": "መለያ ይፍጠሩ",
+    "dontHaveAccount": "መለያ የሎትም?",
+    "alreadyHaveAccount": "አስቀድመው መለያ አለዎት?",
+    "signIn": "ይግቡ",
+    "signUp": "ይመዝገቡ",
+    "emailOrUsername": "ኢሜይል ወይም የተጠቃሚ ስም",
+    "emailOrUsernamePlaceholder": "you@example.com ወይም የተጠቃሚ ስም",
+    "password": "የይለፍ ቃል",
+    "passwordPlaceholder": "••••••••",
+    "rememberMe": "አስታውሰኝ",
+    "forgotPassword": "የይለፍ ቃል ረስተዋል?",
+    "emailAddress": "የኢሜይል አድራሻ",
+    "emailPlaceholder": "you@example.com",
+    "username": "የተጠቃሚ ስም",
+    "usernamePlaceholder": "johndoe123",
+    "fullName": "ሙሉ ስም",
+    "fullNamePlaceholder": "ጆን ዶ",
+    "nativeLanguage": "የትውልድ ቋንቋ",
+    "accountType": "የመለያ ዓይነት",
+    "loadingLanguages": "ቋንቋዎችን በመጫን ላይ...",
+    "selectLanguage": "ቋንቋ ይምረጡ",
+    "createAccountBtn": "መለያ ይፍጠሩ",
+    "signingIn": "በመግባት ላይ..."
+  },
+  "footer": {
+    "privacy": "ግላዊነት",
+    "terms": "ውሎች"
+  },
+  "general": {
+    "logOut": "ውጣ",
+    "signOut": "ውጣ",
+    "loading": "በመጫን ላይ...",
+    "new": "አዲስ",
+    "student": "ተማሪ",
+    "enterprise": "ድርጅት",
+    "individual": "ግለሰብ",
+    "teacher": "አስተማሪ",
+    "masterLanguages": "ቋንቋዎችን በ AI አስተማሪ በተፈጥሮ ይማሩ።",
+    "joinThousands": "በግላዊ ዱካዎች፣ በይነተግባራዊ ትምህርቶች እና በእውነተኛ ጊዜ ቻት ልምምድ አማካይነት እምቅ ችሎታቸውን እየከፈቱ ካሉ በሺህ ከሚቆጠሩ ተማሪዎች ጋር ይቀላቀሉ።"
+  },
+  "landing": {
+    "hero": {
+      "badge": "የEduLingua AI 1.0 መግቢያ",
+      "title1": "የምስራቅ አፍሪካ ቋንቋዎችን ይማሩ",
+      "title2": "በ AI አማካኝነት",
+      "subtitle": "አማርኛን፣ ስዋሂሊን፣ አፋን ኦሮሞን እና ሌሎችንም በሚያስደንቅ የ AI ውይይቶች እና ግላዊ የትምህርት መንገዶች በተፈጥሮ ይማሩ።",
+      "getStarted": "ይጀምሩ",
+      "tryMiniGame": "አነስተኛ ጨዋታ ይሞክሩ"
+    },
+    "features": {
+      "tagline": "ለቋንቋ ብቃት የሚያስፈልጉዎት ነገሮች ሁሉ",
+      "description": "የእኛ በ AI የተደገፈ ፕላትፎርም ከእርስዎ የመማር ዘይቤ ጋር ይላመዳል፣ በፍጥነት እንዲራመዱ የሚያስፈልገዎትን ነገር ያቀርባል።",
+      "feature1": {
+        "title": "በ AI የተደገፉ ትምህርቶች",
+        "desc": "በእርስዎ ጥንካሬ እና ድክመት ዙሪያ በእውነተኛ ጊዜ የሚቀረጽ ተለዋዋጭ ስርዓተ-ትምህርት።"
+      },
+      "feature2": {
+        "title": "የተበጁ መንገዶች",
+        "desc": "ከጀማሪነት ወደ ብቃት በተፈጥሮ ለመድረስ የተቀረጹ የተዋቀሩ ዱካዎችን ይከተሉ።"
+      },
+      "feature3": {
+        "title": "የእውነተኛ ጊዜ የቻት አስተማሪ",
+        "desc": "የሰዋሰው እና የቃላት አጠቃቀምዎን ወዲያውኑ ከሚያርም የ AI ጓደኛ ጋር መነጋገርን ይለማመዱ።"
+      }
+    },
+    "howItWorks": {
+      "title": "EduLingua እንዴት ይሰራል",
+      "step1": {
+        "title": "ቋንቋዎችዎን ይምረጡ",
+        "desc": "የእርስዎን የአፍ መፍቻ ቋንቋ እና ሊማሩት የሚፈልጉትን የዒላማ ቋንቋ ይምረጡ።"
+      },
+      "step2": {
+        "title": "መሰረታዊ ነገሮችን ይማሩ",
+        "desc": "በ AI በተመረጡ የቃላት፣ የሰዋሰው እና የአነባበብ ትምህርቶች ዱካ ውስጥ ይለፉ።"
+      },
+      "step3": {
+        "title": "በእውነተኛ ህይወት ሁኔታዎች ውስጥ ይለማመዱ",
+        "desc": "የንግግር በራስ መተማመንን ለመገንባት በሚያስደንቅ ሚና መጫወት ሁኔታዎች ውስጥ ከ AI አስተማሪዎ ጋር ይወያዩ።"
+      },
+      "step4": {
+        "title": "ፈተናዎችን ይውሰዱ እና ይገምግሙ",
+        "desc": "ከእያንዳንዱ ትምህርት በኋላ ፈተናዎችን ይውሰዱ እና በደረጃዎች ያገኙትን ልምድ ይመዝግቡ።"
+      },
+      "step5": {
+        "title": "ለማጠናቀቂያ የምስክር ወረቀት ያግኙ",
+        "desc": "በአንድ ዱካ ስር ያሉትን ትምህርቶች በሙሉ ሲጨርሱ ሊረጋገጥ የሚችል የምስክር ወረቀት ያግኙ።"
+      }
+    },
+    "testimonials": {
+      "title": "በዓለም ዙሪያ ባሉ ተማሪዎች የተወደደ",
+      "t1": {
+        "text": "EduLingua የመማር መንገዴን ሙሉ በሙሉ ቀይሮታል። የ AI ቻቱ ከአዲስ አበባ የመጣ እውነተኛ ሰው እንደማነጋገር ይሰማኛል!",
+        "name": "አበበ ቢ.",
+        "role": "የአማርኛ ተማሪ"
+      },
+      "t2": {
+        "text": "የተበጁ የመማሪያ መንገዶች የኪስዋሂሊ ሰዋሰውን ከጠበቅኩት በላይ በፍጥነት እንድማር ረድተውኛል። ሀኪ!",
+        "name": "ዘሃራ ኤም.",
+        "role": "የስዋሂሊ ተማሪ"
+      },
+      "t3": {
+        "text": "በመጨረሻ ክልላዊ ቋንቋዎችን የሚያከብር መተግበሪያ አገኘሁ። አውዳዊ ትምህርቱ አፋን ኦሮሞን በጣም ቀላል ያደርገዋል።",
+        "name": "ኮፊ ኤ.",
+        "role": "የአፋን ኦሮሞ ተማሪ"
+      }
+    },
+    "languages": {
+      "title": "ቋንቋዎን ይምረጡ",
+      "subtitle": "በተዋቀሩ ዱካዎች እና በ AI የተደገፈ ትምህርት በማደግ ላይ ያሉ የቋንቋዎችን ዝርዝር እንደግፋለን።",
+      "viewAll": "ሁሉንም ቋንቋዎች ይመልከቱ"
+    },
+    "cta": {
+      "title": "ብቁ ለመሆን ተዘጋጅተዋል?",
+      "subtitle": "በ AI ኃይል አዳዲስ ቋንቋዎችን ለመማር EduLingua ን እየተጠቀሙ ካሉ በሺዎች ከሚቆጠሩ ተማሪዎች ጋር ይቀላቀሉ።",
+      "startFree": "በነፃ ይጀምሩ",
+      "exploreTracks": "ዱካዎችን ያስሱ"
+    }
+  },
+  "publicTracks": {
+    "hero": {
+      "badge": "የትምህርት ዱካዎች",
+      "title": "ወደ ቋንቋ ብቃት የሚያደርሱ የተዋቀሩ መንገዶች",
+      "subtitle": "በባለሙያ የተዘጋጁ የትምህርት ዱካዎች ቤተ-መጽሐፍታችንን ያስሱ። እያንዳንዱ ዱካ የተዋቀሩ ደረጃዎችን፣ በይነተግባራዊ ትምህርቶችን እና በ AI የተደገፉ ፈተናዎችን ይዟል።"
+    },
+    "breadcrumb": {
+      "languages": "ቋንቋዎች",
+      "allTracks": "ሁሉም ዱካዎች"
+    },
+    "filters": {
+      "searchPlaceholder": "ዱካዎችን ይፈልጉ...",
+      "allLanguages": "ሁሉም ቋንቋዎች"
+    },
+    "status": {
+      "loading": "ዱካዎችን በመጫን ላይ...",
+      "error": "ዱካዎችን መጫን አልተቻለም። እባክዎ ቆይተው እንደገና ይሞክሩ።",
+      "noTracks": "ምንም ዱካዎች አልተገኙም",
+      "noTracksDesc": "ፍለጋዎን ወይም ማጣሪያዎን ለማስተካከል ይሞክሩ።",
+      "showing": "በማሳየት ላይ",
+      "track": "ዱካ",
+      "tracks": "ዱካዎች"
+    },
+    "card": {
+      "fullLevel": "ሙሉ ደረጃ",
+      "levels": "ደረጃዎች",
+      "signInToEnroll": "ለመመዝገብ ይግቡ"
+    },
+    "cta": {
+      "title": "የመጀመሪያውን ዱካዎን በነፃ ይጀምሩ",
+      "subtitle": "በማንኛውም ዱካ ለመመዝገብ እና የቋንቋ ትምህርት ጉዞዎን ዛሬ ለመጀመር መለያ ይፍጠሩ።",
+      "createAccount": "ነፃ መለያ ይፍጠሩ",
+      "logIn": "ግባ"
+    }
+  },
+  "languagesPage": {
+    "hero": {
+      "badge": "የሚገኙ ቋንቋዎች",
+      "title1": "ቀጥሎ የትኛውን የምስራቅ አፍሪካ ቋንቋ",
+      "title2": "ያጠናሉ?",
+      "subtitle": "ከማደግ ላይ ካለው የቋንቋዎች ቤተ-መጽሐፍታችን ይምረጡ። እያንዳንዱ ቋንቋ ከተዋቀሩ ዱካዎች፣ ከ AI አስተማሪ ድጋፍ እና በይነተግባራዊ ትምህርቶች ጋር ይመጣል።"
+    },
+    "searchPlaceholder": "ቋንቋዎችን ይፈልጉ...",
+    "status": {
+      "loading": "ቋንቋዎችን በመጫን ላይ...",
+      "error": "ቋንቋዎችን መጫን አልተቻለም። እባክዎ ቆይተው እንደገና ይሞክሩ።",
+      "noLanguagesFound": "ለ \"{{search}}\" ምንም ቋንቋዎች አልተገኙም"
+    },
+    "card": {
+      "tracksAvailable": "የሚገኙ ዱካዎች"
+    },
+    "cta": {
+      "title": "ለመጀመር ዝግጁ ነዎት?",
+      "subtitle": "ዛሬ ነፃ መለያዎን ይፍጠሩ እና የመጀመሪያውን የቋንቋ ዱካዎን ያግኙ።",
+      "getStarted": "በነፃ ይጀምሩ"
+    }
+  },
+  "mosaicGame": {
+    "title": "አፍሮ ሞዛይክ",
+    "lobby": {
+      "title": "ችግርን ይምረጡ",
+      "easy": "ቀላል",
+      "medium": "መካከለኛ",
+      "hard": "ከባድ",
+      "protocol": "ፕሮቶኮል"
+    },
+    "selector": {
+      "map": "የመልሶ ማግኛ ካርታ",
+      "path": "መንገድ",
+      "changeDifficulty": "ችግርን ይቀይሩ",
+      "categories": "ምድቦች"
+    },
+    "instructions": {
+      "title": "የተልዕኮ ፕሮቶኮሎች",
+      "step1": "በእያንዳንዱ ምድብ 4 ሰቆችን ያዛምዱ።",
+      "step2": "ከ 4 ኛው ምርጫ በፊት እንደገና ጠቅ በማድረግ ሰድርን መሰረዝ ይችላሉ።",
+      "step3": "ሞዛይኩን በትንሽ ሙከራዎች በማጠናቀቅ 3 ኮከቦችን ያግኙ።",
+      "start": "መፍታት ይጀምሩ",
+      "back": "ተመለስ"
+    },
+    "playing": {
+      "trials": "ሙከራዎች",
+      "time": "ጊዜ"
+    },
+    "won": {
+      "title": "ተባብሯል",
+      "continue": "መንገዱን ይቀጥሉ",
+      "dashboard": "ዳሽቦርድ",
+      "loginSave": "የኮከብ ደረጃዎን ለማስቀመጥ ይግቡ!"
+    },
+    "archive": {
+      "title": "ማህደር"
+    },
+    "hints": {
+      "mismatch": "ሞዛይክ አልተዛመደም",
+      "success": "ተመልሷል!",
+      "hint": "ፍንጭ፡ ከዚህ ጋር የተያያዙ ነገሮችን ለማግኘት ይሞክሩ"
+    },
+    "auth": {
+      "loginToSave": "ሂደትን ለማስቀመጥ ይግቡ"
+    }
+  },
+  "chronosGrid": {
+    "title": "ክሮኖስ-ግሪድ",
+    "status": {
+      "integrity": "የጊዜ መስመር ትክክለኛነት",
+      "fragments": "ጊዜያዊ ቁርጥራጮች",
+      "left": "ቀሪ",
+      "era": "ዘመን",
+      "node": "ኖድ",
+      "placed": "ቁርጥራጭ ተቀምጧል",
+      "awaiting": "ግቤትን በመጠባበቅ ላይ",
+      "target": "ዒላማ ኖድ"
+    },
+    "info": {
+      "title": "ታሪካዊ መረጃ",
+      "significance": "አስፈላጊነት",
+      "catalyst": "ወሳኝ የዘመን አነሳሽ",
+      "region": "ክልል",
+      "coast": "የምስራቅ አፍሪካ የባህር ዳርቻ"
+    },
+    "won": {
+      "title": "ግሪድ ተመሳስሏል",
+      "subtitle": "ጊዜያዊ አለመመጣጠኖች ተፈተዋል። የምስራቅ አፍሪካ ታሪክ አሁን በጊዜ ቅደም ተከተል የተጠበቀ ነው።",
+      "reset": "ስርዓቱን እንደገና ያስጀምሩ",
+      "dashboard": "ወደ መሰረት ይመለሱ"
+    },
+    "toast": {
+      "success": "የጊዜ መስመር ክፍል ተመሳስሏል",
+      "error": "የጊዜ ቅደም ተከተል አለመስማማት ተገኝቷል"
+    }
+  },
+  "dashboard": {
+    "welcome": "እንኳን ደህና መጡ",
+    "streak": "የ {{count}} ቀናት ተከታታይ ጉዞ ላይ ነዎት። ይቀጥሉበት!",
+    "noStreak": "ጉዞዎን ዛሬ ይጀምሩ — አዲስ ነገር ይማሩ!",
+    "continueLearning": "ትምህርቱን ይቀጥሉ",
+    "startTrack": "ዱካ ይጀምሩ",
+    "aiTutor": "AI አስተማሪ",
+    "yourTracks": "የእርስዎ ዱካዎች",
+    "viewAll": "ሁሉንም ይመልከቱ",
+    "noTracks": "ገና ምንም ዱካ አልተጀመረም",
+    "browseTracks": "ዱካዎችን ያስሱ",
+    "lessonsCompleted": "{{count}} ትምህርት ተጠናቋል",
+    "lessonsCompleted_plural": "{{count}} ትምህርቶች ተጠናቀዋል",
+    "quickActions": "ፈጣን እርምጃዎች",
+    "practiceAi": "ከ AI ጋር ይለማመዱ",
+    "findLanguages": "አዳዲስ ቋንቋዎችን ያግኙ",
+    "manageSystem": "ስርዓቱን ያስተዳድሩ",
+    "unlockEverything": "ሁሉንም ይክፈቱ",
+    "yourStats": "የእርስዎ ስታቲስቲክስ",
+    "dayStreak": "የቀናት ተከታታይነት",
+    "totalXP": "ጠቅላላ XP",
+    "lessonsDone": "የተጠናቀቁ ትምህርቶች",
+    "tracksActive": "ንቁ ዱካዎች",
+    "gameMastery": "የጨዋታ ብቃት",
+    "starsEarned": "የተገኙ ኮከቦች",
+    "stagesClear": "የተጠናቀቁ ደረጃዎች",
+    "continueMosaic": "ሞዛይኩን ይቀጥሉ",
+    "proAnalytics": "ሙያዊ ትንታኔ",
+    "complete": "ተጠናቋል",
+    "aiChatsToday": "የዛሬ AI ቻቶች",
+    "upgradeUnlimited": "ላልተገደበ ቻት ያሻሽሉ",
+    "messagesRemaining": "ዛሬ {{count}} መልእክት ቀርቷል",
+    "messagesRemaining_plural": "ዛሬ {{count}} መልእክቶች ቀርተዋል",
+    "premiumPlan": "ያልተገደበ — የፕሪሚየም ዕቅድ"
+  },
+  "profile": {
+    "title": "የመለያ ቅንብሮች",
+    "subtitle": "የመገለጫዎን እና የመለያዎን ምርጫዎች ያስተዳድሩ።",
+    "general": "አጠቃላይ",
+    "security": "ደህንነት",
+    "fullName": "ሙሉ ስም",
+    "username": "የተጠቃሚ ስም",
+    "email": "የኢሜይል አድራሻ",
+    "emailNote": "ኢሜይል መቀየር አይቻልም።",
+    "nativeLanguage": "የትውልድ ቋንቋ",
+    "saveChanges": "ለውጦችን ያስቀምጡ",
+    "saving": "በማስቀመጥ ላይ...",
+    "changePassword": "የይለፍ ቃል ይቀይሩ",
+    "currentPassword": "የአሁኑ የይለፍ ቃል",
+    "newPassword": "አዲስ የይለፍ ቃል",
+    "confirmPassword": "የይለፍ ቃል ያረጋግጡ",
+    "minCharacters": "ቢያንስ 6 ቁምፊዎች",
+    "passwordMismatch": "የይለፍ ቃሎች አይዛመዱም።",
+    "updatePassword": "የይለፍ ቃል ያዘምኑ",
+    "updating": "በማዘመን ላይ...",
+    "dangerZone": "አደገኛ ቀጠና",
+    "deleteDesc": "መለያዎን እና ሁሉንም ተዛማጅ መረጃዎችን በቋሚነት ያጥፉ። ይህ ሊቀለበስ አይችልም።",
+    "deleteAccount": "መለያ ያጥፉ",
+    "confirmDelete": "እርግጠኛ ነዎት?",
+    "yesDelete": "አዎ፣ ይጥፋ",
+    "deleting": "በማጥፋት ላይ...",
+    "cancel": "ይሰረዝ",
+    "successUpdate": "መገለጫ በተሳካ ሁኔታ ተዘምኗል!",
+    "errorUpdate": "መገለጫውን ማዘመን አልተቻለም።",
+    "successPassword": "የይለፍ ቃል በተሳካ ሁኔታ ተቀይሯል!",
+    "errorPassword": "የይለፍ ቃል መቀየር አልተቻለም።"
+  },
+  "chat": {
+    "title": "EduLingua አስተማሪ",
+    "subtitle": "የአፍ መፍቻ ቋንቋ ተናጋሪ እና ብዙ ቋንቋ አዋቂ",
+    "welcome": "ሰላም {{name}}! እኔ የምስራቅ አፍሪካ ቋንቋ አስተማሪዎ ነኝ። ስዋሂሊ፣ አማርኛ፣ አፋን ኦሮሞ ወይም ማንኛውንም የክልል ቋንቋ እንዲለማመዱ እረዳዎታለሁ። ዛሬ በምን ልርዳዎት?",
+    "limitReached": "የዕለት ተዕለት የነፃ ገደብ ላይ ደርሰዋል። ነገ ተመለሱ ወይም ላለተገደበ አገልግሎት ያሻሽሉ።",
+    "upgrade": "ያሻሽሉ",
+    "typing": "አስተማሪው በመጻፍ ላይ ነው...",
+    "placeholder": "ለ AI አስተማሪዎ መልእክት ይላኩ... (ለመላክ Enter ይጫኑ)",
+    "limitPlaceholder": "የዕለት ገደብ ላይ ደርሰዋል። ለመቀጠል ያሻሽሉ።",
+    "error": "ይቅርታ፣ ግንኙነት ላይ ችግር አለ። እባክዎ ከጥቂት ቆይታ በኋላ እንደገና ይሞክሩ።",
+    "rephrase": "ይህ አልገባኝም። እባክዎ በሌላ አነጋገር ይግለጹልኝ?",
+    "premiumLimitless": "ፕሪሚየም ያልተገደበ"
+  },
+  "teacher": {
+    "dashboard": "የአስተማሪ ዳሽቦርድ",
+    "subtitle": "ዱካዎን ያስተዳድሩ፣ የተማሪዎችን ሂደት ይከታተሉ እና ይዘት ይፍጠሩ።",
+    "manageTrack": "ዱካ ያስተዳድሩ",
+    "newLesson": "አዲስ ትምህርት",
+    "totalStudents": "ጠቅላላ ተማሪዎች",
+    "activeLessons": "ንቁ ትምህርቶች",
+    "quizzesCreated": "የተፈጠሩ ፈተናዎች",
+    "avgCompletion": "አማካይ ማጠናቀቂያ",
+    "recentActivity": "የቅርብ ጊዜ የተማሪ እንቅስቃሴ",
+    "viewAll": "ሁሉንም ይመልከቱ",
+    "noActivity": "እስካሁን ምንም የቅርብ ጊዜ እንቅስቃሴ የለም።",
+    "noTrack": "እስካሁን ምንም ዱካ አልተመደበም።",
+    "contactAdmin": "እባክዎ ልዩ ዱካ እንዲመደብልዎ አስተዳዳሪውን ያነጋግሩ።",
+    "aiAssistant": "የ AI ይዘት ረዳት",
+    "aiAssistantDesc": "የላቀ AI በመጠቀም ለዱካዎ አዳዲስ ክፍሎችን ወይም የፈተና ጥያቄዎችን ያፍልቁ።",
+    "genQuiz": "የደረጃ ፈተና አፍልቅ",
+    "newAiSection": "አዲስ የ AI ክፍል"
+  },
+  "premium": {
+    "title": "ያለ ገደብ ይማሩ",
+    "subtitle": "ያልተገደበ የ AI አስተማሪ አገልግሎት፣ ሁሉንም የትምህርት ዱካዎች እና የቋንቋ ጉዞዎን ለማፋጠን የሚያግዙ ጠንካራ መሳሪያዎችን ያግኙ።",
+    "upgradeToPremium": "ወደ ፕሪሚየም ያሻሽሉ",
+    "goPremium": "ፕሪሚየም ይሁኑ",
+    "youArePremium": "እርስዎ ፕሪሚየም ነዎት! 🎉",
+    "enjoyUnlimited": "በEduLingua ሁሉንም አገልግሎቶች ያለገደብ ያግኙ። የአለም ቋንቋዎች የእርስዎ ናቸው።",
+    "goToDashboard": "ወደ ዳሽቦርድ ይሂዱ",
+    "currentPlan": "የአሁኑ ዕቅድዎ",
+    "bestValue": "ተመራጭ ምርጫ",
+    "upgradeNow": "አሁን ያሻሽሉ",
+    "processing": "በማስኬድ ላይ...",
+    "cancelAnytime": "በማንኛውም ጊዜ መሰረዝ ይችላሉ። ምንም የተደበቀ ክፍያ የለም።",
+    "whyPremium": "ለምን ፕሪሚየም ይሁኑ?",
+    "unlimitedAi": "ያልተገደበ AI አስተማሪ",
+    "unlimitedAiDesc": "በፈለጉት ጊዜ ከ AI ቋንቋ አስተማሪዎ ጋር የፈለጉትን ያህል ይወያዩ።",
+    "allTracks": "ሁሉም ዱካዎች ተከፍተዋል",
+    "allTracksDesc": "ያለ ምንም ገደብ በሁሉም ቋንቋዎች ያሉትን ሁሉንም የትምህርት ዱካዎች ያግኙ።",
+    "advancedProgress": "የላቀ እድገት",
+    "advancedProgressDesc": "ጥንካሬዎን እና የት ላይ ማተኮር እንዳለብዎ ለመረዳት ጥልቅ ትንታኔዎች።",
+    "areYouEducator": "እርስዎ አስተማሪ ነዎት?",
+    "applyTeacher": "አስተማሪ ለመሆን ያመልክቱ እና ስርዓተ ትምህርት ለመፍጠር እና ተማሪዎችን ለማስተማር ልዩ መብት ያግኙ።",
+    "applyNow": "አሁን ያመልክቱ",
+    "freePlan": "ነፃ",
+    "freePrice": "$0",
+    "perMonth": "/በወር",
+    "getStartedBasics": "በመሰረታዊ ነገሮች ይጀምሩ።",
+    "premiumPrice": "$9.99",
+    "everythingMaster": "ቋንቋን ለመቆጣጠር የሚያስፈልግዎ ነገር ሁሉ ተካቷል።",
+    "freeFeature1": "በቀን 30 የ AI ቻት መልእክቶች",
+    "freeFeature2": "ነፃ የትምህርት ዱካዎችን ማግኘት",
+    "freeFeature3": "መሰረታዊ የሂደት ክትትል",
+    "freeFeature4": "የትርጉም ጨዋታ",
+    "premiumFeature1": "ያልተገደበ የ AI አስተማሪ ውይይቶች",
+    "premiumFeature2": "ሁሉም የፕሪሚየም ትምህርት ዱካዎች",
+    "premiumFeature3": "የላቀ ትንታኔ እና ግንዛቤዎች",
+    "premiumFeature4": "ቅድሚያ የሚሰጠው ድጋፍ",
+    "premiumFeature5": "ያለ ኢንተርኔት ይዘቶችን ማግኘት",
+    "premiumFeature6": "ለአዳዲስ አገልግሎቶች ቅድሚያ ማግኘት"
+  },
+  "progress": {
+    "title": "የእኔ እድገት",
+    "subtitle": "በሁሉም የተመዘገቡባቸው ዱካዎች ውስጥ የትምህርት ጉዞዎን ይከታተሉ።",
+    "totalXP": "ጠቅላላ XP",
+    "lessonsDone": "የተጠናቀቁ ትምህርቶች",
+    "tracksActive": "ንቁ ዱካዎች",
+    "tracksFinished": "የተጠናቀቁ ዱካዎች",
+    "mosaicMaster": "የሞዛይክ ጌታ",
+    "historicalStatus": "በሁሉም በይነተገናኝ ሞጁሎች ውስጥ የታሪክ መፍታት ሁኔታ።",
+    "totalStars": "ጠቅላላ ኮከቦች",
+    "totalStages": "ጠቅላላ ደረጃዎች",
+    "loading": "እድገትዎን በመጫን ላይ...",
+    "error": "እድገትን መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።",
+    "noProgress": "እስካሁን ምንም እድገት የለም",
+    "enrollDesc": "ጉዞዎን ለመጀመር በአንድ የትምህርት ዱካ ይመዝገቡ።",
+    "browseTracks": "ዱካዎችን ያስሱ",
+    "enrolledTracks": "የተመዘገቡባቸው ዱካዎች",
+    "completed": "ተጠናቋል",
+    "review": "ከልስ",
+    "continue": "ቀጥል"
+  },
+  "tracks": {
+    "title": "የትምህርት ዱካዎች",
+    "subtitle": "የቋንቋ ትምህርት መንገዶችን ያስሱ እና ይመዝገቡ",
+    "searchPlaceholder": "ዱካዎችን ይፈልጉ...",
+    "allLanguages": "ሁሉም ቋንቋዎች",
+    "loading": "ዱካዎችን በመጫን ላይ...",
+    "noTracks": "ምንም ዱካ አልተገኘም",
+    "tryAdjust": "ፍለጋዎን ወይም የቋንቋ ማጣሪያዎን ለማስተካከል ይሞክሩ።",
+    "levelsCount": "{{count}} ደረጃ",
+    "levelsCount_plural": "{{count}} ደረጃዎች",
+    "enrolled": "ተመዝግቧል",
+    "progress": "እድገት",
+    "continue": "ትምህርቱን ይቀጥሉ",
+    "enrollNow": "አሁን ይመዝገቡ",
+    "enrolling": "በመመዝገብ ላይ...",
+    "beginner": "ጀማሪ",
+    "intermediate": "መካከለኛ",
+    "advanced": "ከፍተኛ"
+  },
+  "publicTracks": {
+    "hero": {
+      "badge": "ያሉ የትምህርት መንገዶች",
+      "title": "የአፍሪካ ቋንቋዎችን ይማሩ እና ብቃትን ያግኙ",
+      "subtitle": "ለአማርኛ፣ ኦሮምኛ፣ ሱዋሂሊ እና ሌሎችም በባለሙያ የተዘጋጁ ስርዓተ ትምህርቶችን ያግኙ። ዛሬ ጉዞዎን ይጀምሩ።"
+    },
+    "breadcrumb": {
+      "languages": "ቋንቋዎች",
+      "allTracks": "ሁሉም ዱካዎች"
+    },
+    "filters": {
+      "searchPlaceholder": "ዱካዎችን በስም ወይም በመግለጫ ይፈልጉ...",
+      "allLanguages": "ሁሉም ቋንቋዎች"
+    },
+    "status": {
+      "loading": "ዱካዎችን በመጫን ላይ...",
+      "error": "ዱካዎችን መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።",
+      "noTracks": "ምንም ዱካ አልተገኘም",
+      "noTracksDesc": "ፍለጋዎን ወይም የቋንቋ ማጣሪያዎን ለማስተካከል ይሞክሩ።",
+      "showing": "በማሳየት ላይ",
+      "track": "ዱካ",
+      "tracks": "ዱካዎች"
+    },
+    "card": {
+      "levels": "ደረጃዎች",
+      "fullLevel": "ሙሉ ደረጃ",
+      "signInToEnroll": "ለመመዝገብ ይግቡ"
+    },
+    "cta": {
+      "title": "ጉዞዎን ለመጀመር ዝግጁ ነዎት?",
+      "subtitle": "ከ EduLingua ጋር የአፍሪካ ቋንቋዎችን እየተማሩ ያሉ በሺዎች የሚቆጠሩ ሰዎችን ይቀላቀሉ።",
+      "createAccount": "ነፃ አካውንት ይፍጠሩ",
+      "logIn": "ይግቡ"
+    }
+  },
+  "languagesPage": {
+    "hero": {
+      "badge": "የአፍሪካ ቅርስ",
+      "title1": "ቋንቋዎችን ያስሱ",
+      "title2": "አፍሪካ",
+      "subtitle": "ከአፍሪካ ቀንድ እስከ ታላላቅ ሀይቆች፣ የአህጉሪቱን የበለፀገ የቋንቋ ብዝሃነት ያግኙ።"
+    },
+    "searchPlaceholder": "ቋንቋዎችን ይፈልጉ...",
+    "status": {
+      "loading": "ቋንቋዎችን በመጫን ላይ...",
+      "error": "ቋንቋዎችን መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።",
+      "noLanguagesFound": "ለ \"{{search}}\" ምንም ቋንቋ አልተገኘም"
+    },
+    "card": {
+      "tracksAvailable": "{{count}} ዱካ ይገኛል",
+      "tracksAvailable_plural": "{{count}} ዱካዎች ይገኛሉ"
+    },
+    "cta": {
+      "title": "የእርስዎ ቋንቋ እዚህ የለም?",
+      "subtitle": "በየጊዜው አዳዲስ ዱካዎችን እየጨመርን ነው። አዳዲስ ቋንቋዎች ሲለቀቁ እንዲያውቁ ይመዝገቡ።",
+      "getStarted": "አሁን ይጀምሩ"
+    }
+  },
+  "mosaicGame": {
+    "title": "AfroMosaic",
+    "hints": {
+      "success": "ክፍል ተገኝቷል",
+      "hint": "ፍንጭ:",
+      "mismatch": "የታሪክ አለመጣጣም"
+    },
+    "playing": {
+      "trials": "ሙከራዎች"
+    },
+    "auth": {
+      "loginToSave": "እድገትን ለማስቀመጥ ይግቡ"
+    },
+    "lobby": {
+      "title": "ክብደት ይምረጡ",
+      "easy": "ቀላል",
+      "medium": "መካከለኛ",
+      "hard": "ከባድ",
+      "protocol": "ፕሮቶኮል"
+    },
+    "selector": {
+      "map": "የክልል ካርታ",
+      "path": "የብቃት መንገድ",
+      "changeDifficulty": "ክብደት ይቀይሩ",
+      "categories": "ምድቦች"
+    },
+    "instructions": {
+      "title": "የመፍታት ፕሮቶኮል",
+      "step1": "ታሪካዊ ክፍልን ለመግለጥ 4 ተዛማጅ ንጣፎችን ያግኙ።",
+      "step2": "ሞዛይኩን ለማጠናቀቅ ሁሉንም ምድቦች ያዛምዱ።",
+      "step3": "በትክክለኛነትዎ እና በፍጥነትዎ ላይ በመመስረት ኮከቦችን ያግኙ።",
+      "back": "ተመለስ",
+      "start": "ፕሮቶኮሉን ይጀምሩ"
+    },
+    "won": {
+      "title": "ሞዛይኩ ተመልሷል",
+      "continue": "ቀጣይ ደረጃ",
+      "dashboard": "ዳሽቦርድ",
+      "loginSave": "ስኬቶችዎን ለማስቀመጥ ይግቡ!"
+    },
+    "archive": {
+      "title": "ታሪካዊ መዝገብ"
+    }
+  }
+}

@@ -101,8 +101,8 @@ const ContentManagement = () => {
         setData(res?.data?.levels || res?.data || []);
         console.log(res?.data?.levels || res?.data || [])
       } else if (activeTab === 'lessons') {
-        res = await getAllLessons(selectedLevel 
-          ? { levelId: selectedLevel, activeOnly: false } 
+        res = await getAllLessons(selectedLevel
+          ? { levelId: selectedLevel, activeOnly: false }
           : { activeOnly: false }
         );
         setData(res?.data?.lessons || res?.data || []);
@@ -293,7 +293,7 @@ const ContentManagement = () => {
     { id: 'sections', label: 'Sections', icon: CheckCircle },
     { id: 'quizzes', label: 'Quizzes', icon: Sparkles },
   ];
-
+console.log(data)
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -391,7 +391,6 @@ const ContentManagement = () => {
                {/* Simplified selection for now */}
             </div>
           )}
-
           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
             {loading ? (
               <div className="py-20 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-rose-500" /></div>

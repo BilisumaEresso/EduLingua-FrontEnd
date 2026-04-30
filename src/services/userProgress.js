@@ -19,9 +19,7 @@ const userProgressService = {
 
   // Start a new learning track
   startLearningTrack: async (data) => {
-    // data should match startLearningTrackSchema: { learningId: "..." }
     const response = await api.post("/progress/start", data);
-    console.log(response);
     return response.data
   },
 
@@ -33,9 +31,7 @@ const userProgressService = {
 
   // Start a quiz attempt for a level
   quizStartAttempt: async (data) => {
-    // data: { learningId, levelId, questionCount? }
     const response = await api.post("/progress/quiz/start", data);
-    console.log(response);
     return response.data
   },
 

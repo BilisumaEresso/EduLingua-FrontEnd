@@ -1,0 +1,21 @@
+{
+  "theme": "East African History",
+  "events": [
+    { "id": 1, "text": "Axumite Empire Peak", "year": 350, "category": "Pre-Colonial", "info": "The empire reaches its greatest extent under King Ezana." },
+    { "id": 2, "text": "Great Zimbabwe Construction", "year": 1100, "category": "Pre-Colonial", "info": "The start of the massive stone city-state's rise." },
+    { "id": 3, "text": "Rise of Kilwa Sultanate", "year": 1200, "category": "Pre-Colonial", "info": "Kilwa becomes the dominant city-state on the Swahili Coast." },
+    { "id": 4, "text": "Arrival of Vasco da Gama", "year": 1498, "category": "Pre-Colonial", "info": "Portuguese explorer arrives in Mombasa and Malindi." },
+    { "id": 5, "text": "Omani Capital to Zanzibar", "year": 1840, "category": "Colonial Transition", "info": "Sultan Seyyid Said moves his capital from Muscat to Zanzibar." },
+    { "id": 6, "text": "Berlin Conference", "year": 1884, "category": "Colonial Transition", "info": "European powers divide Africa, triggering the 'Scramble'." },
+    { "id": 7, "text": "Imperial British EA Charter", "year": 1888, "category": "Colonial Transition", "info": "IBEA Company is granted rights to administer British East Africa." },
+    { "id": 8, "text": "Battle of Adwa", "year": 1896, "category": "Colonial Transition", "info": "Ethiopia defeats Italy, maintaining its independence." },
+    { "id": 9, "text": "Majimaji Rebellion", "year": 1905, "category": "Resistance", "info": "Unified uprising against German colonial rule in Tanganyika." },
+    { "id": 10, "text": "Harry Thuku Protests", "year": 1922, "category": "Resistance", "info": "Early political mobilization against colonial labor laws in Kenya." },
+    { "id": 11, "text": "Mau Mau Uprising Begins", "year": 1952, "category": "Resistance", "info": "Armed struggle against British land policies in Kenya." },
+    { "id": 12, "text": "Kapenguria Six Arrest", "year": 1953, "category": "Resistance", "info": "Detention of Jomo Kenyatta and five other independence leaders." },
+    { "id": 13, "text": "Tanganyika Independence", "year": 1961, "category": "Independence", "info": "Julius Nyerere leads Tanganyika to sovereign rule." },
+    { "id": 14, "text": "Kenya Independence", "year": 1963, "category": "Independence", "info": "Jomo Kenyatta becomes the first Prime Minister." },
+    { "id": 15, "text": "Zanzibar Revolution", "year": 1964, "category": "Independence", "info": "Overthrow of the Sultan and establishment of a republic." },
+    { "id": 16, "text": "East African Community Formed", "year": 1967, "category": "Independence", "info": "Regional integration between Kenya, Uganda, and Tanzania." }
+  ]
+}

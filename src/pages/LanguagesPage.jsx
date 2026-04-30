@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Globe, Search, ArrowRight, BookOpen, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Search, ArrowRight, Loader2, Languages, BookText } from 'lucide-react';
 import { getAllLanguages } from '../services/language';
 
 // Flag emoji helper using country code (common languages only)
@@ -36,9 +37,10 @@ const bgColors = [
 ];
 
 const LanguagesPage = () => {
+  const { t } = useTranslation();
   const [languages, setLanguages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -47,7 +49,7 @@ const LanguagesPage = () => {
         const res = await getAllLanguages();
         const allLangs = res?.data?.langs || res?.data || [];
         // Only show active languages to learners
-        setLanguages(allLangs.filter(l => l.isActive));
+        setLanguages(allLangs.filter((l) => l.isActive));
       } catch {
         setError(true);
       } finally {
@@ -57,8 +59,8 @@ const LanguagesPage = () => {
     fetch();
   }, []);
 
-  const filtered = languages.filter(l =>
-    l.name?.toLowerCase().includes(search.toLowerCase())
+  const filtered = languages.filter((l) =>
+    l.name?.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -76,17 +78,17 @@ const LanguagesPage = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-sm font-medium mb-6">
-              <Globe className="h-4 w-4" />
-              Available Languages
+              <Languages className="h-4 w-4" />
+              {t('languagesPage.hero.badge')}
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6">
-              Which East African language will you{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-rose-600">
-                master next?
+              {t('languagesPage.hero.title1')}{" "}
+              <span className="text-transparent px-2 bg-clip-text bg-gradient-to-r from-amber-600 to-rose-600">
+                {t('languagesPage.hero.title2')}
               </span>
             </h1>
             <p className="max-w-xl mx-auto text-lg text-slate-600 dark:text-slate-400 mb-10">
-              Choose from our growing library of languages. Each one comes with structured tracks, AI tutor support, and interactive lessons.
+              {t('languagesPage.hero.subtitle')}
             </p>
 
             {/* Search */}
@@ -95,8 +97,8 @@ const LanguagesPage = () => {
               <input
                 type="text"
                 value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder="Search languages..."
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={t('languagesPage.searchPlaceholder')}
                 className="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm"
               />
             </div>
@@ -110,19 +112,23 @@ const LanguagesPage = () => {
           {loading && (
             <div className="flex flex-col items-center py-24 gap-4 text-slate-500">
               <Loader2 className="w-10 h-10 animate-spin text-indigo-500" />
-              <p>Loading languages...</p>
+              <p>{t('languagesPage.status.loading')}</p>
             </div>
           )}
 
           {error && !loading && (
             <div className="text-center py-24">
-              <p className="text-slate-500 dark:text-slate-400 text-lg">Could not load languages. Please try again later.</p>
+              <p className="text-slate-500 dark:text-slate-400 text-lg">
+                {t('languagesPage.status.error')}
+              </p>
             </div>
           )}
 
           {!loading && !error && filtered.length === 0 && (
             <div className="text-center py-24">
-              <p className="text-slate-500 dark:text-slate-400 text-lg">No languages found for "<strong>{search}</strong>"</p>
+              <p className="text-slate-500 dark:text-slate-400 text-lg">
+                {t('languagesPage.status.noLanguagesFound', { search })}
+              </p>
             </div>
           )}
 
@@ -141,22 +147,30 @@ const LanguagesPage = () => {
                     className="group block bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                   >
                     {/* Card Header */}
-                    <div className={`h-28 bg-gradient-to-br ${bgColors[idx % bgColors.length]} relative overflow-hidden flex items-center justify-center`}>
+                    <div
+                      className={`h-28 bg-gradient-to-r ${bgColors[idx % bgColors.length]} relative overflow-hidden flex items-center justify-center`}
+                    >
                       <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <span className="text-6xl drop-shadow-lg">{getFlag(lang)}</span>
+                      <span className="text-6xl drop-shadow-lg">
+                        {getFlag(lang)}
+                      </span>
                     </div>
 
                     {/* Card Body */}
                     <div className="p-6 flex items-center justify-between">
                       <div>
                         <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                          {lang.name} 
-                          {lang.nativeName && <span className="ml-2 text-sm font-medium text-slate-400">({lang.nativeName})</span>}
+                          {lang.name}
+                          {lang.nativeName && (
+                            <span className="ml-2 text-sm font-medium text-slate-400">
+                              ({lang.nativeName})
+                            </span>
+                          )}
                         </h3>
                         <div className="flex items-center gap-1.5 mt-1">
-                          <BookOpen className="w-4 h-4 text-slate-400" />
+                          <BookText className="w-4 h-4 text-slate-400" />
                           <span className="text-sm text-slate-500 dark:text-slate-400">
-                            {lang.learningCount ?? 'Multiple'} tracks available
+                            {t('languagesPage.card.tracksAvailable', { count: lang.learningCount || 0 })}
                           </span>
                         </div>
                       </div>
@@ -176,16 +190,16 @@ const LanguagesPage = () => {
       <section className="py-20 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-2xl">
           <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
-            Ready to start your journey?
+            {t('languagesPage.cta.title')}
           </h2>
           <p className="text-slate-500 dark:text-slate-400 mb-8">
-            Create your free account and get access to your first language track today.
+            {t('languagesPage.cta.subtitle')}
           </p>
           <Link
             to="/signup"
             className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3.5 rounded-full font-bold text-base transition-colors shadow-md shadow-indigo-500/25"
           >
-            Get Started Free <ArrowRight className="w-5 h-5" />
+            {t('languagesPage.cta.getStarted')} <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </section>

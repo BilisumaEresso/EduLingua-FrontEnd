@@ -10,8 +10,8 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { getMyChat, sendMessage as sendChatMessage } from "../services/chat";
-import userProgressService from "../services/userProgress";
 import useAuthStore from "../store/authStore";
 
 const FREE_LIMIT = 30;
@@ -36,6 +36,7 @@ const TypewriterMessage = ({ text }) => {
 };
 
 const ChatPage = () => {
+  const { t } = useTranslation();
   const { user, checkAuth } = useAuthStore();
   const [session, setSession] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -52,12 +53,9 @@ const ChatPage = () => {
   useEffect(() => {
     getMyChat()
       .then((res) => {
-        console.log(res);
         const chatSession =
           res?.data?.session || res?.data || res?.chat || null;
         setSession(chatSession);
-        console.log(chatSession)
-        // If backend returns previous messages, seed them after the welcome
         const history = chatSession?.messages || [];
         if (history.length > 0) {
           const mapped = history.map((m, idx) => ({
@@ -66,14 +64,14 @@ const ChatPage = () => {
             text: m.content || m.text,
           }));
           setMessages(mapped);
-          console.log(messages)
         } else {
           // Default localized welcome for new sessions
+          const firstName = user?.fullName?.split(" ")[0] || t('general.student');
           setMessages([
             {
               id: "welcome",
               sender: "ai",
-              text: `Hujambo ${user?.fullName?.split(" ")[0] || "there"}! I'm your East African language tutor. I can help you practice Swahili, Amharic, Afan Oromo, or any other regional language. How can I assist you today?`,
+              text: t('chat.welcome', { name: firstName }),
             },
           ]);
         }
@@ -82,7 +80,7 @@ const ChatPage = () => {
         /* session load failure is non-critical — chat still works */
       })
       .finally(() => setSessionLoading(false));
-  }, []);
+  }, [t, user?.fullName]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -109,7 +107,7 @@ const ChatPage = () => {
           res?.data?.reply ||
           res?.data?.message ||
           res?.data?.text ||
-          "I didn't understand that. Can you rephrase?";
+          t('chat.rephrase');
 
         const aiMsg = { id: Date.now() + 1, sender: "ai", text: aiText, isAnimated: true };
         setMessages((prev) => [...prev, aiMsg]);
@@ -129,7 +127,7 @@ const ChatPage = () => {
             {
               id: Date.now() + 1,
               sender: "ai",
-              text: "Sorry, I'm having trouble connecting. Please try again in a moment.",
+              text: t('chat.error'),
             },
           ]);
         }
@@ -137,7 +135,7 @@ const ChatPage = () => {
         setIsTyping(false);
       }
     },
-    [inputValue, isTyping, isQuotaExhausted, chatCount, checkAuth],
+    [inputValue, isTyping, isQuotaExhausted, session?._id, checkAuth, t],
   );
 
   // Enter key support
@@ -148,7 +146,6 @@ const ChatPage = () => {
     }
   };
 
-  console.log(messages)
   return (
     <div className="max-w-5xl mx-auto h-[calc(100vh-6rem)] flex flex-col bg-slate-50/50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/60 rounded-[2.5rem] overflow-hidden shadow-2xl backdrop-blur-xl ring-1 ring-black/5 dark:ring-white/5 relative z-0">
       
@@ -167,10 +164,10 @@ const ChatPage = () => {
           </div>
           <div>
             <h2 className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 flex items-center gap-2 tracking-tight">
-              EduLingua Tutor <Sparkles className="w-5 h-5 text-amber-400" />
+              {t('chat.title')} <Sparkles className="w-5 h-5 text-amber-400" />
             </h2>
             <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">
-              Native Speaker & Polyglot
+              {t('chat.subtitle')}
             </p>
           </div>
         </div>
@@ -185,14 +182,14 @@ const ChatPage = () => {
                   : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300"
               }`}
             >
-              {chatCount} / {FREE_LIMIT} <span className="hidden sm:inline">chats</span>
+              {chatCount} / {FREE_LIMIT} <span className="hidden sm:inline">{t('nav.aiTutorChat').split(' ')[2] || 'chats'}</span>
             </div>
             {isQuotaExhausted && (
               <Link
                 to="/premium"
                 className="inline-flex items-center gap-1.5 text-xs font-bold bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-yellow-950 px-4 py-2 rounded-full transition-all shadow-md shadow-amber-500/20 hover:scale-105"
               >
-                <Crown className="w-4 h-4" /> Upgrade
+                <Crown className="w-4 h-4" /> {t('chat.upgrade')}
               </Link>
             )}
           </div>
@@ -200,7 +197,7 @@ const ChatPage = () => {
         {isPremium && (
           <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-200 dark:border-yellow-900/50 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 text-yellow-700 dark:text-yellow-400 shadow-sm">
             <Crown className="w-4 h-4" />
-            <span className="text-xs font-bold">Premium Limitless</span>
+            <span className="text-xs font-bold">{t('chat.premiumLimitless')}</span>
           </div>
         )}
       </div>
@@ -282,14 +279,14 @@ const ChatPage = () => {
           <div className="flex items-center gap-3 text-amber-700 dark:text-amber-400">
             <AlertCircle className="w-5 h-5 shrink-0" />
             <p className="text-sm font-semibold">
-              Daily free limit reached. Come back tomorrow or upgrade for unlimited access.
+              {t('chat.limitReached')}
             </p>
           </div>
           <Link
             to="/premium"
             className="shrink-0 inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md hover:scale-105"
           >
-            <Crown className="w-4 h-4" /> Go Premium
+            <Crown className="w-4 h-4" /> {t('chat.upgrade')}
           </Link>
         </div>
       )}
@@ -305,8 +302,8 @@ const ChatPage = () => {
               disabled={isQuotaExhausted}
               placeholder={
                 isQuotaExhausted
-                  ? "Daily limit reached. Upgrade to continue."
-                  : "Message your AI tutor... (Enter to send)"
+                  ? t('chat.limitPlaceholder')
+                  : t('chat.placeholder')
               }
               rows={1}
               className="w-full min-h-[60px] max-h-32 bg-slate-50/80 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-700/50 focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-indigo-500/10 rounded-3xl py-4 px-6 text-slate-900 dark:text-white transition-all resize-none disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-slate-400 text-[15px] font-medium leading-relaxed shadow-inner"

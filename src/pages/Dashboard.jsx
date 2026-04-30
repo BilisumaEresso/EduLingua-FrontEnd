@@ -1,12 +1,14 @@
 import { useState, useEffect, createElement } from 'react';
 import { Link } from 'react-router-dom';
 import { motion as Motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   Flame, Trophy, Target, ArrowRight, PlayCircle, BookOpen,
-  Loader2, Plus, MessageSquare, Zap, Shield
+  Loader2, Plus, MessageSquare, Zap, Shield, Gamepad2, Star
 } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 import userProgressService from '../services/userProgress';
+import { getGameProgress } from '../services/game';
 import {
   ResponsiveContainer,
   LineChart,
@@ -14,7 +16,7 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  CartesianGrid,
+  CartesianGrid, 
   BarChart,
   Bar,
 } from 'recharts';
@@ -29,8 +31,10 @@ const gradients = [
 ];
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const [progressList, setProgressList] = useState([]);
+  const [gameProgress, setGameProgress] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,7 +45,13 @@ const Dashboard = () => {
       })
       .catch(() => setProgressList([]))
       .finally(() => setLoading(false));
-  }, []);
+
+    if (user) {
+      getGameProgress()
+        .then(res => setGameProgress(res.data.progress || []))
+        .catch(() => setGameProgress([]));
+    }
+  }, [user]);
 
   const computeTrackStats = (p) => {
     const levels = Array.isArray(p?.levelsProgress) ? p.levelsProgress : []
@@ -64,11 +74,14 @@ const Dashboard = () => {
   const completedLessons = progressList.reduce((acc, p) => acc + (computeTrackStats(p).lessonCompletionCount ?? 0), 0);
   const chatCount = user?.chatCount ?? 0;
   const chatLimit = user?.isPremium ? '∞' : '30';
+  
+  const totalStars = gameProgress.reduce((acc, p) => acc + (p.stars ?? 0), 0);
+  const mosaicLevels = gameProgress.filter(p => p.gameType === 'afro-mosaic').length;
 
   // First non-complete track for "continue" CTA
   const activeTrack = progressList.find((p) => computeTrackStats(p).pct < 100) || progressList[0];
   const activeTrackStats = activeTrack ? computeTrackStats(activeTrack) : null;
-  const firstName = user?.fullName?.split(' ')[0] || user?.username || 'Learner';
+  const firstName = user?.fullName?.split(' ')[0] || user?.username || t('general.student');
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
@@ -79,10 +92,12 @@ const Dashboard = () => {
         </div>
         <div className="relative z-10 max-w-2xl">
           <h1 className="text-3xl sm:text-4xl font-extrabold mb-2 tracking-tight">
-            Welcome back, {firstName}! 👋
+            {t('dashboard.welcome')}, {firstName}! 👋
           </h1>
           <p className="text-indigo-100 text-lg mb-8">
-            {streak > 0 ? `You're on a ${streak}-day streak. Keep it up!` : "Start your streak today — learn something new!"}
+            {streak > 0 
+              ? t('dashboard.streak', { count: streak }) 
+              : t('dashboard.noStreak')}
           </p>
           <div className="flex flex-wrap gap-3">
             {activeTrack ? (
@@ -91,7 +106,7 @@ const Dashboard = () => {
                 className="inline-flex items-center gap-2 bg-white text-indigo-600 px-6 py-3 rounded-full font-bold hover:bg-indigo-50 transition-colors shadow-sm"
               >
                 <PlayCircle className="w-5 h-5" />
-                Continue Learning
+                {t('dashboard.continueLearning')}
               </Link>
             ) : (
               <Link
@@ -99,7 +114,7 @@ const Dashboard = () => {
                 className="inline-flex items-center gap-2 bg-white text-indigo-600 px-6 py-3 rounded-full font-bold hover:bg-indigo-50 transition-colors shadow-sm"
               >
                 <Plus className="w-5 h-5" />
-                Start a Track
+                {t('dashboard.startTrack')}
               </Link>
             )}
             <Link
@@ -107,7 +122,7 @@ const Dashboard = () => {
               className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 border border-white/30 text-white px-6 py-3 rounded-full font-bold transition-colors"
             >
               <MessageSquare className="w-5 h-5" />
-              AI Tutor
+              {t('dashboard.aiTutor')}
             </Link>
           </div>
         </div>
@@ -120,9 +135,9 @@ const Dashboard = () => {
           {/* Active Tracks */}
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Your Tracks</h2>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">{t('dashboard.yourTracks')}</h2>
               <Link to="/tracks" className="text-indigo-600 dark:text-indigo-400 font-medium text-sm flex items-center gap-1 hover:underline">
-                View all <ArrowRight className="w-4 h-4" />
+                {t('dashboard.viewAll')} <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
@@ -133,19 +148,19 @@ const Dashboard = () => {
             ) : progressList.length === 0 ? (
               <div className="bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-10 text-center">
                 <BookOpen className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-                <p className="font-semibold text-slate-500 dark:text-slate-400 mb-4">No tracks started yet</p>
+                <p className="font-semibold text-slate-500 dark:text-slate-400 mb-4">{t('dashboard.noTracks')}</p>
                 <Link
                   to="/tracks"
                   className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors"
                 >
-                  <Plus className="w-4 h-4" /> Browse Tracks
+                  <Plus className="w-4 h-4" /> {t('dashboard.browseTracks')}
                 </Link>
               </div>
             ) : (
               <div className="grid sm:grid-cols-2 gap-4">
                 {progressList.slice(0, 4).map((p, idx) => {
                   const trackId = p.learning?._id || p.learning;
-                  const title = p.learning?.title || p.title || 'Learning Track';
+                  const title = p.learning?.title || p.title || t('nav.learningTracks');
                   const stats = computeTrackStats(p)
                   const pct = stats.pct
                   return (
@@ -176,7 +191,7 @@ const Dashboard = () => {
                         </div>
                         {stats.lessonCompletionCount > 0 && (
                           <p className="text-xs text-slate-400 mt-2">
-                            {stats.lessonCompletionCount} lesson{stats.lessonCompletionCount !== 1 ? 's' : ''} completed
+                            {t('dashboard.lessonsCompleted', { count: stats.lessonCompletionCount })}
                           </p>
                         )}
                       </Link>
@@ -189,13 +204,13 @@ const Dashboard = () => {
 
           {/* Quick actions */}
           <section>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Quick Actions</h2>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{t('dashboard.quickActions')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
-                { to: '/chat', icon: MessageSquare, label: 'AI Tutor Chat', desc: 'Practice with AI', color: 'indigo' },
-                { to: '/tracks', icon: BookOpen, label: 'Browse Tracks', desc: 'Find new languages', color: 'fuchsia' },
-                ...((user?.role === 'admin' || user?.role === 'super-admin') ? [{ to: '/admin', icon: Shield, label: 'Admin Panel', desc: 'Manage system', color: 'rose' }] : []),
-                { to: '/premium', icon: Zap, label: 'Go Premium', desc: 'Unlock everything', color: 'yellow', hide: user?.isPremium },
+                { to: '/chat', icon: MessageSquare, label: t('nav.aiTutorChat'), desc: t('dashboard.practiceAi'), color: 'indigo' },
+                { to: '/tracks', icon: BookOpen, label: t('dashboard.browseTracks'), desc: t('dashboard.findLanguages'), color: 'fuchsia' },
+                ...((user?.role === 'admin' || user?.role === 'super-admin') ? [{ to: '/admin', icon: Shield, label: t('nav.adminPanel'), desc: t('dashboard.manageSystem'), color: 'rose' }] : []),
+                { to: '/premium', icon: Zap, label: t('nav.goPremium'), desc: t('dashboard.unlockEverything'), color: 'yellow', hide: user?.isPremium },
               ].filter(a => !a.hide).map(({ to, icon: Icon, label, desc, color }) => (
                 <Link
                   key={to}
@@ -218,13 +233,13 @@ const Dashboard = () => {
         {/* Right: Stats sidebar */}
         <div className="space-y-6">
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6">
-            <h3 className="font-bold text-slate-900 dark:text-white mb-6">Your Stats</h3>
+            <h3 className="font-bold text-slate-900 dark:text-white mb-6">{t('dashboard.yourStats')}</h3>
             <div className="space-y-5">
               {[
-                { icon: Flame, label: 'Day Streak', value: streak || '—', bg: 'orange' },
-                { icon: Trophy, label: 'Total XP', value: totalXP || '—', bg: 'indigo' },
-                { icon: BookOpen, label: 'Lessons Done', value: completedLessons || '—', bg: 'emerald' },
-                { icon: Target, label: 'Tracks Active', value: progressList.length || '—', bg: 'fuchsia' },
+                { icon: Flame, label: t('dashboard.dayStreak'), value: streak || '—', bg: 'orange' },
+                { icon: Trophy, label: t('dashboard.totalXP'), value: totalXP || '—', bg: 'indigo' },
+                { icon: BookOpen, label: t('dashboard.lessonsDone'), value: completedLessons || '—', bg: 'emerald' },
+                { icon: Target, label: t('dashboard.tracksActive'), value: progressList.length || '—', bg: 'fuchsia' },
               ].map(({ icon: Icon, label, value, bg }) => (
                 <div key={label} className="flex items-center gap-4">
                   <div className={`w-12 h-12 rounded-xl bg-${bg}-50 dark:bg-${bg}-900/20 text-${bg}-500 flex items-center justify-center shrink-0`}>
@@ -239,12 +254,41 @@ const Dashboard = () => {
             </div>
           </div>
 
+          {/* Game Mastery Stats */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6">
+            <h3 className="font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+              <Gamepad2 className="w-5 h-5 text-indigo-500" />
+              {t('dashboard.gameMastery')}
+            </h3>
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                    {totalStars} <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+                  </div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('dashboard.starsEarned')}</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-black text-slate-900 dark:text-white">{mosaicLevels}</div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t('dashboard.stagesClear')}</div>
+                </div>
+              </div>
+              
+              <Link 
+                to="/game" 
+                className="block w-full py-3 bg-indigo-600/10 border border-indigo-500/20 rounded-2xl text-center text-xs font-black uppercase tracking-widest text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all"
+              >
+                {t('dashboard.continueMosaic')}
+              </Link>
+            </div>
+          </div>
+
           {/* Pro analytics */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6">
             <div className="flex items-center justify-between gap-3 mb-4">
-              <h3 className="font-bold text-slate-900 dark:text-white">Pro Analytics</h3>
+              <h3 className="font-bold text-slate-900 dark:text-white">{t('dashboard.proAnalytics')}</h3>
               <div className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                {activeTrackStats ? `${activeTrackStats.pct}%` : "—"} complete
+                {activeTrackStats ? `${activeTrackStats.pct}%` : "—"} {t('dashboard.complete')}
               </div>
             </div>
 
@@ -288,8 +332,8 @@ const Dashboard = () => {
                         const failed = levels.filter((lp) => lp.status === "failed").length
                         const review = levels.filter((lp) => lp.status === "review").length
                         return [
-                          { name: "Locked", value: locked },
-                          { name: "Active", value: active },
+                          { name: t('chronosGrid.status.integrity').split(' ')[1] || "Locked", value: locked },
+                          { name: t('chronosGrid.status.awaiting').split(' ')[0] || "Active", value: active },
                           { name: "Failed", value: failed },
                           { name: "Review", value: review },
                         ]
@@ -312,7 +356,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-indigo-500" />
-                <span className="text-sm font-bold text-slate-900 dark:text-white">AI Chats Today</span>
+                <span className="text-sm font-bold text-slate-900 dark:text-white">{t('dashboard.aiChatsToday')}</span>
               </div>
               <span className="text-sm font-bold text-slate-600 dark:text-slate-300">
                 {chatCount} / {chatLimit}
@@ -328,15 +372,15 @@ const Dashboard = () => {
                 </div>
                 {chatCount >= 30 ? (
                   <Link to="/premium" className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
-                    Upgrade for unlimited chats →
+                    {t('dashboard.upgradeUnlimited')} →
                   </Link>
                 ) : (
-                  <p className="text-xs text-slate-400">{30 - chatCount} message{5 - chatCount !== 1 ? 's' : ''} remaining today</p>
+                  <p className="text-xs text-slate-400">{t('dashboard.messagesRemaining', { count: 30 - chatCount })}</p>
                 )}
               </>
             )}
             {user?.isPremium && (
-              <p className="text-xs font-semibold text-yellow-500">⭐ Unlimited — Premium plan</p>
+              <p className="text-xs font-semibold text-yellow-500">⭐ {t('dashboard.premiumPlan')}</p>
             )}
           </div>
         </div>

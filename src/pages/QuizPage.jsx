@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { X, Check, CheckCircle2, Trophy, ArrowRight, Loader2, BookOpen, RotateCcw } from 'lucide-react';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import userProgressService from '../services/userProgress';
-import { getLevelById } from '../services/level';
+import { getLevel } from '../services/level';
 
 const QuizPage = () => {
   const { id } = useParams(); // levelId
@@ -37,7 +37,7 @@ const QuizPage = () => {
       setQuizStartError("")
 
       try {
-        const levelRes = await getLevelById(id)
+        const levelRes = await getLevel(id)
         const lvl = levelRes?.data?.level || levelRes?.level || levelRes?.data
         if (!lvl) throw new Error("Level not found")
 
@@ -59,7 +59,6 @@ const QuizPage = () => {
           levelId: id,
           questionCount: 10,
         })
-        console.log(startRes)
         startRes = startRes?.data
         if (startRes?.mode === "review") {
           const levelEntry = prog?.levelsProgress?.find(
@@ -239,7 +238,6 @@ const QuizPage = () => {
       </div>
     )
   }
-console.log(quiz)
   // ── No quiz found ──────────────────────────────────────────────
   if (!quiz || questions.length === 0) {
     return (

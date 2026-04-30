@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "theme": "Amharic & Oromo Greetings",
+    "solution_reveal": "Language is the bridge of unity across the Ethiopian highlands.",
+    "tiles": [
+      { "id": 1, "text": "Selam", "category": "Amharic", "fragment": "Common Amharic greeting meaning 'Peace'." },
+      { "id": 2, "text": "Tadiyas", "category": "Amharic", "fragment": "Informal Amharic way of saying 'What's up?'." },
+      { "id": 3, "text": "Aman", "category": "Amharic", "fragment": "Means 'Safety' or 'Peace' in various contexts." },
+      { "id": 4, "text": "Tenayistillign", "category": "Amharic", "fragment": "The most formal Amharic greeting." },
+      { "id": 5, "text": "Akkam", "category": "Oromo", "fragment": "The standard Oromo greeting for 'How are you?'." },
+      { "id": 6, "text": "Fayyaa", "category": "Oromo", "fragment": "Oromo word for 'Health' or 'Well-being'." },
+      { "id": 7, "text": "Nagaa", "category": "Oromo", "fragment": "Means 'Peace' in Afaan Oromo." },
+      { "id": 8, "text": "Baga Duftan", "category": "Oromo", "fragment": "Traditional Oromo welcome greeting." }
+    ],
+    "categories": 2,
+    "trialsTarget": 4,
+    "timeTarget": 30
+  },
+  {
+    "id": 2,
+    "theme": "Historical Landscapes",
+    "solution_reveal": "Ethiopia's geography has protected its independence for millennia.",
+    "tiles": [
+      { "id": 1, "text": "Simien", "category": "Mountains", "fragment": "Home to the Walia Ibex and Gelada baboons." },
+      { "id": 2, "text": "Bale", "category": "Mountains", "fragment": "Famous for its unique afro-alpine ecosystem." },
+      { "id": 3, "text": "Ras Dashen", "category": "Mountains", "fragment": "The highest peak in all of Ethiopia." },
+      { "id": 4, "text": "Gheralta", "category": "Mountains", "fragment": "Dramatic cliffs housing rock-hewn churches." },
+      { "id": 5, "text": "Tana", "category": "Lakes", "fragment": "The source of the Blue Nile River." },
+      { "id": 6, "text": "Langano", "category": "Lakes", "fragment": "Known for its distinctive brown, mineral-rich waters." },
+      { "id": 7, "text": "Abaya", "category": "Lakes", "fragment": "The largest lake in the Ethiopian Rift Valley." },
+      { "id": 8, "text": "Chamo", "category": "Lakes", "fragment": "Famous for its 'Crocodile Market' shore." }
+    ],
+    "categories": 2,
+    "trialsTarget": 4,
+    "timeTarget": 30
+  }
+]

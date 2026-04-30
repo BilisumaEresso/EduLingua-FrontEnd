@@ -19,8 +19,8 @@ export const demoteUser = async (userId) => {
   return res.data;
 };
 
-export const acceptTeacher = async (userId) => {
-  const res = await api.put(`/admin/accept-teacher/${userId}`);
+export const acceptTeacher = async (userId, data) => {
+  const res = await api.put(`/admin/accept-teacher/${userId}`, data);
   return res.data;
 };
 
@@ -39,6 +39,10 @@ export const shutdownSystem = async () => {
   return res.data;
 };
 
+export const deleteUserPermanently = async (userId) => {
+  const res = await api.delete(`/admin/user/delete/${userId}`);
+  return res.data;
+};
 
 // ======================
 // 🧑‍💼 Admin & Super Admin
@@ -70,5 +74,30 @@ export const getAllQuizzes = async (page = 1, limit = 10) => {
 
 export const getDashboardStats = async () => {
   const res = await api.get('/admin/dashboard-stats');
+  return res.data;
+};
+
+export const updateUserInfo = async (userId, data) => {
+  const res = await api.put(`/admin/user/update/${userId}`, data);
+  return res.data;
+};
+
+export const togglePremium = async (userId) => {
+  const res = await api.patch(`/admin/user/toggle-premium/${userId}`);
+  return res.data;
+};
+
+export const enrollUserInTrack = async (userId, trackId) => {
+  const res = await api.post(`/admin/user/enroll/${userId}`, { trackId });
+  return res.data;
+};
+
+export const unenrollUserFromTrack = async (userId, trackId) => {
+  const res = await api.delete(`/admin/user/unenroll/${userId}`, { data: { trackId } });
+  return res.data;
+};
+
+export const getAllTracks = async () => {
+  const res = await api.get('/admin/all-tracks');
   return res.data;
 };

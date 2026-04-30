@@ -1,0 +1,562 @@
+{
+  "nav": {
+    "home": "Mana",
+    "features": "Amaloota",
+    "languages": "Afaanoota",
+    "tracks": "Karaalee",
+    "mosaicGame": "Tapha Mozaayikii",
+    "dashboard": "Daashboordii",
+    "dash": "Daash",
+    "login": "Seensa",
+    "getStarted": "Jalqabi",
+    "playMiniGame": "Tapha Xiqqaa Taphadhu",
+    "myStudents": "Barattoota Koo",
+    "trackEditor": "Gulaalaa Karaa",
+    "learningTracks": "Karaalee Barnootaa",
+    "myProgress": "Guddina Koo",
+    "aiTutorChat": "Chaatti Barsiisaa AI",
+    "accountSettings": "Sajoo Akaawuntii",
+    "systemAdmin": "Bulchaa Sirnaa",
+    "goPremium": "Gara Premium Deemaa",
+    "becomeTeacher": "Barsiisaa Ta'i",
+    "backToApp": "Gara Appii deebi'i",
+    "adminPanel": "Paaneel Bulchaa",
+    "overview": "Ilaalcha Waliigalaa",
+    "users": "Fayyadamtoota",
+    "teachers": "Barsiisota",
+    "content": "Qabiyyee"
+  },
+  "auth": {
+    "welcomeBack": "Baga Deebite",
+    "createAccount": "Akaawuntii Uumi",
+    "dontHaveAccount": "Akaawuntii hin qabduu?",
+    "alreadyHaveAccount": "Duraan Akaawuntii Qabduu?",
+    "signIn": "Seensa",
+    "signUp": "Galmaa'i",
+    "emailOrUsername": "Imeelii ykn Maqaa Fayyadamaa",
+    "emailOrUsernamePlaceholder": "you@example.com ykn maqaa fayyadamaa",
+    "password": "Jecha Darbii",
+    "passwordPlaceholder": "••••••••",
+    "rememberMe": "Na Yaadadhu",
+    "forgotPassword": "Jecha Darbii Irraanfattee?",
+    "emailAddress": "Teessoo Imeelii",
+    "emailPlaceholder": "you@example.com",
+    "username": "Maqaa Fayyadamaa",
+    "usernamePlaceholder": "johndoe123",
+    "fullName": "Maqaa Guutuu",
+    "fullNamePlaceholder": "John Doe",
+    "nativeLanguage": "Afaan Dhalootaa",
+    "accountType": "Gosa Akaawuntii",
+    "loadingLanguages": "Afaanoota fe'aa jira...",
+    "selectLanguage": "Afaan filadhu",
+    "createAccountBtn": "Akaawuntii Uumi",
+    "signingIn": "Seensa jira..."
+  },
+  "footer": {
+    "privacy": "Dhuunfaa",
+    "terms": "Haaloota"
+  },
+  "general": {
+    "logOut": "Ba'i",
+    "signOut": "Ba'i",
+    "loading": "Fe'aa jira...",
+    "new": "Haaraa",
+    "student": "Barataa",
+    "enterprise": "Dhaabbata",
+    "individual": "Dhuunfaa",
+    "teacher": "Barsiisaa",
+    "masterLanguages": "AI Barsiisaa fayyadamuun afaanoota uumamaan baradhaa.",
+    "joinThousands": "Kumaatamaan barattoota dandeettii isaanii karaalee dhuunfaa, barnoota walqunnamsiisaa, fi shaatti yeroo dhugaa fayyadamuun banatanitti makami."
+  },
+  "landing": {
+    "hero": {
+      "badge": "EduLingua AI 1.0 Beeksisa",
+      "title1": "AFAANOOTA AFRIKA BAHAA",
+      "title2": "AI FAYYADAMUUN BARADHU",
+      "subtitle": "Afaan Amaaraa, Swahili, Afaan Oromoo, fi kanneen biroo marii AI fi karaalee barnootaa dhuunfaa fayyadamuun uumamaan baradhaa.",
+      "getStarted": "Jalqabi",
+      "tryMiniGame": "Tapha Xiqqaa Taphadhu"
+    },
+    "features": {
+      "tagline": "Dandeettii afaanii gonfachuuf waan si barbaachisu hunda",
+      "description": "Pilaatfoormiin keenya AI irratti hundaa'e akkaataa barumsa keetii waliin wal simata, waan si barbaachisu hunda siif kenna.",
+      "feature1": {
+        "title": "Barnoota AI-fayyadaman",
+        "desc": "Kunuunsa dandeettii fi dadhabina kee irratti hundaa'ee yeroo dhugaa keessatti siif qophaa'u."
+      },
+      "feature2": {
+        "title": "Karaalee Dhuunfatti Qophaa'an",
+        "desc": "Sadarkaa jalqabaa irraa kaasee hanga dandeettii guutuutti karaalee qophaa'an hordofi."
+      },
+      "feature3": {
+        "title": "Barsiisaa Chaattii Yeroo Dhugaa",
+        "desc": "Hiriyyaa AI sirreeffama giramaaraa fi jechootaa siif kennu waliin dubbachuu shaakali."
+      }
+    },
+    "howItWorks": {
+      "title": "EduLingua Akkaataa Inni Hojjetu",
+      "step1": {
+        "title": "Afaanoota kee filadhu",
+        "desc": "Afaan dhalootaa keetii fi afaan barachuu barbaaddu filadhu."
+      },
+      "step2": {
+        "title": "Bu'uura isaa baradhu",
+        "desc": "Barnoota jechootaa, giramaaraa fi akkaataa dubbisnaa AI dhaan qophaa'an keessa darbi."
+      },
+      "step3": {
+        "title": "Haala jireenya dhugaa keessatti shaakali",
+        "desc": "Dandeettii dubbachuu kee guddisuuf barsiisaa AI kee waliin haala garaa garaa keessatti mari'adhu."
+      },
+      "step4": {
+        "title": "Qorumsa fudhadhu",
+        "desc": "Barnoota hunda booda qorumsa fudhachuun dandeettii kee madaali."
+      },
+      "step5": {
+        "title": "Waraqaa ragaa fudhadhu",
+        "desc": "Barnoota hunda yoo xumurtu waraqaa ragaa mirkanaa'e fudhadhu."
+      }
+    },
+    "testimonials": {
+      "title": "Barattoota addunyaa hunda biratti jaallatamaa",
+      "t1": {
+        "text": "EduLingua akkaataa ani baradhu guutummaatti jijjiireera. Chaattiin AI barsiisaa Finfinnee jiru waliin dubbachuu natti fakkata!",
+        "name": "Abebe B.",
+        "role": "Barataa Afaan Amaaraa"
+      },
+      "t2": {
+        "text": "Karaaleen barnootaa dhuunfaa Afaan Swahilii akka ani salphaatti baradhu na gargaaraniiru. Haakii!",
+        "name": "Zahara M.",
+        "role": "Barataa Afaan Swahilii"
+      },
+      "t3": {
+        "text": "Dhumarratti appii afaanoota naannoo kabaju argadheera. Barnoonni kun Afaan Oromoo akka salphaatti naaf galu na gargaareera.",
+        "name": "Kofi A.",
+        "role": "Barataa Afaan Oromoo"
+      }
+    },
+    "languages": {
+      "title": "Afaan kee filadhu",
+      "subtitle": "Afaanoota hedduu karaalee qophaa'an waliin ni deggarra.",
+      "viewAll": "Afaanoota hunda ilaali"
+    },
+    "cta": {
+      "title": "Dandeettii afaanii gonfachuuf qophiidhaa?",
+      "subtitle": "Barattoota kumaatamaan lakkaawaman AI fayyadamuun afaan barachaa jiranitti makami.",
+      "startFree": "Bilisaan jalqabi",
+      "exploreTracks": "Karaalee ilaali"
+    }
+  },
+  "publicTracks": {
+    "hero": {
+      "badge": "Karaalee Barnootaa",
+      "title": "Karaalee dandeettii afaanii gonfachuuf gargaaran",
+      "subtitle": "Karaalee barnootaa ogeeyyiin qophaa'an ilaali. Tokkoon tokkoon isaanii sadarkaa, barnoota fi qorumsa qabu."
+    },
+    "breadcrumb": {
+      "languages": "Afaanoota",
+      "allTracks": "Karaalee Hunda"
+    },
+    "filters": {
+      "searchPlaceholder": "Karaalee barbaadi...",
+      "allLanguages": "Afaanoota Hunda"
+    },
+    "status": {
+      "loading": "Karaalee fe'aa jira...",
+      "error": "Karaalee fe'uu hin dandeenye. Ammas yaali.",
+      "noTracks": "Karaan argame hin jiru",
+      "noTracksDesc": "Waan barbaaddu jijjiiri yaali.",
+      "showing": "Agarsiisaa jira",
+      "track": "karaa",
+      "tracks": "karaalee"
+    },
+    "card": {
+      "fullLevel": "Sadarkaa Guutuu",
+      "levels": "sadarkaa",
+      "signInToEnroll": "Galmaa'uuf seensa uumi"
+    },
+    "cta": {
+      "title": "Karaa jalqabaa bilisaan jalqabi",
+      "subtitle": "Akaawuntii uumuun barnoota kee har'a jalqabi.",
+      "createAccount": "Akaawuntii bilisaa uumi",
+      "logIn": "Seensa"
+    }
+  },
+  "languagesPage": {
+    "hero": {
+      "badge": "Afaanoota Jiran",
+      "title1": "Afaan Afrikaa Bahaa isa kam",
+      "title2": "barachuu barbaaddu?",
+      "subtitle": "Afaanoota jiran keessaa filadhu. Tokkoon tokkoon isaanii barsiisaa AI waliin qophaa'an."
+    },
+    "searchPlaceholder": "Afaanoota barbaadi...",
+    "status": {
+      "loading": "Afaanoota fe'aa jira...",
+      "error": "Afaanoota fe'uu hin dandeenye. Ammas yaali.",
+      "noLanguagesFound": "Afaan \"{{search}}\" fakkatu hin jiru"
+    },
+    "card": {
+      "tracksAvailable": "Karaalee jiran"
+    },
+    "cta": {
+      "title": "Jalqabuuf qophiidhaa?",
+      "subtitle": "Har'a akaawuntii bilisaa uumi.",
+      "getStarted": "Bilisaan jalqabi"
+    }
+  },
+  "mosaicGame": {
+    "title": "AfroMosaic",
+    "lobby": {
+      "title": "Filannoo",
+      "easy": "Salphaa",
+      "medium": "Giddu-galeessa",
+      "hard": "Jabaa",
+      "protocol": "Pirootokoolii"
+    },
+    "selector": {
+      "map": "Kaartaa",
+      "path": "Karaa",
+      "changeDifficulty": "Jijjiiri",
+      "categories": "Ramaddii"
+    },
+    "instructions": {
+      "title": "Pirootokoolii Misiyoonaa",
+      "step1": "Ramaddii tokkoon tokkoon isaaniitiif tile 4 walitti firoomsi.",
+      "step2": "Tile tokko filannoo 4ffaa dura irratti cuqaasuun haquu dandeessa.",
+      "step3": "Yaalii xiqqaadhaan xumuruun Urjii 3 argadhu.",
+      "start": "Jalqabi",
+      "back": "Duubatti"
+    },
+    "playing": {
+      "trials": "Yaalii",
+      "time": "Yeroo"
+    },
+    "won": {
+      "title": "Tokkoomeera",
+      "continue": "Itti fufi",
+      "dashboard": "Daashboordii",
+      "loginSave": "Urjii kee galmeessisuuf seeni!"
+    },
+    "archive": {
+      "title": "Kuusaa"
+    },
+    "hints": {
+      "mismatch": "Wal hin finne",
+      "success": "Deebi'eera!",
+      "hint": "Gargaarsa: Waan kanaan wal qabatu barbaadi"
+    },
+    "auth": {
+      "loginToSave": "Galmeessisuuf seensa uumi"
+    }
+  },
+  "chronosGrid": {
+    "title": "Chronos-Grid",
+    "status": {
+      "integrity": "Timeline Integrity",
+      "fragments": "Temporal Fragments",
+      "left": "LEFT",
+      "era": "Era",
+      "node": "NODE",
+      "placed": "FRAGMENT PLACED",
+      "awaiting": "Awaiting Input",
+      "target": "Target Node"
+    },
+    "info": {
+      "title": "Historical Intelligence",
+      "significance": "Significance",
+      "catalyst": "Critical Era Catalyst",
+      "region": "Region",
+      "coast": "East African Coast"
+    },
+    "won": {
+      "title": "Grid Synced",
+      "subtitle": "Temporal anomalies resolved. The history of East Africa is now chronologically secure.",
+      "reset": "System Reset",
+      "dashboard": "Return to Base"
+    },
+    "toast": {
+      "success": "Timeline Segment Synchronized",
+      "error": "Chronological Dissonance Detected"
+    }
+  },
+  "dashboard": {
+    "welcome": "Baga Deebite",
+    "streak": "Guyyoota {{count}} walitti aansee barachaa jirta. Itti fufi!",
+    "noStreak": "Guyyaa kee har'a jalqabi — waan haaraa baradhu!",
+    "continueLearning": "Barachuu Itti Fufi",
+    "startTrack": "Karaa Jalqabi",
+    "aiTutor": "AI Barsiisaa",
+    "yourTracks": "Karaalee Kee",
+    "viewAll": "Hunda Ilaali",
+    "noTracks": "Hanga yoonaa karaan jalqabame hin jiru",
+    "browseTracks": "Karaalee Ilaali",
+    "lessonsCompleted": "Barnoota {{count}} xumurameera",
+    "lessonsCompleted_plural": "Barnoota {{count}} xumuramaniru",
+    "quickActions": "Gochaawwan Saffisaa",
+    "practiceAi": "AI waliin shaakali",
+    "findLanguages": "Afaanoota haaraa argadhu",
+    "manageSystem": "Sirna bulchi",
+    "unlockEverything": "Hunda banadhu",
+    "yourStats": "Istatistiksii Kee",
+    "dayStreak": "Guyyoota Walitti Aansan",
+    "totalXP": "XP Waliigalaa",
+    "lessonsDone": "Barnoota Xumuraman",
+    "tracksActive": "Karaalee Hojii Irra Jiran",
+    "gameMastery": "Dandeettii Taphaa",
+    "starsEarned": "Urjii Argaman",
+    "stagesClear": "Sadarkaalee Xumuraman",
+    "continueMosaic": "Mozaayikii Itti Fufi",
+    "proAnalytics": "Xiinxala Pro",
+    "complete": "xumurameera",
+    "aiChatsToday": "Mariilee AI Har'aa",
+    "upgradeUnlimited": "Mariilee daangaa hin qabneef fooyyessi",
+    "messagesRemaining": "Har'a ergaa {{count}} hafeera",
+    "messagesRemaining_plural": "Har'a ergaa {{count}} hafaniru",
+    "premiumPlan": "Daangaa Kan Hin Qabne — Karoorra Premium"
+  },
+  "profile": {
+    "title": "Sajoo Akaawuntii",
+    "subtitle": "Moggaasa madaallii fi dhuunfaa kee bulchi.",
+    "general": "Waliigala",
+    "security": "Nageenya",
+    "fullName": "Maqaa Guutuu",
+    "username": "Maqaa Fayyadamaa",
+    "email": "Teessoo Imeelii",
+    "emailNote": "Imeelii jijjiiruun hin danda'amu.",
+    "nativeLanguage": "Afaan Dhalootaa",
+    "saveChanges": "Jijjiirama Galmeessi",
+    "saving": "Galmeessaa jira...",
+    "changePassword": "Jecha Darbii Jijjiiri",
+    "currentPassword": "Jecha Darbii Ammaa",
+    "newPassword": "Jecha Darbii Haaraa",
+    "confirmPassword": "Jecha Darbii Mirkanessi",
+    "minCharacters": "Yoo xiqqaate qubee 6",
+    "passwordMismatch": "Jechi darbii wal hin simne.",
+    "updatePassword": "Jecha Darbii Haaromsi",
+    "updating": "Haaromsaa jira...",
+    "dangerZone": "Naannoo Balaa",
+    "deleteDesc": "Akaawuntii kee fi ragaalee waliin jiran hunda guutummaatti haqi. Kun deebifamuu hin danda'amu.",
+    "deleteAccount": "Akaawuntii Haqi",
+    "confirmDelete": "Dhuguma mirkaneeffattee?",
+    "yesDelete": "Eeyyee, Haqi",
+    "deleting": "Haquu jira...",
+    "cancel": "Dhiisi",
+    "successUpdate": "Moggaasni milkaa'inaan haaromeera!",
+    "errorUpdate": "Moggaasa haaromsuun hin danda'amne.",
+    "successPassword": "Jechi darbii milkaa'inaan jijjiirameera!",
+    "errorPassword": "Jecha darbii jijjiiruun hin danda'amne."
+  },
+  "chat": {
+    "title": "EduLingua Barsiisaa",
+    "subtitle": "Namicha Afaan Dhalootaa & Beekaa Afaanoota Hedduu",
+    "welcome": "Akkam {{name}}! Ani barsiisaa afaan Afrikaa Bahaa keeti. Afaan Swahilii, Amaaraa, Oromoo, ykn afaan naannoo biroo akka shaakaltu si gargaaruun danda'a. Har'a akkamitti si gargaaru?",
+    "limitReached": "Daangaan bilisaa guyyaa xumurameera. Bor deebi'i ykn daangaa malee fayyadamuuf fooyyessi.",
+    "upgrade": "Fooyyessi",
+    "typing": "Barsiisaan barreessaa jira...",
+    "placeholder": "Barsiisaa AI keetiif ergaa barreessi... (Erguuf Enter cuqaasi)",
+    "limitPlaceholder": "Daangaan guyyaa xumurameera. Itti fufuuf fooyyessi.",
+    "error": "Dhiifama, qunamtii irratti rakkoon uumameera. Mee yeroo xiqqoo booda ammas yaali.",
+    "rephrase": "Kun naaf hin galle. Mee karaa biraatiin naaf ibsi?",
+    "premiumLimitless": "Premium Daangaa Kan Hin Qabne"
+  },
+  "teacher": {
+    "dashboard": "Daashboordii Barsiisaa",
+    "subtitle": "Karaa kee bulchi, guddina barattootaa hordofi, fi qabiyyee uumi.",
+    "manageTrack": "Karaa Bulchi",
+    "newLesson": "Barnoota Haaraa",
+    "totalStudents": "Barattoota Waliigalaa",
+    "activeLessons": "Barnoota Hojii Irra Jiran",
+    "quizzesCreated": "Qorumsa Uumaman",
+    "avgCompletion": "Xumura Giddu-galeessaa",
+    "recentActivity": "Sochiilee Barattootaa Dhihoo",
+    "viewAll": "Hunda Ilaali",
+    "noActivity": "Hanga yoonaa sochiin dhihoo hin jiru.",
+    "noTrack": "Hanga yoonaa karaan sitti hin kennamne.",
+    "contactAdmin": "Mee karaa addaa akka siif kennamuuf bulchaa qunnamu.",
+    "aiAssistant": "Gargaaraa Qabiyyee AI",
+    "aiAssistantDesc": "AI fayyadamuun kutaa haaraa ykn gaaffilee qorumsaa uumi.",
+    "genQuiz": "Qorumsa Sadarkaa Uumi",
+    "newAiSection": "Kutaa AI Haaraa"
+  },
+  "premium": {
+    "title": "Daangaa malee baradhu",
+    "subtitle": "Barsiisaa AI daangaa hin qabne, karaalee barnootaa hunda, fi meeshaalee guddina afaan keetii saffisiisan argadhu.",
+    "upgradeToPremium": "Gara Premiumitti fooyyessi",
+    "goPremium": "Premium Tahu",
+    "youArePremium": "Ati Premium dha! 🎉",
+    "enjoyUnlimited": "EduLingua keessatti tajaajiloota hunda daangaa malee fayyadami. Afaanonni addunyaa kan keeti.",
+    "goToDashboard": "Gara Daashboordiitti deemi",
+    "currentPlan": "Karoora kee kan ammaa",
+    "bestValue": "FILANNOO GAARII",
+    "upgradeNow": "Amma fooyyessi",
+    "processing": "Adeemsisamaa jira...",
+    "cancelAnytime": "Yeroo barbaaddetti haquu dandeessa. Kaffaltiin dhokataa hin jiru.",
+    "whyPremium": "Maaliif Premium taata?",
+    "unlimitedAi": "Barsiisaa AI Daangaa Hin Qabne",
+    "unlimitedAiDesc": "Barsiisaa afaan AI keetii waliin yeroo barbaaddetti mari'adhu.",
+    "allTracks": "Karaaleen Hundi Banamaniru",
+    "allTracksDesc": "Daangaa malee afaanota hunda irratti karaalee barnootaa hunda argadhu.",
+    "advancedProgress": "Guddina Olaanaa",
+    "advancedProgressDesc": "Cimina kee fi bakka xiyyeeffannoo barbaadu baruuf xiinxala gad fagoo.",
+    "areYouEducator": "Ati barsiisaa dhaa?",
+    "applyTeacher": "Barsiisaa ta'uuf iyyadhu, qabiyyee barnootaa uumuu fi barattoota barsiisuuf mirga addaa argadhu.",
+    "applyNow": "Amma iyyadhu",
+    "freePlan": "Bilisa",
+    "freePrice": "$0",
+    "perMonth": "/ji'atti",
+    "getStartedBasics": "Waan bu'uuraa irraa jalqabi.",
+    "premiumPrice": "$9.99",
+    "everythingMaster": "Afaan tokko dhuunfachuuf waan si barbaachisu hunda qaba.",
+    "freeFeature1": "Guyyaatti ergaa 30 AI ቻት",
+    "freeFeature2": "Karaalee barnootaa bilisaa argachuu",
+    "freeFeature3": "Hordoffii guddinaa bu'uuraa",
+    "freeFeature4": "Tapha hiikkaa afaanii",
+    "premiumFeature1": "Mariilee barsiisaa AI daangaa hin qabne",
+    "premiumFeature2": "Karaalee barnootaa premium hunda",
+    "premiumFeature3": "Xiinxala guddinaa olaanaa",
+    "premiumFeature4": "Deggersa dursa kennamuuf",
+    "premiumFeature5": "Interneeta malee qabiyyee argachuu",
+    "premiumFeature6": "Tajaajiloota haaraa dursa argachuu"
+  },
+  "progress": {
+    "title": "Guddina Koo",
+    "subtitle": "Karaalee itti galmoofte hunda irratti adeemsa barnoota keetii hordofi.",
+    "totalXP": "XP Waliigalaa",
+    "lessonsDone": "Barnoota Xumuraman",
+    "tracksActive": "Karaalee Hojii Irra Jiran",
+    "tracksFinished": "Karaalee Xumuraman",
+    "mosaicMaster": "Gooftaa Mozaayikii",
+    "historicalStatus": "Moodiyuulota hunda irratti haala hiikkaa seenaa.",
+    "totalStars": "Urjii Waliigalaa",
+    "totalStages": "Sadarkaalee Waliigalaa",
+    "loading": "Guddina kee fe'aa jira...",
+    "error": "Guddina fe'uun hin danda'amne. Mee ammas yaali.",
+    "noProgress": "Hanga yoonaa guddinni hin jiru",
+    "enrollDesc": "Adeemsa kee jalqabuuf karaa barnootaa tokko irratti galmaa'i.",
+    "browseTracks": "Karaalee Ilaali",
+    "enrolledTracks": "Karaalee Itti Galmoofte",
+    "completed": "Xumurameera",
+    "review": "Irra deebi'i",
+    "continue": "Itti fufi"
+  },
+  "tracks": {
+    "title": "Karaalee Barnootaa",
+    "subtitle": "Karaalee barnoota afaanii argadhu fi irratti galmaa'i",
+    "searchPlaceholder": "Karaalee barbaadi...",
+    "allLanguages": "Afaanota Hunda",
+    "loading": "Karaalee fe'aa jira...",
+    "noTracks": "Karaan argame hin jiru",
+    "tryAdjust": "Barbaacha kee ykn calaltuu afaanii sirreessuuf yaali.",
+    "levelsCount": "Sadarkaa {{count}}",
+    "levelsCount_plural": "Sadarkaa {{count}}",
+    "enrolled": "Galmaa'eera",
+    "progress": "Guddina",
+    "continue": "Barachuu Itti Fufi",
+    "enrollNow": "Amma Galmaa'i",
+    "enrolling": "Galmeessaa jira...",
+    "beginner": "Jalqaba",
+    "intermediate": "Giddu-galeessa",
+    "advanced": "Olaanaa"
+  },
+  "publicTracks": {
+    "hero": {
+      "badge": "Karaalee Barnootaa Jiran",
+      "title": "Afaanota Afriikaa dhuunfachuun dandeettii argadhu",
+      "subtitle": "Barnoota Afaan Amaaraa, Oromoo, Sawaahilii fi kanneen biroof ogummaan qophaa'an argadhu. Har'a jalqabi."
+    },
+    "breadcrumb": {
+      "languages": "Afaanota",
+      "allTracks": "Karaalee Hunda"
+    },
+    "filters": {
+      "searchPlaceholder": "Karaalee maqaan ykn ibsaan barbaadi...",
+      "allLanguages": "Afaanota Hunda"
+    },
+    "status": {
+      "loading": "Karaalee fe'aa jira...",
+      "error": "Karaalee fe'uun hin danda'amne. Mee ammas yaali.",
+      "noTracks": "Karaan argame hin jiru",
+      "noTracksDesc": "Barbaacha kee ykn calaltuu afaanii sirreessuuf yaali.",
+      "showing": "Agarsiisaa jira",
+      "track": "karaa",
+      "tracks": "karaalee"
+    },
+    "card": {
+      "levels": "sadarkaalee",
+      "fullLevel": "Sadarkaa Guutuu",
+      "signInToEnroll": "Galmaa'uuf seeni"
+    },
+    "cta": {
+      "title": "Adeemsa kee jalqabuuf qophiidhaa?",
+      "subtitle": "EduLingua waliin afaanota Afriikaa dhuunfachaa kan jiran barattoota kumaatamaan lakkaawamanitti dabalami.",
+      "createAccount": "Akkaawuntii bilisaa uumi",
+      "logIn": "Seeni"
+    }
+  },
+  "languagesPage": {
+    "hero": {
+      "badge": "Dhaalmaya Afriikaa",
+      "title1": "Afaanota",
+      "title2": "Afriikaa",
+      "subtitle": "Gaanfa Afriikaa irraa hanga Haroolee Gurguddootti, dhalmaya afaanota qabeenya ardii kanaa argadhu."
+    },
+    "searchPlaceholder": "Afaanota barbaadi...",
+    "status": {
+      "loading": "Afaanota fe'aa jira...",
+      "error": "Afaanota fe'uun hin danda'amne. Mee ammas yaali.",
+      "noLanguagesFound": "Afaan \"{{search}}\" jedhamu hin argamne"
+    },
+    "card": {
+      "tracksAvailable": "karaa {{count}} argama",
+      "tracksAvailable_plural": "karaaleen {{count}} argamu"
+    },
+    "cta": {
+      "title": "Afaan kee hin arginee?",
+      "subtitle": "Yeroo hunda karaalee haaraa dabalaa jirra. Afaanonni haaraa yeroo gadhiifaman akka sitti himamuuf galmaa'i.",
+      "getStarted": "Amma Jalqabi"
+    }
+  },
+  "mosaicGame": {
+    "title": "AfroMosaic",
+    "hints": {
+      "success": "Kutaan Argameera",
+      "hint": "Gorsa:",
+      "mismatch": "Waliigaltee Seenaa"
+    },
+    "playing": {
+      "trials": "Yaaliiwwan"
+    },
+    "auth": {
+      "loginToSave": "Guddina kee galmeessuuf seeni"
+    },
+    "lobby": {
+      "title": "Sadarkaa Filadhu",
+      "easy": "Salphaa",
+      "medium": "Giddu-galeessa",
+      "hard": "Jabaa",
+      "protocol": "Pirootokoolii"
+    },
+    "selector": {
+      "map": "Kaartaa Naannoo",
+      "path": "Daandii Ogummaa",
+      "changeDifficulty": "Sadarkaa jijjiiri",
+      "categories": "Ramaddiiwwan"
+    },
+    "instructions": {
+      "title": "Pirootokoolii Hiikkaa",
+      "step1": "Kutaa seenaa ifa gochuuf xiraalee 4 walitti dhufeenya qaban argadhu.",
+      "step2": "Mozaayikii xumuruuf ramaddiiwwan hunda walitti fidi.",
+      "step3": "Saffisaa fi sirrummaa kee irratti hundaa'uun urjiiwwan argadhu.",
+      "back": "Deebi'i",
+      "start": "Pirootokoolii Jalqabi"
+    },
+    "won": {
+      "title": "Mozaayikiin Deebieera",
+      "continue": "Sadarkaa Itti Aanu",
+      "dashboard": "Daashboordi",
+      "loginSave": "Milkaa'ina kee galmeessuuf seeni!"
+    },
+    "archive": {
+      "title": "Kuusaa Seenaa"
+    }
+  }
+}

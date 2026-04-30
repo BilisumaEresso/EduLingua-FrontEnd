@@ -4,7 +4,7 @@ import { X, Check, Volume2, ArrowRight, BookOpen, Loader2, Image as ImageIcon } 
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { getAllLessons } from '../services/lesson';
 import { getAllSections } from '../services/section';
-import { getLevelById } from '../services/level';
+import { getLevel } from '../services/level';
 import userProgressService from '../services/userProgress';
 
 // Section renderer helpers
@@ -128,7 +128,7 @@ const LessonPage = () => {
         // id here is levelId
         const [lessonsRes, levelRes] = await Promise.all([
           getAllLessons({ levelId: id }),
-          getLevelById(id),
+          getLevel(id),
         ]);
         const fetchedLessons = lessonsRes?.data?.lessons || lessonsRes?.data || [];
         setLessons(fetchedLessons);

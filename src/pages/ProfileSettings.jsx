@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { User, Lock, Trash2, Save, Globe, UserCircle, CheckCircle, AlertCircle, Eye, EyeOff, ShieldAlert } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import useAuthStore from '../store/authStore';
 import { updateUser, changePassword, deleteAccount } from '../services/auth';
 import { getAllLanguages } from '../services/language';
@@ -16,6 +17,7 @@ const Toast = ({ message, type, onClose }) => (
 );
 
 const ProfileSettings = () => {
+  const { t } = useTranslation();
   const { user, checkAuth } = useAuthStore();
   const [activeTab, setActiveTab] = useState(TAB_GENERAL);
   const [languages, setLanguages] = useState([]);
@@ -54,9 +56,9 @@ const ProfileSettings = () => {
     try {
       await updateUser({ fullName, username, nativeLanguage });
       await checkAuth();
-      showToast('Profile updated successfully!');
+      showToast(t('profile.successUpdate'));
     } catch (err) {
-      showToast(err?.response?.data?.message || 'Failed to update profile.', 'error');
+      showToast(err?.response?.data?.message || t('profile.errorUpdate'), 'error');
     } finally {
       setSavingGeneral(false);
     }
@@ -65,16 +67,16 @@ const ProfileSettings = () => {
   const handleChangePassword = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      showToast('New passwords do not match.', 'error');
+      showToast(t('profile.passwordMismatch'), 'error');
       return;
     }
     setSavingPassword(true);
     try {
       await changePassword({ currentPassword, newPassword });
       setCurrentPassword(''); setNewPassword(''); setConfirmPassword('');
-      showToast('Password changed successfully!');
+      showToast(t('profile.successPassword'));
     } catch (err) {
-      showToast(err?.response?.data?.message || 'Failed to change password.', 'error');
+      showToast(err?.response?.data?.message || t('profile.errorPassword'), 'error');
     } finally {
       setSavingPassword(false);
     }
@@ -93,8 +95,8 @@ const ProfileSettings = () => {
   };
 
   const tabs = [
-    { key: TAB_GENERAL, label: 'General', icon: User },
-    { key: TAB_SECURITY, label: 'Security', icon: Lock },
+    { key: TAB_GENERAL, label: t('profile.general'), icon: User },
+    { key: TAB_SECURITY, label: t('profile.security'), icon: Lock },
   ];
 
   return (
@@ -103,8 +105,8 @@ const ProfileSettings = () => {
 
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Account Settings</h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">Manage your profile and account preferences.</p>
+        <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">{t('profile.title')}</h1>
+        <p className="text-slate-500 dark:text-slate-400 mt-1">{t('profile.subtitle')}</p>
       </div>
 
       {/* Profile Summary Card */}
@@ -116,7 +118,7 @@ const ProfileSettings = () => {
           <p className="text-lg font-bold">{user?.fullName || user?.name || 'Your Name'}</p>
           <p className="text-indigo-100 text-sm">@{user?.username || 'username'}</p>
           <span className={`inline-block mt-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${user?.isPremium ? 'bg-yellow-400 text-yellow-900' : 'bg-white/20 text-white'}`}>
-            {user?.isPremium ? '⭐ Premium' : user?.role || 'Learner'}
+            {user?.isPremium ? '⭐ Premium' : user?.role || t('general.student')}
           </span>
         </div>
       </div>
@@ -142,7 +144,7 @@ const ProfileSettings = () => {
             <form onSubmit={handleSaveGeneral} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Full Name</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t('profile.fullName')}</label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input
@@ -151,13 +153,13 @@ const ProfileSettings = () => {
                       onChange={e => setFullName(e.target.value)}
                       required
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
-                      placeholder="Your full name"
+                      placeholder={t('auth.fullNamePlaceholder')}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Username</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t('profile.username')}</label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-medium">@</span>
                     <input
@@ -166,25 +168,25 @@ const ProfileSettings = () => {
                       onChange={e => setUsername(e.target.value)}
                       required
                       className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
-                      placeholder="username"
+                      placeholder={t('auth.usernamePlaceholder')}
                     />
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Email Address</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t('profile.email')}</label>
                 <input
                   type="email"
                   value={user?.email || ''}
                   disabled
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/60 text-slate-400 text-sm cursor-not-allowed"
                 />
-                <p className="mt-1 text-xs text-slate-400">Email cannot be changed.</p>
+                <p className="mt-1 text-xs text-slate-400">{t('profile.emailNote')}</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Native Language</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t('profile.nativeLanguage')}</label>
                 <div className="relative">
                   <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <select
@@ -192,7 +194,7 @@ const ProfileSettings = () => {
                     onChange={e => setNativeLanguage(e.target.value)}
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm appearance-none"
                   >
-                    <option value="" disabled>Select language</option>
+                    <option value="" disabled>{t('auth.selectLanguage')}</option>
                     {languages.map(lang => (
                       <option key={lang._id} value={lang._id}>{lang.name}</option>
                     ))}
@@ -207,7 +209,7 @@ const ProfileSettings = () => {
                   className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition-colors disabled:opacity-60"
                 >
                   <Save className="w-4 h-4" />
-                  {savingGeneral ? 'Saving...' : 'Save Changes'}
+                  {savingGeneral ? t('profile.saving') : t('profile.saveChanges')}
                 </button>
               </div>
             </form>
@@ -218,10 +220,10 @@ const ProfileSettings = () => {
             <div className="space-y-10">
               {/* Change Password */}
               <form onSubmit={handleChangePassword} className="space-y-5">
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">Change Password</h3>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">{t('profile.changePassword')}</h3>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Current Password</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t('profile.currentPassword')}</label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input
@@ -230,7 +232,7 @@ const ProfileSettings = () => {
                       onChange={e => setCurrentPassword(e.target.value)}
                       required
                       className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
-                      placeholder="••••••••"
+                      placeholder={t('auth.passwordPlaceholder')}
                     />
                     <button type="button" onClick={() => setShowCurrent(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
                       {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -240,7 +242,7 @@ const ProfileSettings = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">New Password</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t('profile.newPassword')}</label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                       <input
@@ -250,7 +252,7 @@ const ProfileSettings = () => {
                         required
                         minLength={6}
                         className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
-                        placeholder="Min. 6 characters"
+                        placeholder={t('profile.minCharacters')}
                       />
                       <button type="button" onClick={() => setShowNew(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
                         {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -258,7 +260,7 @@ const ProfileSettings = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Confirm Password</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t('profile.confirmPassword')}</label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                       <input
@@ -267,11 +269,11 @@ const ProfileSettings = () => {
                         onChange={e => setConfirmPassword(e.target.value)}
                         required
                         className={`w-full pl-10 pr-4 py-2.5 rounded-xl border bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm ${confirmPassword && confirmPassword !== newPassword ? 'border-red-400' : 'border-slate-300 dark:border-slate-700'}`}
-                        placeholder="••••••••"
+                        placeholder={t('auth.passwordPlaceholder')}
                       />
                     </div>
                     {confirmPassword && confirmPassword !== newPassword && (
-                      <p className="mt-1 text-xs text-red-500">Passwords do not match.</p>
+                      <p className="mt-1 text-xs text-red-500">{t('profile.passwordMismatch')}</p>
                     )}
                   </div>
                 </div>
@@ -283,7 +285,7 @@ const ProfileSettings = () => {
                     className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition-colors disabled:opacity-60"
                   >
                     <Lock className="w-4 h-4" />
-                    {savingPassword ? 'Updating...' : 'Update Password'}
+                    {savingPassword ? t('profile.updating') : t('profile.updatePassword')}
                   </button>
                 </div>
               </form>
@@ -292,10 +294,10 @@ const ProfileSettings = () => {
               <div className="border border-red-200 dark:border-red-900/40 rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-3">
                   <ShieldAlert className="w-5 h-5 text-red-500" />
-                  <h3 className="text-base font-bold text-red-600 dark:text-red-400">Danger Zone</h3>
+                  <h3 className="text-base font-bold text-red-600 dark:text-red-400">{t('profile.dangerZone')}</h3>
                 </div>
                 <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                  Permanently delete your account and all associated data. This cannot be undone.
+                  {t('profile.deleteDesc')}
                 </p>
                 {!showDeleteConfirm ? (
                   <button
@@ -303,23 +305,23 @@ const ProfileSettings = () => {
                     className="inline-flex items-center gap-2 border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
-                    Delete Account
+                    {t('profile.deleteAccount')}
                   </button>
                 ) : (
                   <div className="flex items-center gap-3">
-                    <p className="text-sm font-medium text-red-600 dark:text-red-400">Are you absolutely sure?</p>
+                    <p className="text-sm font-medium text-red-600 dark:text-red-400">{t('profile.confirmDelete')}</p>
                     <button
                       onClick={handleDeleteAccount}
                       disabled={deletingAccount}
                       className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-xl font-semibold text-sm transition-colors disabled:opacity-60"
                     >
-                      {deletingAccount ? 'Deleting...' : 'Yes, Delete'}
+                      {deletingAccount ? t('profile.deleting') : t('profile.yesDelete')}
                     </button>
                     <button
                       onClick={() => setShowDeleteConfirm(false)}
                       className="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 text-sm font-medium"
                     >
-                      Cancel
+                      {t('profile.cancel')}
                     </button>
                   </div>
                 )}

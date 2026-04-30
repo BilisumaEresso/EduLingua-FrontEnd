@@ -13,9 +13,10 @@ import RoleRoute from './components/RoleRoute';
 const Landing = React.lazy(() => import('./pages/Landing'));
 const Login = React.lazy(() => import('./pages/Login'));
 const Signup = React.lazy(() => import('./pages/Signup'));
-const PublicGame = React.lazy(() => import('./pages/PublicGame'));
+const AfroMosaicGame = React.lazy(() => import('./pages/AfroMosaicGame'));
 const LanguagesPage = React.lazy(() => import('./pages/LanguagesPage'));
 const PublicTracksPage = React.lazy(() => import('./pages/PublicTracksPage'));
+const ChronosGrid = React.lazy(() => import('./pages/ChronosGrid'));
 
 // Protected Pages (Lazy Loaded)
 const Dashboard = React.lazy(() => import('./pages/Dashboard'));
@@ -58,6 +59,12 @@ const ProtectedRoute = ({ children }) => {
 
 import { Toaster } from 'react-hot-toast';
 
+// Teacher Pages (Lazy Loaded)
+const TeacherDashboard = React.lazy(() => import('./pages/teacher/TeacherDashboard'));
+const TrackEditor = React.lazy(() => import('./pages/teacher/TrackEditor'));
+const TeacherStudents = React.lazy(() => import('./pages/teacher/TeacherStudents'));
+const LessonContentEditor = React.lazy(() => import('./pages/teacher/LessonContentEditor'));
+
 function App() {
   const { checkAuth, isMaintenanceMode } = useAuthStore();
 
@@ -96,9 +103,10 @@ function App() {
           {/* Public Routes with MainLayout (Navbar, Footer) */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<Landing />} />
-            <Route path="/game" element={<PublicGame />} />
+            <Route path="/game" element={<AfroMosaicGame />} />
             <Route path="/languages" element={<LanguagesPage />} />
             <Route path="/explore" element={<PublicTracksPage />} />
+            <Route path="/chronos-grid" element={<ChronosGrid />} />
           </Route>
 
           {/* Auth Routes with AuthLayout (Clean, focused) */}
@@ -123,6 +131,28 @@ function App() {
             <Route path="/settings" element={<ProfileSettings />} />
             <Route path="/premium" element={<PremiumUpgrade />} />
             <Route path="/become-teacher" element={<TeacherApplication />} />
+
+            {/* Teacher Routes */}
+            <Route path="/teacher/dashboard" element={
+              <RoleRoute allowedRoles={['teacher', 'super-admin']}>
+                <TeacherDashboard />
+              </RoleRoute>
+            } />
+            <Route path="/teacher/edit-track" element={
+              <RoleRoute allowedRoles={['teacher', 'super-admin']}>
+                <TrackEditor />
+              </RoleRoute>
+            } />
+            <Route path="/teacher/students" element={
+              <RoleRoute allowedRoles={['teacher', 'super-admin']}>
+                <TeacherStudents />
+              </RoleRoute>
+            } />
+            <Route path="/teacher/edit-lesson/:id" element={
+              <RoleRoute allowedRoles={['teacher', 'super-admin']}>
+                <LessonContentEditor />
+              </RoleRoute>
+            } />
           </Route>
 
           {/* Admin Routes */}

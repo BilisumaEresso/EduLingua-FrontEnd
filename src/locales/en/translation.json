@@ -1,0 +1,563 @@
+{
+  "nav": {
+    "home": "Home",
+    "features": "Features",
+    "languages": "Languages",
+    "tracks": "Tracks",
+    "mosaicGame": "Mosaic Game",
+    "dashboard": "Dashboard",
+    "dash": "Dash",
+    "login": "Log in",
+    "getStarted": "Get Started",
+    "playMiniGame": "Play Mini-Game",
+    "myStudents": "My Students",
+    "trackEditor": "Track Editor",
+    "learningTracks": "Learning Tracks",
+    "myProgress": "My Progress",
+    "aiTutorChat": "AI Tutor Chat",
+    "accountSettings": "Account Settings",
+    "systemAdmin": "System Admin",
+    "goPremium": "Go Premium",
+    "becomeTeacher": "Become a Teacher",
+    "backToApp": "Back to App",
+    "adminPanel": "Admin Panel",
+    "overview": "Overview",
+    "users": "Users",
+    "teachers": "Teachers",
+    "content": "Content"
+  },
+  "auth": {
+    "welcomeBack": "Welcome back",
+    "createAccount": "Create an account",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "emailOrUsername": "Email or Username",
+    "emailOrUsernamePlaceholder": "you@example.com or username",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "emailAddress": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "username": "Username",
+    "usernamePlaceholder": "johndoe123",
+    "fullName": "Full name",
+    "fullNamePlaceholder": "John Doe",
+    "nativeLanguage": "Native Language",
+    "accountType": "Account Type",
+    "loadingLanguages": "Loading languages...",
+    "selectLanguage": "Select your language",
+    "createAccountBtn": "Create account",
+    "signingIn": "Signing in..."
+  },
+  "footer": {
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "general": {
+    "logOut": "Log out",
+    "signOut": "Sign Out",
+    "loading": "Loading...",
+    "new": "NEW",
+    "student": "Student",
+    "enterprise": "Enterprise",
+    "individual": "Individual",
+    "teacher": "Teacher",
+    "masterLanguages": "Master languages naturally with AI tutoring.",
+    "joinThousands": "Join thousands of learners unlocking their potential through personalized tracks, interactive lessons, and real-time chat practice."
+  },
+  "landing": {
+    "hero": {
+      "badge": "Introducing EduLingua AI 1.0",
+      "title1": "MASTER EAST AFRICAN LANGUAGES",
+      "title2": "THROUGH AI",
+      "subtitle": "Master Amharic, Swahili, Afan Oromo, and more organically through immersive AI conversations and personalized learning paths.",
+      "getStarted": "Get Started",
+      "tryMiniGame": "Try Mini-Game"
+    },
+    "features": {
+      "tagline": "Everything you need to reach fluency",
+      "description": "Our AI-powered platform adapts to your learning style, providing exactly what you need to progress faster.",
+      "feature1": {
+        "title": "AI-Powered Lessons",
+        "desc": "Dynamic curriculum that shapes itself around your strengths and weaknesses in real-time."
+      },
+      "feature2": {
+        "title": "Personalized Paths",
+        "desc": "Follow structured tracks designed to take you from beginner to fluent naturally."
+      },
+      "feature3": {
+        "title": "Real-time Chat Tutor",
+        "desc": "Practice conversing with an AI companion that corrects your grammar and vocabulary instantly."
+      }
+    },
+    "howItWorks": {
+      "title": "How EduLingua Works",
+      "step1": {
+        "title": "Choose your languages",
+        "desc": "Select your native language and the target language you want to master."
+      },
+      "step2": {
+        "title": "Learn the fundamentals",
+        "desc": "Progress through an AI-curated track of vocabulary, grammar, and pronunciation lessons."
+      },
+      "step3": {
+        "title": "Practice in real-life scenarios",
+        "desc": "Chat with your AI tutor in immersive role-play situations to build conversational confidence."
+      },
+      "step4": {
+        "title": "Take Quizes and Evaluate",
+        "desc": "After every lessons take quizzes and record experiences earned through the levels."
+      },
+      "step5": {
+        "title": "Get Your Certificate For Completion",
+        "desc": "When you finish all the lessons under a track get verifiable certificate."
+      }
+    },
+    "testimonials": {
+      "title": "Loved by learners worldwide",
+      "t1": {
+        "text": "EduLingua completely changed how I learn. The AI chat feels like talking to a real native speaker from Addis Ababa!",
+        "name": "Abebe B.",
+        "role": "Amharic Learner"
+      },
+      "t2": {
+        "text": "The personalized learning paths helped me master Kiswahili grammar faster than I ever thought possible. Haki!",
+        "name": "Zahara M.",
+        "role": "Swahili Learner"
+      },
+      "t3": {
+        "text": "Finally an app that respects regional languages. The contextual learning makes Afaan Oromoo so much easier to grasp.",
+        "name": "Kofi A.",
+        "role": "Afan Oromo Learner"
+      }
+    },
+    "languages": {
+      "title": "Choose your language",
+      "subtitle": "We support a growing list of languages, each with structured tracks and AI-powered tutoring.",
+      "viewAll": "View all languages"
+    },
+    "cta": {
+      "title": "Ready to become fluent?",
+      "subtitle": "Join thousands of learners already using EduLingua to master new languages with the power of AI.",
+      "startFree": "Start for Free",
+      "exploreTracks": "Explore Tracks"
+    }
+  },
+  "publicTracks": {
+    "hero": {
+      "badge": "Learning Tracks",
+      "title": "Structured paths to fluency",
+      "subtitle": "Browse our library of expert-curated learning tracks. Each track contains structured levels, interactive lessons, and AI-powered quizzes."
+    },
+    "breadcrumb": {
+      "languages": "Languages",
+      "allTracks": "All Tracks"
+    },
+    "filters": {
+      "searchPlaceholder": "Search tracks...",
+      "allLanguages": "All Languages"
+    },
+    "status": {
+      "loading": "Loading tracks...",
+      "error": "Could not load tracks. Please try again later.",
+      "noTracks": "No tracks found",
+      "noTracksDesc": "Try adjusting your search or filter.",
+      "showing": "Showing",
+      "track": "track",
+      "tracks": "tracks"
+    },
+    "card": {
+      "fullLevel": "Full Level",
+      "levels": "levels",
+      "signInToEnroll": "Sign in to enroll"
+    },
+    "cta": {
+      "title": "Start your first track for free",
+      "subtitle": "Create an account to enroll in any track and begin your language learning journey today.",
+      "createAccount": "Create Free Account",
+      "logIn": "Log In"
+    }
+  },
+  "languagesPage": {
+    "hero": {
+      "badge": "Available Languages",
+      "title1": "Which East African language will you",
+      "title2": "master next ?",
+      "subtitle": "Choose from our growing library of languages. Each one comes with structured tracks, AI tutor support, and interactive lessons."
+    },
+    "searchPlaceholder": "Search languages...",
+    "status": {
+      "loading": "Loading languages...",
+      "error": "Could not load languages. Please try again later.",
+      "noLanguagesFound": "No languages found for \"{{search}}\""
+    },
+    "card": {
+      "tracksAvailable": "Multiple tracks available",
+      "tracksAvailable_plural": "{{count}} tracks available"
+    },
+    "cta": {
+      "title": "Ready to start your journey?",
+      "subtitle": "Create your free account and get access to your first language track today.",
+      "getStarted": "Get Started Free"
+    }
+  },
+  "mosaicGame": {
+    "title": "AfroMosaic",
+    "lobby": {
+      "title": "Select Difficulty",
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard",
+      "protocol": "Protocol"
+    },
+    "selector": {
+      "map": "Restoration Map",
+      "path": "Path",
+      "changeDifficulty": "Change Difficulty",
+      "categories": "Categories"
+    },
+    "instructions": {
+      "title": "Mission Protocols",
+      "step1": "Match 4 tiles per category.",
+      "step2": "Deselect a tile by clicking it again before the 4th choice.",
+      "step3": "Earn 3 Stars by completing with minimal trials.",
+      "start": "Start Decryption",
+      "back": "Back"
+    },
+    "playing": {
+      "trials": "Trials",
+      "time": "Time"
+    },
+    "won": {
+      "title": "Unified",
+      "continue": "Continue Path",
+      "dashboard": "Dashboard",
+      "loginSave": "Login to save your star rating!"
+    },
+    "archive": {
+      "title": "Archive"
+    },
+    "hints": {
+      "mismatch": "Mosaic Mismatch",
+      "success": "Restored!",
+      "hint": "Hint: Try finding items related to"
+    },
+    "auth": {
+      "loginToSave": "Login to Save Progress"
+    }
+  },
+  "chronosGrid": {
+    "title": "Chronos-Grid",
+    "status": {
+      "integrity": "Timeline Integrity",
+      "fragments": "Temporal Fragments",
+      "left": "LEFT",
+      "era": "Era",
+      "node": "NODE",
+      "placed": "FRAGMENT PLACED",
+      "awaiting": "Awaiting Input",
+      "target": "Target Node"
+    },
+    "info": {
+      "title": "Historical Intelligence",
+      "significance": "Significance",
+      "catalyst": "Critical Era Catalyst",
+      "region": "Region",
+      "coast": "East African Coast"
+    },
+    "won": {
+      "title": "Grid Synced",
+      "subtitle": "Temporal anomalies resolved. The history of East Africa is now chronologically secure.",
+      "reset": "System Reset",
+      "dashboard": "Return to Base"
+    },
+    "toast": {
+      "success": "Timeline Segment Synchronized",
+      "error": "Chronological Dissonance Detected"
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "streak": "You're on a {{count}}-day streak. Keep it up!",
+    "noStreak": "Start your streak today — learn something new!",
+    "continueLearning": "Continue Learning",
+    "startTrack": "Start a Track",
+    "aiTutor": "AI Tutor",
+    "yourTracks": "Your Tracks",
+    "viewAll": "View all",
+    "noTracks": "No tracks started yet",
+    "browseTracks": "Browse Tracks",
+    "lessonsCompleted": "{{count}} lesson completed",
+    "lessonsCompleted_plural": "{{count}} lessons completed",
+    "quickActions": "Quick Actions",
+    "practiceAi": "Practice with AI",
+    "findLanguages": "Find new languages",
+    "manageSystem": "Manage system",
+    "unlockEverything": "Unlock everything",
+    "yourStats": "Your Stats",
+    "dayStreak": "Day Streak",
+    "totalXP": "Total XP",
+    "lessonsDone": "Lessons Done",
+    "tracksActive": "Tracks Active",
+    "gameMastery": "Game Mastery",
+    "starsEarned": "Stars Earned",
+    "stagesClear": "Stages Clear",
+    "continueMosaic": "Continue Mosaic",
+    "proAnalytics": "Pro Analytics",
+    "complete": "complete",
+    "aiChatsToday": "AI Chats Today",
+    "upgradeUnlimited": "Upgrade for unlimited chats",
+    "messagesRemaining": "{{count}} message remaining today",
+    "messagesRemaining_plural": "{{count}} messages remaining today",
+    "premiumPlan": "Unlimited — Premium plan"
+  },
+  "profile": {
+    "title": "Account Settings",
+    "subtitle": "Manage your profile and account preferences.",
+    "general": "General",
+    "security": "Security",
+    "fullName": "Full Name",
+    "username": "Username",
+    "email": "Email Address",
+    "emailNote": "Email cannot be changed.",
+    "nativeLanguage": "Native Language",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "minCharacters": "Min. 6 characters",
+    "passwordMismatch": "Passwords do not match.",
+    "updatePassword": "Update Password",
+    "updating": "Updating...",
+    "dangerZone": "Danger Zone",
+    "deleteDesc": "Permanently delete your account and all associated data. This cannot be undone.",
+    "deleteAccount": "Delete Account",
+    "confirmDelete": "Are you absolutely sure?",
+    "yesDelete": "Yes, Delete",
+    "deleting": "Deleting...",
+    "cancel": "Cancel",
+    "successUpdate": "Profile updated successfully!",
+    "errorUpdate": "Failed to update profile.",
+    "successPassword": "Password changed successfully!",
+    "errorPassword": "Failed to change password."
+  },
+  "chat": {
+    "title": "EduLingua Tutor",
+    "subtitle": "Native Speaker & Polyglot",
+    "welcome": "Hujambo {{name}}! I'm your East African language tutor. I can help you practice Swahili, Amharic, Afan Oromo, or any other regional language. How can I assist you today?",
+    "limitReached": "Daily free limit reached. Come back tomorrow or upgrade for unlimited access.",
+    "upgrade": "Upgrade",
+    "typing": "Tutor is typing...",
+    "placeholder": "Message your AI tutor... (Enter to send)",
+    "limitPlaceholder": "Daily limit reached. Upgrade to continue.",
+    "error": "Sorry, I'm having trouble connecting. Please try again in a moment.",
+    "rephrase": "I didn't understand that. Can you rephrase?",
+    "premiumLimitless": "Premium Limitless"
+  },
+  "teacher": {
+    "dashboard": "Teacher Dashboard",
+    "subtitle": "Manage your track, track student progress, and create content.",
+    "manageTrack": "Manage Track",
+    "newLesson": "New Lesson",
+    "totalStudents": "Total Students",
+    "activeLessons": "Active Lessons",
+    "quizzesCreated": "Quizzes Created",
+    "avgCompletion": "Avg. Completion",
+    "recentActivity": "Recent Student Activity",
+    "viewAll": "View All",
+    "noActivity": "No recent activity yet.",
+    "noTrack": "No track assigned yet.",
+    "contactAdmin": "Please contact the administrator to assign your specialized track.",
+    "aiAssistant": "AI Content Assistant",
+    "aiAssistantDesc": "Generate new sections or quiz questions for your track using advanced AI.",
+    "genQuiz": "Generate Level Quiz",
+    "newAiSection": "New AI Section"
+  },
+  "premium": {
+    "title": "Learn without limits",
+    "subtitle": "Get unlimited AI tutor access, all learning tracks, and powerful tools to accelerate your language journey.",
+    "upgradeToPremium": "Upgrade to Premium",
+    "goPremium": "Go Premium",
+    "youArePremium": "You're Premium! 🎉",
+    "enjoyUnlimited": "Enjoy unlimited access to all features of EduLingua. The world's languages are yours to explore.",
+    "goToDashboard": "Go to Dashboard",
+    "currentPlan": "Your current plan",
+    "bestValue": "BEST VALUE",
+    "upgradeNow": "Upgrade Now",
+    "processing": "Processing...",
+    "cancelAnytime": "Cancel anytime. No hidden fees.",
+    "whyPremium": "Why go Premium?",
+    "unlimitedAi": "Unlimited AI Tutor",
+    "unlimitedAiDesc": "Chat with your AI language tutor as much as you want, anytime.",
+    "allTracks": "All Tracks Unlocked",
+    "allTracksDesc": "Access every learning track across all languages without restrictions.",
+    "advancedProgress": "Advanced Progress",
+    "advancedProgressDesc": "Deep analytics to understand your strengths and where to focus.",
+    "areYouEducator": "Are you an educator?",
+    "applyTeacher": "Apply to become a teacher and get special access to create curriculum and teach students.",
+    "applyNow": "Apply Now",
+    "freePlan": "Free",
+    "freePrice": "$0",
+    "perMonth": "/month",
+    "getStartedBasics": "Get started with the basics.",
+    "premiumPrice": "$9.99",
+    "everythingMaster": "Everything you need to master a language.",
+    "freeFeature1": "30 AI chat messages per day",
+    "freeFeature2": "Access to free learning tracks",
+    "freeFeature3": "Basic progress tracking",
+    "freeFeature4": "Translation mini-game",
+    "premiumFeature1": "Unlimited AI Tutor conversations",
+    "premiumFeature2": "All premium learning tracks",
+    "premiumFeature3": "Advanced analytics & insights",
+    "premiumFeature4": "Priority support",
+    "premiumFeature5": "Offline content access",
+    "premiumFeature6": "Early access to new features"
+  },
+  "progress": {
+    "title": "My Progress",
+    "subtitle": "Track your learning journey across all enrolled tracks.",
+    "totalXP": "Total XP",
+    "lessonsDone": "Lessons Done",
+    "tracksActive": "Tracks Active",
+    "tracksFinished": "Tracks Finished",
+    "mosaicMaster": "Mosaic Master",
+    "historicalStatus": "Historical decryption status across all interactive modules.",
+    "totalStars": "Total Stars",
+    "totalStages": "Total Stages",
+    "loading": "Loading your progress...",
+    "error": "Could not load progress. Please try again.",
+    "noProgress": "No progress yet",
+    "enrollDesc": "Enroll in a learning track to start your journey.",
+    "browseTracks": "Browse Tracks",
+    "enrolledTracks": "Enrolled Tracks",
+    "completed": "Completed",
+    "review": "Review",
+    "continue": "Continue"
+  },
+  "tracks": {
+    "title": "Learning Tracks",
+    "subtitle": "Discover and enroll in language learning paths",
+    "searchPlaceholder": "Search tracks...",
+    "allLanguages": "All Languages",
+    "loading": "Loading tracks...",
+    "noTracks": "No tracks found",
+    "tryAdjust": "Try adjusting your search or language filter.",
+    "levelsCount": "{{count}} level",
+    "levelsCount_plural": "{{count}} levels",
+    "enrolled": "Enrolled",
+    "progress": "Progress",
+    "continue": "Continue Learning",
+    "enrollNow": "Enroll Now",
+    "enrolling": "Enrolling...",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  },
+  "publicTracks": {
+    "hero": {
+      "badge": "Available Learning Paths",
+      "title": "Master African languages and achieve fluency",
+      "subtitle": "Discover professionally crafted curriculum for Amharic, Oromo, Swahili, and more. Start your journey today."
+    },
+    "breadcrumb": {
+      "languages": "Languages",
+      "allTracks": "All Tracks"
+    },
+    "filters": {
+      "searchPlaceholder": "Search tracks by name or description...",
+      "allLanguages": "All Languages"
+    },
+    "status": {
+      "loading": "Loading tracks...",
+      "error": "Could not load tracks. Please try again.",
+      "noTracks": "No tracks found",
+      "noTracksDesc": "Try adjusting your search or language filter.",
+      "showing": "Showing",
+      "track": "track",
+      "tracks": "tracks"
+    },
+    "card": {
+      "levels": "levels",
+      "fullLevel": "Full Level",
+      "signInToEnroll": "Sign in to enroll"
+    },
+    "cta": {
+      "title": "Ready to start your journey?",
+      "subtitle": "Join thousands of learners mastering African languages with EduLingua.",
+      "createAccount": "Create Free Account",
+      "logIn": "Log In"
+    }
+  },
+  "languagesPage": {
+    "hero": {
+      "badge": "African Heritage",
+      "title1": "Explore the languages of",
+      "title2": "Africa",
+      "subtitle": "From the horn of Africa to the Great Lakes, discover the rich linguistic diversity of the continent."
+    },
+    "searchPlaceholder": "Search languages...",
+    "status": {
+      "loading": "Loading languages...",
+      "error": "Could not load languages. Please try again.",
+      "noLanguagesFound": "No languages found for \"{{search}}\""
+    },
+    "card": {
+      "tracksAvailable": "{{count}} track available",
+      "tracksAvailable_plural": "{{count}} tracks available"
+    },
+    "cta": {
+      "title": "Don't see your language?",
+      "subtitle": "We are constantly adding new tracks. Sign up to get notified when new languages are released.",
+      "getStarted": "Get Started Now"
+    }
+  },
+  "mosaicGame": {
+    "title": "AfroMosaic",
+    "hints": {
+      "success": "Fragment Found",
+      "hint": "Hint:",
+      "mismatch": "Historical Mismatch"
+    },
+    "playing": {
+      "trials": "Trials"
+    },
+    "auth": {
+      "loginToSave": "Login to Save Progress"
+    },
+    "lobby": {
+      "title": "Select Difficulty",
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard",
+      "protocol": "Protocol"
+    },
+    "selector": {
+      "map": "Region Map",
+      "path": "Mastery Path",
+      "changeDifficulty": "Change Difficulty",
+      "categories": "Categories"
+    },
+    "instructions": {
+      "title": "Decryption Protocol",
+      "step1": "Find 4 related tiles to reveal a historical fragment.",
+      "step2": "Match all categories to complete the mosaic.",
+      "step3": "Earn stars based on your precision and speed.",
+      "back": "Go Back",
+      "start": "Initiate Protocol"
+    },
+    "won": {
+      "title": "Mosaic Restored",
+      "continue": "Next Level",
+      "dashboard": "Dashboard",
+      "loginSave": "Login to save your achievements!"
+    },
+    "archive": {
+      "title": "Historical Archive"
+    }
+  }
+}

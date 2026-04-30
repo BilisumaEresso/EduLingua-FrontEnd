@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { GraduationCap, CheckCircle, Send, BookOpen, Users, Star } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { GraduationCap, CheckCircle, Send, BookOpen, Users, Star, Globe } from 'lucide-react';
 import { applyForTeacher } from '../services/auth';
+import { getAllLanguages } from '../services/language';
 import useAuthStore from '../store/authStore';
 import { Link } from 'react-router-dom';
 
@@ -14,20 +15,49 @@ const TeacherApplication = () => {
   const { user, checkAuth } = useAuthStore();
   const [motivation, setMotivation] = useState('');
   const [experience, setExperience] = useState('');
-  const [subject, setSubject] = useState('');
+  const [nativeLanguage, setNativeLanguage] = useState('');
+  const [targetLanguage, setTargetLanguage] = useState('');
+  const [languages, setLanguages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchLanguages = async () => {
+      try {
+        const res = await getAllLanguages();
+        setLanguages(res.data.langs || []);
+      } catch (err) {
+        console.error('Failed to fetch languages:', err);
+      }
+    };
+    fetchLanguages();
+  }, []);
 
   const alreadyApplied = user?.teacherRequested;
   const isTeacher = user?.role === 'teacher' || user?.role === 'admin' || user?.role === 'super-admin';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!nativeLanguage || !targetLanguage) {
+      setError('Please select both your native language and the language you want to teach.');
+      return;
+    }
+    if (nativeLanguage === targetLanguage) {
+      setError('Native and target languages cannot be the same.');
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
-      await applyForTeacher({ motivation, experience, subject });
+      await applyForTeacher({ 
+        motivation, 
+        experience, 
+        nativeLanguage, 
+        targetLanguage,
+        requestedSubject: languages.find(l => l._id === targetLanguage)?.name || ''
+      });
       await checkAuth();
       setSuccess(true);
     } catch (err) {
@@ -125,18 +155,40 @@ const TeacherApplication = () => {
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Your Application</h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                  Primary Subject / Language
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={subject}
-                  onChange={e => setSubject(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
-                  placeholder="e.g. Swahili, Amharic, Afan Oromo..."
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                    Your Native Language
+                  </label>
+                  <select
+                    required
+                    value={nativeLanguage}
+                    onChange={e => setNativeLanguage(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm appearance-none"
+                  >
+                    <option value="">Select Language</option>
+                    {languages.map(lang => (
+                      <option key={lang._id} value={lang._id}>{lang.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                    Language to Teach
+                  </label>
+                  <select
+                    required
+                    value={targetLanguage}
+                    onChange={e => setTargetLanguage(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm appearance-none"
+                  >
+                    <option value="">Select Language</option>
+                    {languages.map(lang => (
+                      <option key={lang._id} value={lang._id}>{lang.name}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div>
@@ -192,3 +244,4 @@ const TeacherApplication = () => {
 };
 
 export default TeacherApplication;
+

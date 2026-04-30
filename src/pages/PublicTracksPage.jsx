@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BookOpen, Search, Globe, Layers, Lock, ArrowRight, Loader2, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Search, Globe, Layers, Lock, ArrowRight, Loader2, ChevronRight, Goal } from 'lucide-react';
 import { getAllLearnings } from '../services/learning';
 import { getAllLanguages } from '../services/language';
 
@@ -21,6 +22,7 @@ const gradients = [
 ];
 
 const PublicTracksPage = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const langFilter = searchParams.get('lang');
 
@@ -70,21 +72,21 @@ const PublicTracksPage = () => {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-sm font-medium mb-6">
               <Layers className="h-4 w-4" />
-              Learning Tracks
+              {t('publicTracks.hero.badge')}
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6">
-              Structured paths to{' '}
+              {t('publicTracks.hero.title').split('fluency')[0]}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-600">fluency</span>
             </h1>
             <p className="max-w-xl mx-auto text-lg text-slate-600 dark:text-slate-400 mb-4">
-              Browse our library of expert-curated learning tracks. Each track contains structured levels, interactive lessons, and AI-powered quizzes.
+              {t('publicTracks.hero.subtitle')}
             </p>
 
             {/* Breadcrumb */}
             <div className="flex items-center justify-center gap-1 text-sm text-slate-500 mb-10">
-              <Link to="/languages" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Languages</Link>
+              <Link to="/languages" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">{t('publicTracks.breadcrumb.languages')}</Link>
               <ChevronRight className="w-4 h-4" />
-              <span>All Tracks</span>
+              <span>{t('publicTracks.breadcrumb.allTracks')}</span>
             </div>
 
             {/* Filters */}
@@ -95,7 +97,7 @@ const PublicTracksPage = () => {
                   type="text"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
-                  placeholder="Search tracks..."
+                  placeholder={t('publicTracks.filters.searchPlaceholder')}
                   className="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm"
                 />
               </div>
@@ -106,7 +108,7 @@ const PublicTracksPage = () => {
                   onChange={e => setSelectedLang(e.target.value)}
                   className="pl-9 pr-6 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm shadow-sm appearance-none min-w-[160px]"
                 >
-                  <option value="">All Languages</option>
+                  <option value="">{t('publicTracks.filters.allLanguages')}</option>
                   {languages.map(l => (
                     <option key={l._id} value={l._id}>{l.name}</option>
                   ))}
@@ -123,28 +125,28 @@ const PublicTracksPage = () => {
           {loading && (
             <div className="flex flex-col items-center py-24 gap-4 text-slate-500">
               <Loader2 className="w-10 h-10 animate-spin text-indigo-500" />
-              <p>Loading tracks...</p>
+              <p>{t('publicTracks.status.loading')}</p>
             </div>
           )}
 
           {error && !loading && (
             <div className="text-center py-24">
-              <p className="text-slate-500 dark:text-slate-400 text-lg">Could not load tracks. Please try again later.</p>
+              <p className="text-slate-500 dark:text-slate-400 text-lg">{t('publicTracks.status.error')}</p>
             </div>
           )}
 
           {!loading && !error && filtered.length === 0 && (
             <div className="text-center py-24">
               <Layers className="w-12 h-12 text-slate-300 dark:text-slate-700 mx-auto mb-4" />
-              <p className="text-slate-500 dark:text-slate-400 text-lg font-medium">No tracks found</p>
-              <p className="text-slate-400 dark:text-slate-500 text-sm mt-1">Try adjusting your search or filter.</p>
+              <p className="text-slate-500 dark:text-slate-400 text-lg font-medium">{t('publicTracks.status.noTracks')}</p>
+              <p className="text-slate-400 dark:text-slate-500 text-sm mt-1">{t('publicTracks.status.noTracksDesc')}</p>
             </div>
           )}
 
           {!loading && !error && filtered.length > 0 && (
             <>
               <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-                Showing <strong className="text-slate-700 dark:text-slate-300">{filtered.length}</strong> track{filtered.length !== 1 ? 's' : ''}
+                {t('publicTracks.status.showing')} <strong className="text-slate-700 dark:text-slate-300">{filtered.length}</strong> {filtered.length !== 1 ? t('publicTracks.status.tracks') : t('publicTracks.status.track')}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filtered.map((track, idx) => {
@@ -167,10 +169,10 @@ const PublicTracksPage = () => {
                         <div className="p-6 flex flex-col gap-4 flex-1">
                           <div className="flex items-start justify-between gap-3">
                             <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${gradients[idx % gradients.length]} flex items-center justify-center shrink-0 shadow-md`}>
-                              <BookOpen className="w-5 h-5 text-white" />
+                              <Goal className="w-5 h-5 text-white" />
                             </div>
                             <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${levelColors[level] || levelColors.beginner}`}>
-                              {track.level || 'Beginner'}
+                              {track.level || t('publicTracks.card.fullLevel')}
                             </span>
                           </div>
 
@@ -195,11 +197,11 @@ const PublicTracksPage = () => {
                           <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
                             <div className="flex items-center gap-1.5 text-sm text-slate-500">
                               <Layers className="w-4 h-4" />
-                              <span>{track.levelsCount ?? track.sections?.length ?? '—'} levels</span>
+                              <span>{track.levelsCount ?? track.sections?.length ?? '5'} {t('publicTracks.card.levels')}</span>
                             </div>
                             <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                               <Lock className="w-3.5 h-3.5" />
-                              Sign in to enroll
+                              {t('publicTracks.card.signInToEnroll')}
                               <ArrowRight className="w-3.5 h-3.5" />
                             </div>
                           </div>
@@ -218,23 +220,23 @@ const PublicTracksPage = () => {
       <section className="py-20 bg-gradient-to-br from-indigo-600 to-fuchsia-600 text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-2xl">
           <h2 className="text-3xl font-extrabold mb-4 tracking-tight">
-            Start your first track for free
+            {t('publicTracks.cta.title')}
           </h2>
           <p className="text-indigo-100 mb-8 text-lg">
-            Create an account to enroll in any track and begin your language learning journey today.
+            {t('publicTracks.cta.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               to="/signup"
               className="inline-flex items-center justify-center gap-2 bg-white text-indigo-700 px-8 py-3.5 rounded-full font-bold text-base hover:bg-indigo-50 transition-colors"
             >
-              Create Free Account <ArrowRight className="w-5 h-5" />
+              {t('publicTracks.cta.createAccount')} <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               to="/login"
               className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-8 py-3.5 rounded-full font-bold text-base transition-colors"
             >
-              Log In
+              {t('publicTracks.cta.logIn')}
             </Link>
           </div>
         </div>

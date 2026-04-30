@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "theme": "Battle of Adwa & Language Roots",
+    "solution_reveal": "Ethiopia's victory at Adwa in 1896 became a beacon of hope for all of Africa.",
+    "tiles": [
+      { "id": 1, "text": "Fidel", "category": "Scripts", "fragment": "The unique syllabary used for Amharic and Tigrigna." },
+      { "id": 2, "text": "Qubee", "category": "Scripts", "fragment": "The Latin-based script adopted for Afaan Oromo." },
+      { "id": 3, "text": "Ajami", "category": "Scripts", "fragment": "Arabic script adapted for African languages like Harari." },
+      { "id": 4, "text": "Sabaean", "category": "Scripts", "fragment": "Ancient South Arabian script that influenced Ge'ez." },
+      { "id": 5, "text": "Menelik II", "category": "Adwa", "fragment": "The Emperor who unified Ethiopia and led the victory." },
+      { "id": 6, "text": "Taytu Betul", "category": "Adwa", "fragment": "Empress and master strategist at the Battle of Adwa." },
+      { "id": 7, "text": "Alula Aba Nega", "category": "Adwa", "fragment": "Legendary general and hero of the Dogali battle." },
+      { "id": 8, "text": "Balcha Safo", "category": "Adwa", "fragment": "Oromo commander of the imperial artillery." },
+      { "id": 9, "text": "Habesha", "category": "Identity", "fragment": "Historical term for the people of the Ethiopian highlands." },
+      { "id": 10, "text": "Kushitic", "category": "Identity", "fragment": "The language family including Oromo, Somali, and Sidamo." },
+      { "id": 11, "text": "Semitic", "category": "Identity", "fragment": "The language family including Amharic, Tigrigna, and Gurage." },
+      { "id": 12, "text": "Omotic", "category": "Identity", "fragment": "Unique language family found only in southwest Ethiopia." },
+      { "id": 13, "text": "Jamba", "category": "Swahili", "fragment": "The roots of Swahili coastal interactions." },
+      { "id": 14, "text": "Kiswahili", "category": "Swahili", "fragment": "A hybrid of Bantu and Arabic influences." },
+      { "id": 15, "text": "Zanzibar", "category": "Swahili", "fragment": "The historic trade hub connecting the Horn to the Coast." },
+      { "id": 16, "text": "Ujamaa", "category": "Swahili", "fragment": "The social philosophy of self-reliance." }
+    ],
+    "categories": 4,
+    "trialsTarget": 12,
+    "timeTarget": 100
+  }
+]

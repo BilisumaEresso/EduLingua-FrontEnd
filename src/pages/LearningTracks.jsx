@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Compass, BookOpen, Globe, Search, ArrowRight, Lock, CheckCircle, Loader2, PlayCircle, Plus } from 'lucide-react';
+import { Compass, BookOpen, Globe, Search, ArrowRight, CheckCircle, Loader2, PlayCircle, Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { getAllLearnings } from '../services/learning';
 import { getAllLanguages } from '../services/language';
 import userProgressService from '../services/userProgress';
@@ -14,12 +15,6 @@ const gradients = [
   'from-rose-500 to-red-600',
 ];
 
-const levelBadge = {
-  beginner: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400',
-  intermediate: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400',
-  advanced: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400',
-};
-
 const formatProgress = (data) => {
   if (Array.isArray(data)) return data;
   if (data && typeof data === 'object') return [data];
@@ -27,6 +22,7 @@ const formatProgress = (data) => {
 };
 
 const LearningTracks = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const [tracks, setTracks] = useState([]);
   const [languages, setLanguages] = useState([]);
@@ -51,7 +47,6 @@ const LearningTracks = () => {
 
         setTracks(tracksData);
         setLanguages(langsData);
-
         setMyProgress(formatProgress(progressData));
       } catch (e) {
         console.error("Fetch all error:", e);
@@ -67,14 +62,11 @@ const LearningTracks = () => {
   const handleEnroll = async (trackId) => {
     setEnrolling(trackId);
     try {
-      const res = await userProgressService.startLearningTrack({ learning: trackId });
-      console.log(res)
-      console.log(trackId)
+      await userProgressService.startLearningTrack({ learning: trackId });
       const progressRes = await userProgressService.getProgress();
       const rawProgress = progressRes?.data?.progress || progressRes?.data || [];
       setMyProgress(Array.isArray(rawProgress) ? rawProgress : (rawProgress && typeof rawProgress === 'object' ? [rawProgress] : []));
-    } catch (e) {
-      console.error(e);
+    } catch {
     } finally {
       setEnrolling(null);
     }
@@ -95,8 +87,8 @@ const LearningTracks = () => {
           <Compass className="w-6 h-6" />
         </div>
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Learning Tracks</h1>
-          <p className="text-slate-500 dark:text-slate-400">Discover and enroll in language learning paths</p>
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">{t('tracks.title')}</h1>
+          <p className="text-slate-500 dark:text-slate-400">{t('tracks.subtitle')}</p>
         </div>
       </div>
 
@@ -108,7 +100,7 @@ const LearningTracks = () => {
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search tracks..."
+            placeholder={t('tracks.searchPlaceholder')}
             className="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
           />
         </div>
@@ -119,7 +111,7 @@ const LearningTracks = () => {
             onChange={e => setSelectedLang(e.target.value)}
             className="pl-9 pr-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm appearance-none min-w-[160px]"
           >
-            <option value="">All Languages</option>
+            <option value="">{t('tracks.allLanguages')}</option>
             {languages.map(l => <option key={l._id} value={l._id}>{l.name}</option>)}
           </select>
         </div>
@@ -129,7 +121,7 @@ const LearningTracks = () => {
       {loading && (
         <div className="flex items-center justify-center py-24 gap-3 text-slate-500">
           <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
-          <span>Loading tracks...</span>
+          <span>{t('tracks.loading')}</span>
         </div>
       )}
 
@@ -137,8 +129,8 @@ const LearningTracks = () => {
       {!loading && filtered.length === 0 && (
         <div className="text-center py-24">
           <Compass className="w-12 h-12 text-slate-300 dark:text-slate-700 mx-auto mb-4" />
-          <p className="text-slate-500 text-lg font-medium">No tracks found</p>
-          <p className="text-slate-400 text-sm mt-1">Try adjusting your search or language filter.</p>
+          <p className="text-slate-500 text-lg font-medium">{t('tracks.noTracks')}</p>
+          <p className="text-slate-400 text-sm mt-1">{t('tracks.tryAdjust')}</p>
         </div>
       )}
 
@@ -153,7 +145,7 @@ const LearningTracks = () => {
             const totalLessonsInTrack = track.levels?.reduce((sum, level) => sum + (level.lessons?.length || 0), 0) || 1;
             const progressPct = Math.min(100, Math.round((completedCount / totalLessonsInTrack) * 100));
 
-            const level = track.level?.toLowerCase() || 'beginner';
+            const levelKey = track.level?.toLowerCase() || 'beginner';
 
             return (
               <div
@@ -169,7 +161,7 @@ const LearningTracks = () => {
                       {track.targetLanguage?.name || 'Language'}
                     </span>
                     <span className={`text-xs font-bold px-2.5 py-1 rounded-full bg-white/20 text-white backdrop-blur`}>
-                      {track.level || 'Beginner'}
+                      {t(`tracks.${levelKey}`)}
                     </span>
                   </div>
                 </div>
@@ -187,12 +179,12 @@ const LearningTracks = () => {
                   <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
                     <div className="flex items-center gap-1.5">
                       <BookOpen className="w-4 h-4" />
-                      <span>{track.levelsCount ?? '—'} levels</span>
+                      <span>{t('tracks.levelsCount', { count: track.levelsCount || 5 })}</span>
                     </div>
                     {isEnrolled && (
                       <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold">
                         <CheckCircle className="w-4 h-4" />
-                        <span>Enrolled</span>
+                        <span>{t('tracks.enrolled')}</span>
                       </div>
                     )}
                   </div>
@@ -201,7 +193,7 @@ const LearningTracks = () => {
                     {isEnrolled ? (
                       <div className="space-y-3">
                         <div className="flex justify-between text-xs font-bold text-slate-500 dark:text-slate-400">
-                          <span>Progress</span>
+                          <span>{t('tracks.progress')}</span>
                           <span>{progressPct}%</span>
                         </div>
                         <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
@@ -212,7 +204,7 @@ const LearningTracks = () => {
                           className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 transition-colors"
                         >
                           <PlayCircle className="w-4 h-4" />
-                          Continue Learning
+                          {t('tracks.continue')}
                         </Link>
                       </div>
                     ) : (
@@ -222,9 +214,9 @@ const LearningTracks = () => {
                         className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors disabled:opacity-60"
                       >
                         {enrolling === track._id ? (
-                          <><Loader2 className="w-4 h-4 animate-spin" /> Enrolling...</>
+                          <><Loader2 className="w-4 h-4 animate-spin" /> {t('tracks.enrolling')}</>
                         ) : (
-                          <><Plus className="w-4 h-4" /> Enroll Now</>
+                          <><Plus className="w-4 h-4" /> {t('tracks.enrollNow')}</>
                         )}
                       </button>
                     )}

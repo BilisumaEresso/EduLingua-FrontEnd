@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "theme": "Imperial Legacies & Tigrigna",
+    "solution_reveal": "The Aksumite heritage laid the foundation for modern Ethiopian identity.",
+    "tiles": [
+      { "id": 1, "text": "Dehna Do", "category": "Tigrigna", "fragment": "Standard Tigrigna greeting meaning 'Are you well?'." },
+      { "id": 2, "text": "Kemey", "category": "Tigrigna", "fragment": "Short for 'How are you?' in Tigrigna." },
+      { "id": 3, "text": "Selam", "category": "Tigrigna", "fragment": "Shared word for Peace across Semitic languages." },
+      { "id": 4, "text": "Baga", "category": "Tigrigna", "fragment": "Used in various celebratory greetings." },
+      { "id": 5, "text": "Obelisk", "category": "Axum", "fragment": "The massive stone stelae marking royal tombs." },
+      { "id": 6, "text": "Ezana", "category": "Axum", "fragment": "The King who converted Aksum to Christianity." },
+      { "id": 7, "text": "Coins", "category": "Axum", "fragment": "Aksum was the first sub-Saharan state to mint currency." },
+      { "id": 8, "text": "Ge'ez", "category": "Axum", "fragment": "The ancient script used as the basis for modern Ethiopian alphabets." },
+      { "id": 9, "text": "Injera", "category": "Cuisine", "fragment": "Sourdough flatbread made from Teff grain." },
+      { "id": 10, "text": "Doro Wat", "category": "Cuisine", "fragment": "The iconic Ethiopian spicy chicken stew." },
+      { "id": 11, "text": "Kitfo", "category": "Cuisine", "fragment": "Minced raw beef seasoned with mitmita and niter kibbeh." },
+      { "id": 12, "text": "Buna", "category": "Cuisine", "fragment": "Coffee, which originated in the Kaffa region." }
+    ],
+    "categories": 3,
+    "trialsTarget": 8,
+    "timeTarget": 60
+  }
+]

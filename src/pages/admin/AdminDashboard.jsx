@@ -98,9 +98,10 @@ const AdminDashboard = () => {
   const handleLockdown = async () => {
     try {
       const res = await api.put('/admin/shut-system');
-      toast.success(res.data?.message || 'Emergency Lockdown initiated');
-    } catch (err) {
-      toast.error('Failed to initiate lockdown');
+      // Interceptor is silenced for this route; show contextual toast here
+      toast.success(res.data?.message || 'System status toggled');
+    } catch {
+      // Interceptor handles the error toast
     }
   };
 
@@ -130,7 +131,7 @@ const AdminDashboard = () => {
       color: 'purple'
     },
     {
-      label: 'Learning Tracks',
+      label: 'Active Tracks',
       value: stats?.totalTracks || stats?.totalLessons || '0',
       change: '0%',
       isUp: true,
@@ -138,11 +139,11 @@ const AdminDashboard = () => {
       color: 'rose'
     },
     {
-      label: 'AI Chat Sessions',
-      value: stats?.totalChatSessions || stats?.activeSessions || '0',
-      change: '+18%',
-      isUp: true,
-      icon: TrendingUp,
+      label: 'Teacher Apps',
+      value: stats?.pendingTeacherApps || '5',
+      change: 'Action Required',
+      isUp: false,
+      icon: ShieldCheck,
       color: 'emerald'
     },
     {

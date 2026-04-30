@@ -1,0 +1,562 @@
+{
+  "nav": {
+    "home": "Nyumbani",
+    "features": "Vipengele",
+    "languages": "Lugha",
+    "tracks": "Njia",
+    "mosaicGame": "Mchezo wa Mosaic",
+    "dashboard": "Dashibodi",
+    "dash": "Dashi",
+    "login": "Ingia",
+    "getStarted": "Anza",
+    "playMiniGame": "Cheza Mchezo Mdogo",
+    "myStudents": "Wanafunzi Wangu",
+    "trackEditor": "Kihariri cha Njia",
+    "learningTracks": "Njia za Kujifunza",
+    "myProgress": "Maendeleo Yangu",
+    "aiTutorChat": "Mazungumzo ya Mkufunzi wa AI",
+    "accountSettings": "Mipangilio ya Akaunti",
+    "systemAdmin": "Msimamizi wa Mfumo",
+    "goPremium": "Nenda Premium",
+    "becomeTeacher": "Kuwa Mwalimu",
+    "backToApp": "Rudi kwenye Programu",
+    "adminPanel": "Paneli ya Msimamizi",
+    "overview": "Muhtasari",
+    "users": "Watumiaji",
+    "teachers": "Walimu",
+    "content": "Maudhui"
+  },
+  "auth": {
+    "welcomeBack": "Karibu tena",
+    "createAccount": "Unda Akaunti",
+    "dontHaveAccount": "Huna akaunti?",
+    "alreadyHaveAccount": "Tayari una akaunti?",
+    "signIn": "Ingia",
+    "signUp": "Jisajili",
+    "emailOrUsername": "Barua pepe au Jina la mtumiaji",
+    "emailOrUsernamePlaceholder": "you@example.com au jina la mtumiaji",
+    "password": "Nenosiri",
+    "passwordPlaceholder": "••••••••",
+    "rememberMe": "Nikumbuke",
+    "forgotPassword": "Umesahau nenosiri?",
+    "emailAddress": "Anwani ya barua pepe",
+    "emailPlaceholder": "you@example.com",
+    "username": "Jina la mtumiaji",
+    "usernamePlaceholder": "johndoe123",
+    "fullName": "Jina kamili",
+    "fullNamePlaceholder": "John Doe",
+    "nativeLanguage": "Lugha ya asili",
+    "accountType": "Aina ya akaunti",
+    "loadingLanguages": "Inapakia lugha...",
+    "selectLanguage": "Chagua lugha",
+    "createAccountBtn": "Unda Akaunti",
+    "signingIn": "Inaingia..."
+  },
+  "footer": {
+    "privacy": "Faragha",
+    "terms": "Masharti"
+  },
+  "general": {
+    "logOut": "Toka",
+    "signOut": "Toka",
+    "loading": "Inapakia...",
+    "new": "Mpya",
+    "student": "Mwanafunzi",
+    "enterprise": "Shirika",
+    "individual": "Mtu binafsi",
+    "teacher": "Mwalimu",
+    "masterLanguages": "Stadi lugha kwa njia ya asili kwa msaada wa mkufunzi wa AI.",
+    "joinThousands": "Jiunge na maelfu ya wanafunzi wanaofungua uwezo wao kupitia njia za kibinafsi, masomo shirikishi, na mazoezi ya mazungumzo ya moja kwa moja."
+  },
+  "landing": {
+    "hero": {
+      "badge": "Tunatambulisha EduLingua AI 1.0",
+      "title1": "MASHIRIKI LUGHA ZA AFRIKA MASHARIKI",
+      "title2": "KUPITIA AI",
+      "subtitle": "Mudu Kiamhari, Kiswahili, Afaan Oromo, na zaidi kupitia mazungumzo ya kuzama ya AI na njia za kibinafsi za kujifunza.",
+      "getStarted": "Anza",
+      "tryMiniGame": "Jaribu Mchezo Mdogo"
+    },
+    "features": {
+      "tagline": "Kila kitu unachohitaji kufikia ufasaha",
+      "description": "Jukwaa letu linalotumia AI hubadilika kulingana na mtindo wako wa kujifunza, likitoa kile unachohitaji ili upige hatua haraka.",
+      "feature1": {
+        "title": "Masomo Yanayotumia AI",
+        "desc": "Mtaala unaobadilika kulingana na uwezo na udhaifu wako kwa wakati halisi."
+      },
+      "feature2": {
+        "title": "Njia za Kibinafsi",
+        "desc": "Fuata njia zilizoundwa kukupeleka kutoka mwanzo hadi ufasaha kwa asili."
+      },
+      "feature3": {
+        "title": "Mkufunzi wa Mazungumzo ya Wakati Halisi",
+        "desc": "Fanya mazoezi ya kuzungumza na mwenzako wa AI ambaye hurekebisha sarufi na msamiati wako papo hapo."
+      }
+    },
+    "howItWorks": {
+      "title": "Jinsi EduLingua Inavyofanya Kazi",
+      "step1": {
+        "title": "Chagua lugha zako",
+        "desc": "Chagua lugha yako ya asili na lugha unayotaka kujifunza."
+      },
+      "step2": {
+        "title": "Jifunze misingi",
+        "desc": "Endelea kupitia njia ya msamiati, sarufi, na masomo ya matamshi yaliyosimamiwa na AI."
+      },
+      "step3": {
+        "title": "Fanya mazoezi katika hali halisi",
+        "desc": "Zungumza na mkufunzi wako wa AI katika hali za maigizo ili kujenga ujasiri wa mazungumzo."
+      },
+      "step4": {
+        "title": "Fanya Mitihani na Tathmini",
+        "desc": "Baada ya kila somo fanya mitihani na urekodi uzoefu uliopatikana kupitia ngazi."
+      },
+      "step5": {
+        "title": "Pata Cheti cha Kukamilisha",
+        "desc": "Unapomaliza masomo yote chini ya njia, pata cheti kinachoweza kuthibitishwa."
+      }
+    },
+    "testimonials": {
+      "title": "Inapendwa na wanafunzi ulimwenguni kote",
+      "t1": {
+        "text": "EduLingua imebadilisha kabisa jinsi ninavyojifunza. Mazungumzo ya AI yanahisi kama kuzungumza na mzawa halisi kutoka Addis Ababa!",
+        "name": "Abebe B.",
+        "role": "Mwanafunzi wa Kiamhari"
+      },
+      "t2": {
+        "text": "Njia za kibinafsi za kujifunza zimenisaidia kufahamu sarufi ya Kiswahili haraka kuliko nilivyofikiria. Haki!",
+        "name": "Zahara M.",
+        "role": "Mwanafunzi wa Kiswahili"
+      },
+      "t3": {
+        "text": "Hatimaye programu inayojali lugha za kikanda. Mafunzo ya kimazingira yanafanya Afaan Oromoo kuwa rahisi kuelewa.",
+        "name": "Kofi A.",
+        "role": "Mwanafunzi wa Afaan Oromo"
+      }
+    },
+    "languages": {
+      "title": "Chagua lugha yako",
+      "subtitle": "Tunasaidia orodha inayokua ya lugha, kila moja ikiwa na njia zilizoundwa na mafunzo yanayotumia AI.",
+      "viewAll": "Angalia lugha zote"
+    },
+    "cta": {
+      "title": "Uko tayari kuwa mfasaha?",
+      "subtitle": "Jiunge na maelfu ya wanafunzi wanaotumia EduLingua kujifunza lugha mpya kwa nguvu ya AI.",
+      "startFree": "Anza Bure",
+      "exploreTracks": "Chunguza Njia"
+    }
+  },
+  "publicTracks": {
+    "hero": {
+      "badge": "Njia za Kujifunza",
+      "title": "Njia zilizoundwa kufikia ufasaha",
+      "subtitle": "Vinjari maktaba yetu ya njia za kujifunza zilizosimamiwa na wataalam. Kila njia ina ngazi zilizoundwa, masomo shirikishi, na mitihani yanayotumia AI."
+    },
+    "breadcrumb": {
+      "languages": "Lugha",
+      "allTracks": "Njia Zote"
+    },
+    "filters": {
+      "searchPlaceholder": "Tafuta njia...",
+      "allLanguages": "Lugha Zote"
+    },
+    "status": {
+      "loading": "Inapakia njia...",
+      "error": "Imeshindwa kupakia njia. Tafadhali jaribu tena baadaye.",
+      "noTracks": "Hakuna njia zilizopatikana",
+      "noTracksDesc": "Jaribu kurekebisha utafutaji wako.",
+      "showing": "Inaonyesha",
+      "track": "njia",
+      "tracks": "njia"
+    },
+    "card": {
+      "fullLevel": "Ngazi Kamili",
+      "levels": "ngazi",
+      "signInToEnroll": "Ingia ili ujiandikishe"
+    },
+    "cta": {
+      "title": "Anza njia yako ya kwanza bure",
+      "subtitle": "Unda akaunti ili ujiandikishe katika njia yoyote na uanze safari yako ya kujifunza lugha leo.",
+      "createAccount": "Unda Akaunti Bure",
+      "logIn": "Ingia"
+    }
+  },
+  "languagesPage": {
+    "hero": {
+      "badge": "Lugha Zinazopatikana",
+      "title1": "Ni lugha gani ya Afrika Mashariki",
+      "title2": "utaifurahia kufuata?",
+      "subtitle": "Chagua kutoka kwa maktaba yetu inayokua ya lugha. Kila moja inakuja na njia zilizoundwa, msaada wa mkufunzi wa AI, na masomo shirikishi."
+    },
+    "searchPlaceholder": "Tafuta lugha...",
+    "status": {
+      "loading": "Inapakia lugha...",
+      "error": "Imeshindwa kupakia lugha. Tafadhali jaribu tena baadaye.",
+      "noLanguagesFound": "Hakuna lugha zilizopatikana kwa \"{{search}}\""
+    },
+    "card": {
+      "tracksAvailable": "Njia zinazopatikana"
+    },
+    "cta": {
+      "title": "Tayari kuanza safari yako?",
+      "subtitle": "Unda akaunti yako ya bure na upate njia yako ya kwanza ya lugha leo.",
+      "getStarted": "Anza Bure"
+    }
+  },
+  "mosaicGame": {
+    "title": "AfroMosaic",
+    "lobby": {
+      "title": "Chagua Ugumu",
+      "easy": "Rahisi",
+      "medium": "Wastani",
+      "hard": "Ngumu",
+      "protocol": "Itifaki"
+    },
+    "selector": {
+      "map": "Ramani ya Urejesho",
+      "path": "Njia",
+      "changeDifficulty": "Badilisha Ugumu",
+      "categories": "Jamii"
+    },
+    "instructions": {
+      "title": "Itifaki za Misheni",
+      "step1": "Linganisha vigae 4 kwa kila jamii.",
+      "step2": "Ghairi kigae kwa kukibonyeza tena kabla ya chaguo la 4.",
+      "step3": "Pata Nyota 3 kwa kukamilisha kwa majaribio machache.",
+      "start": "Anza Usimbaji",
+      "back": "Rudi"
+    },
+    "playing": {
+      "trials": "Majaribio",
+      "time": "Muda"
+    },
+    "won": {
+      "title": "Imeunganishwa",
+      "continue": "Endelea na Njia",
+      "dashboard": "Dashibodi",
+      "loginSave": "Ingia ili uhifadhi ukadiriaji wako wa nyota!"
+    },
+    "archive": {
+      "title": "Kumbukumbu"
+    },
+    "hints": {
+      "mismatch": "Hitilafu ya Mosaic",
+      "success": "Imerejeshwa!",
+      "hint": "Kidokezo: Jaribu kupata vitu vinavyohusiana na"
+    },
+    "auth": {
+      "loginToSave": "Ingia ili Uhifadhi Maendeleo"
+    }
+  },
+  "chronosGrid": {
+    "title": "Chronos-Grid",
+    "status": {
+      "integrity": "Uadilifu wa Muda",
+      "fragments": "Vipande vya Muda",
+      "left": "IMEBAKI",
+      "era": "Enzi",
+      "node": "Nodi",
+      "placed": "KIPANDE KIMEWEKWA",
+      "awaiting": "Inasubiri Ingizo",
+      "target": "Nodi ya Lengo"
+    },
+    "info": {
+      "title": "Ujasusi wa Kihistoria",
+      "significance": "Umuhimu",
+      "catalyst": "Kichocheo cha Enzi Muhimu",
+      "region": "Mkoa",
+      "coast": "Pwani ya Afrika Mashariki"
+    },
+    "won": {
+      "title": "Gridi Imesawazishwa",
+      "subtitle": "Anomali za muda zimetatuliwa. Historia ya Afrika Mashariki sasa iko salama kulingana na mpangilio wa muda.",
+      "reset": "Mfumo Upya",
+      "dashboard": "Rudi Kwenye Kituo"
+    },
+    "toast": {
+      "success": "Sehemu ya Muda Imesawazishwa",
+      "error": "Dissonance ya Kihistoria Imegunduliwa"
+    }
+  },
+  "dashboard": {
+    "welcome": "Karibu tena",
+    "streak": "Uko kwenye mfululizo wa siku {{count}}. Endelea hivyo!",
+    "noStreak": "Anza mfululizo wako leo — jifunze kitu kipya!",
+    "continueLearning": "Endelea Kujifunza",
+    "startTrack": "Anza Njia",
+    "aiTutor": "Mkufunzi wa AI",
+    "yourTracks": "Njia Zako",
+    "viewAll": "Angalia zote",
+    "noTracks": "Bado hakuna njia zilizoanza",
+    "browseTracks": "Vinjari Njia",
+    "lessonsCompleted": "Somo {{count}} limekamilika",
+    "lessonsCompleted_plural": "Masomo {{count}} yamekamilika",
+    "quickActions": "Hatua za Haraka",
+    "practiceAi": "Fanya mazoezi na AI",
+    "findLanguages": "Tafuta lugha mpya",
+    "manageSystem": "Simamia mfumo",
+    "unlockEverything": "Fungua kila kitu",
+    "yourStats": "Takwimu Zako",
+    "dayStreak": "Mfululizo wa Siku",
+    "totalXP": "Jumla ya XP",
+    "lessonsDone": "Masomo Yaliyofanyika",
+    "tracksActive": "Njia Zinazoendelea",
+    "gameMastery": "Umahiri wa Mchezo",
+    "starsEarned": "Nyota Zilizopatikana",
+    "stagesClear": "Hatua Zilizovukwa",
+    "continueMosaic": "Endelea na Mosaic",
+    "proAnalytics": "Uchambuzi wa Pro",
+    "complete": "imekamilika",
+    "aiChatsToday": "Mazungumzo ya AI Leo",
+    "upgradeUnlimited": "Pata mazungumzo yasiyo na kikomo",
+    "messagesRemaining": "Umebakiza ujumbe {{count}} leo",
+    "messagesRemaining_plural": "Umebakiza ujumbe {{count}} leo",
+    "premiumPlan": "Bila Kikomo — Mpango wa Premium"
+  },
+  "profile": {
+    "title": "Mipangilio ya Akaunti",
+    "subtitle": "Simamia wasifu wako na mapendeleo ya akaunti.",
+    "general": "Jumla",
+    "security": "Usalama",
+    "fullName": "Jina Kamili",
+    "username": "Jina la Mtumiaji",
+    "email": "Anwani ya Barua Pepe",
+    "emailNote": "Barua pepe haiwezi kubadilishwa.",
+    "nativeLanguage": "Lugha ya Asili",
+    "saveChanges": "Hifadhi Mabadiliko",
+    "saving": "Inahifadhi...",
+    "changePassword": "Badilisha Nenosiri",
+    "currentPassword": "Nenosiri la Sasa",
+    "newPassword": "Nenosiri Jipya",
+    "confirmPassword": "Thibitisha Nenosiri",
+    "minCharacters": "Angalau herufi 6",
+    "passwordMismatch": "Manenosiri hayafanani.",
+    "updatePassword": "Sasisha Nenosiri",
+    "updating": "Inasasisha...",
+    "dangerZone": "Eneo la Hatari",
+    "deleteDesc": "Futa akaunti yako na data zote zinazohusiana kabisa. Hii haiwezi kubadilishwa.",
+    "deleteAccount": "Futa Akaunti",
+    "confirmDelete": "Je, una uhakika kabisa?",
+    "yesDelete": "Ndiyo, Futa",
+    "deleting": "Inafuta...",
+    "cancel": "Ghairi",
+    "successUpdate": "Wasifu umesasishwa kikamilifu!",
+    "errorUpdate": "Imeshindwa kusasisha wasifu.",
+    "successPassword": "Nenosiri limebadilishwa kikamilifu!",
+    "errorPassword": "Imeshindwa kubadilisha nenosiri."
+  },
+  "chat": {
+    "title": "Mkufunzi wa EduLingua",
+    "subtitle": "Mzungumzaji wa Asili & Mwanaisimu",
+    "welcome": "Hujambo {{name}}! Mimi ni mkufunzi wako wa lugha za Afrika Mashariki. Naweza kukusaidia kufanya mazoezi ya Kiswahili, Kiamhari, Afaan Oromo, au lugha nyingine yoyote ya kikanda. Naweza kukusaidia vipi leo?",
+    "limitReached": "Umekamilisha kikomo cha bure cha kila siku. Rudi kesho au jiunge na mpango wa premium kwa ufikiaji usio na kikomo.",
+    "upgrade": "Jiunge",
+    "typing": "Mkufunzi anaandika...",
+    "placeholder": "Tuma ujumbe kwa mkufunzi wako wa AI... (Bonyeza Enter kutuma)",
+    "limitPlaceholder": "Kikomo cha kila siku kimefikiwa. Jiunge ili uendelee.",
+    "error": "Samahani, ninapata shida kuunganishwa. Tafadhali jaribu tena baada ya muda mfupi.",
+    "rephrase": "Sikuelewa hilo. Je, unaweza kusema kwa njia nyingine?",
+    "premiumLimitless": "Premium Bila Kikomo"
+  },
+  "teacher": {
+    "dashboard": "Dashibodi ya Mwalimu",
+    "subtitle": "Simamia njia yako, fuatilia maendeleo ya wanafunzi, na unda maudhui.",
+    "manageTrack": "Simamia Njia",
+    "newLesson": "Somo Jipya",
+    "totalStudents": "Jumla ya Wanafunzi",
+    "activeLessons": "Masomo Yanayoendelea",
+    "quizzesCreated": "Mitihani Iliyoundwa",
+    "avgCompletion": "Wastani wa Ukamilishaji",
+    "recentActivity": "Shughuli za Hivi Karibuni za Wanafunzi",
+    "viewAll": "Angalia Zote",
+    "noActivity": "Bado hakuna shughuli za hivi karibuni.",
+    "noTrack": "Bado hujaajiriwa kwenye njia yoyote.",
+    "contactAdmin": "Tafadhali wasiliana na msimamizi ili upangiwe njia yako maalum.",
+    "aiAssistant": "Msaidizi wa Maudhui wa AI",
+    "aiAssistantDesc": "Unda sehemu mpya au maswali ya mtihani kwa njia yako kwa kutumia AI ya juu.",
+    "genQuiz": "Unda Mtihani wa Ngazi",
+    "newAiSection": "Sehemu Mpya ya AI"
+  },
+  "premium": {
+    "title": "Jifunze bila kikomo",
+    "subtitle": "Pata ufikiaji usio na kikomo wa mkufunzi wa AI, njia zote za kujifunza, na zana zenye nguvu za kuharakisha safari yako ya lugha.",
+    "upgradeToPremium": "Pata Premium",
+    "goPremium": "Kuwa Premium",
+    "youArePremium": "Wewe ni Premium! 🎉",
+    "enjoyUnlimited": "Furahia ufikiaji usio na kikomo kwa vipengele vyote vya EduLingua. Lugha za dunia ni zako kuzigundua.",
+    "goToDashboard": "Nenda kwenye Dashibodi",
+    "currentPlan": "Mpango wako wa sasa",
+    "bestValue": "THAMANI BORA",
+    "upgradeNow": "Pata Sasa",
+    "processing": "Inashughulikiwa...",
+    "cancelAnytime": "Ghairi wakati wowote. Hakuna gharama zilizofichwa.",
+    "whyPremium": "Kwa nini uwe Premium?",
+    "unlimitedAi": "Mkufunzi wa AI Bila Kikomo",
+    "unlimitedAiDesc": "Zungumza na mkufunzi wako wa lugha wa AI kadiri unavyotaka, wakati wowote.",
+    "allTracks": "Njia Zote Zimefunguliwa",
+    "allTracksDesc": "Fikia kila njia ya kujifunza katika lugha zote bila vikwazo.",
+    "advancedProgress": "Maendeleo ya Juu",
+    "advancedProgressDesc": "Uchambuzi wa kina ili kuelewa uwezo wako na mahali pa kuweka mkazo.",
+    "areYouEducator": "Je, wewe ni mwalimu?",
+    "applyTeacher": "Omba kuwa mwalimu na upate ufikiaji maalum wa kuunda mtaala na kufundisha wanafunzi.",
+    "applyNow": "Omba Sasa",
+    "freePlan": "Bure",
+    "freePrice": "$0",
+    "perMonth": "/kwa mwezi",
+    "getStartedBasics": "Anza na mambo ya msingi.",
+    "premiumPrice": "$9.99",
+    "everythingMaster": "Kila kitu unachohitaji ili kufahamu lugha.",
+    "freeFeature1": "Ujumbe 30 wa AI kwa siku",
+    "freeFeature2": "Fikia njia za kujifunza za bure",
+    "freeFeature3": "Ufuatiliaji wa msingi wa maendeleo",
+    "freeFeature4": "Mchezo wa tafsiri",
+    "premiumFeature1": "Mazungumzo yasiyo na kikomo na mkufunzi wa AI",
+    "premiumFeature2": "Njia zote za kujifunza za premium",
+    "premiumFeature3": "Uchambuzi wa juu na ufahamu",
+    "premiumFeature4": "Msaada wa kwanza",
+    "premiumFeature5": "Fikia maudhui bila mtandao",
+    "premiumFeature6": "Ufikiaji wa mapema wa vipengele vipya"
+  },
+  "progress": {
+    "title": "Maendeleo Yangu",
+    "subtitle": "Fuatilia safari yako ya kujifunza katika njia zote ulizojiandikisha.",
+    "totalXP": "Jumla ya XP",
+    "lessonsDone": "Masomo Yaliyofanyika",
+    "tracksActive": "Njia Zinazoendelea",
+    "tracksFinished": "Njia Zilizokamilika",
+    "mosaicMaster": "Mtaalamu wa Mosaic",
+    "historicalStatus": "Hali ya utatuzi wa kihistoria katika moduli zote za mwingiliano.",
+    "totalStars": "Jumla ya Nyota",
+    "totalStages": "Jumla ya Hatua",
+    "loading": "Inapakia maendeleo yako...",
+    "error": "Imeshindwa kupakia maendeleo. Tafadhali jaribu tena.",
+    "noProgress": "Bado hakuna maendeleo",
+    "enrollDesc": "Jiandikishe katika njia ya kujifunza ili kuanza safari yako.",
+    "browseTracks": "Vinjari Njia",
+    "enrolledTracks": "Njia Ulizojiandikisha",
+    "completed": "Imekamilika",
+    "review": "Pitia",
+    "continue": "Endelea"
+  },
+  "tracks": {
+    "title": "Njia za Kujifunza",
+    "subtitle": "Gundua na ujiandikishe katika njia za kujifunza lugha",
+    "searchPlaceholder": "Tafuta njia...",
+    "allLanguages": "Lugha Zote",
+    "loading": "Inapakia njia...",
+    "noTracks": "Hakuna njia zilizopatikana",
+    "tryAdjust": "Jaribu kurekebisha utafutaji wako au kichujio cha lugha.",
+    "levelsCount": "Ngazi {{count}}",
+    "levelsCount_plural": "Ngazi {{count}}",
+    "enrolled": "Umejiandikisha",
+    "progress": "Maendeleo",
+    "continue": "Endelea Kujifunza",
+    "enrollNow": "Jiandikishe Sasa",
+    "enrolling": "Inajiandikisha...",
+    "beginner": "Anayeanza",
+    "intermediate": "Wa kati",
+    "advanced": "Aliyeendelea"
+  },
+  "publicTracks": {
+    "hero": {
+      "badge": "Njia za Kujifunza Zinazopatikana",
+      "title": "Mudu lugha za Kiafrika na upate ufasaha",
+      "subtitle": "Gundua mtaala ulioundwa kitaalamu wa Kiamhari, Kioromo, Kiswahili, na nyinginezo. Anza safari yako leo."
+    },
+    "breadcrumb": {
+      "languages": "Lugha",
+      "allTracks": "Njia Zote"
+    },
+    "filters": {
+      "searchPlaceholder": "Tafuta njia kwa jina au maelezo...",
+      "allLanguages": "Lugha Zote"
+    },
+    "status": {
+      "loading": "Inapakia njia...",
+      "error": "Imeshindwa kupakia njia. Tafadhali jaribu tena.",
+      "noTracks": "Hakuna njia zilizopatikana",
+      "noTracksDesc": "Jaribu kurekebisha utafutaji wako au kichujio cha lugha.",
+      "showing": "Inaonyesha",
+      "track": "njia",
+      "tracks": "njia"
+    },
+    "card": {
+      "levels": "ngazi",
+      "fullLevel": "Ngazi Kamili",
+      "signInToEnroll": "Ingia ili ujiandikishe"
+    },
+    "cta": {
+      "title": "Uko tayari kuanza safari yako?",
+      "subtitle": "Jiunge na maelfu ya wanafunzi wanaomudu lugha za Kiafrika na EduLingua.",
+      "createAccount": "Fungua Akaunti ya Bure",
+      "logIn": "Ingia"
+    }
+  },
+  "languagesPage": {
+    "hero": {
+      "badge": "Urithi wa Kiafrika",
+      "title1": "Gundua lugha za",
+      "title2": "Afrika",
+      "subtitle": "Kutoka Pembe ya Afrika hadi Maziwa Makuu, gundua utofauti mkubwa wa lugha barani."
+    },
+    "searchPlaceholder": "Tafuta lugha...",
+    "status": {
+      "loading": "Inapakia lugha...",
+      "error": "Imeshindwa kupakia lugha. Tafadhali jaribu tena.",
+      "noLanguagesFound": "Hakuna lugha iliyopatikana kwa \"{{search}}\""
+    },
+    "card": {
+      "tracksAvailable": "njia {{count}} inapatikana",
+      "tracksAvailable_plural": "njia {{count}} zinapatikana"
+    },
+    "cta": {
+      "title": "Huoni lugha yako?",
+      "subtitle": "Tunaongeza njia mpya kila wakati. Jisajili ili upate taarifa lugha mpya zinapotolewa.",
+      "getStarted": "Anza Sasa"
+    }
+  },
+  "mosaicGame": {
+    "title": "AfroMosaic",
+    "hints": {
+      "success": "Sehemu Imepatikana",
+      "hint": "Kidokezo:",
+      "mismatch": "Hitilafu ya Kihistoria"
+    },
+    "playing": {
+      "trials": "Majaribio"
+    },
+    "auth": {
+      "loginToSave": "Ingia ili Kuhifadhi Maendeleo"
+    },
+    "lobby": {
+      "title": "Chagua Ugumu",
+      "easy": "Rahisi",
+      "medium": "Wastani",
+      "hard": "Ngumu",
+      "protocol": "Itifaki"
+    },
+    "selector": {
+      "map": "Ramani ya Eneo",
+      "path": "Njia ya Umahiri",
+      "changeDifficulty": "Badilisha Ugumu",
+      "categories": "Jamii"
+    },
+    "instructions": {
+      "title": "Itifaki ya Utatuzi",
+      "step1": "Pata vigae 4 vinavyohusiana ili kufunua sehemu ya kihistoria.",
+      "step2": "Linganisha jamii zote ili kukamilisha mosaic.",
+      "step3": "Pata nyota kulingana na usahihi na kasi yako.",
+      "back": "Rudi",
+      "start": "Anza Itifaki"
+    },
+    "won": {
+      "title": "Mosaic Imerejeshwa",
+      "continue": "Ngazi Inayofuata",
+      "dashboard": "Dashibodi",
+      "loginSave": "Ingia ili kuhifadhi mafanikio yako!"
+    },
+    "archive": {
+      "title": "Kumbukumbu ya Kihistoria"
+    }
+  }
+}
